@@ -1,0 +1,12 @@
+@use './scss/contax_variables.scss' as *;
+
+$theme-colors: (
+    "primary": $custom-primary,
+    "secondary": adjust-color($custom-primary, $lightness:-15%),
+    "info": $custom-info,
+    "warning": $custom-warning,
+    "danger": $custom-danger,
+    "success": $custom-success
+);
+
+@import '../node_modules/bootstrap/scss/bootstrap.scss';

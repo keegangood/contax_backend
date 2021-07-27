@@ -1,0 +1,12 @@
+$olivine: hsla(92, 33%, 56%, 1);
+$buff: hsla(50, 83%, 74%, 1);
+$sandy-brown: hsla(28, 88%, 65%, 1);
+$wintergreen-dream: hsla(160, 22%, 46%, 1);
+$bittersweet-shimmer: hsla(357, 46%, 52%, 1);
+
+$custom-primary: $wintergreen-dream;
+$custom-secondary: adjust-color($custom-primary, $lightness:-10%);
+$custom-info: $sandy-brown;
+$custom-warning: $buff;
+$custom-danger: $bittersweet-shimmer;
+$custom-success: $olivine;
