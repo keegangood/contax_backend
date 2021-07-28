@@ -6,7 +6,18 @@ $theme-colors: (
     "info": $custom-info,
     "warning": $custom-warning,
     "danger": $custom-danger,
-    "success": $custom-success
+    "success": $custom-success,
+    "app": $custom-light,
+    "light": $custom-light
 );
 
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+body {
+    font-family: $primary-font;
+    font-weight: 300;
+}
+
+// .shadowed {
+//     box-shadow: 0 0 10px $custom-shadow;
+// }

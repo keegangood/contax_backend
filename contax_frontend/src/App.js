@@ -3,14 +3,21 @@ import { createBrowserHistory } from "history";
 
 import "./App.scss";
 
+import Homepage from "./pages/Homepage/Homepage";
+import {Container} from 'reactstrap';
+
 function App() {
   const history = createBrowserHistory();
 
-  return <div className="App container-fluid">
-    <Router history={history}>
-      <Route exact path="/" component={()=>("Hello")} />
-    </Router>
-  </div>;
+  return (
+    <>
+      <Container fluid className="g-0">
+        <Router history={history}>
+          <Route exact path="/" component={Homepage} />
+        </Router>
+      </Container>
+    </>
+  );
 }
 
 export default App;

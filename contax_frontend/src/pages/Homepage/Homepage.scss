@@ -1,0 +1,36 @@
+@use '../../scss/contax_variables.scss' as *;
+
+#homepage-content {
+    // border-top-right-radius: 50%;
+    #hero {
+        #hero-content {
+            background: adjust-color($custom-warning, $alpha: -0.8);
+            height: 100%;
+            width: 100%;
+
+            #hero-card {
+                background-color: adjust-color($custom-primary, $alpha: -0.1);
+                border-radius: 10px;
+
+                h1 {
+                    color: adjust-color($custom-primary, $lightness: 70%);
+                }
+                p {
+                    color: adjust-color($custom-primary, $lightness: 50%);
+                }
+            }
+        }
+
+        background-image: url(../../assets/images/desk-bg.jpg);
+        height: 60vh;
+        font-family: $secondary-font;
+        background-size: cover;
+        background-position-x: 75%;
+        background-repeat: no-repeat;
+    }
+
+    #right-column {
+        height: 100vh;
+        // border-top-left-radius: 50%;
+    }
+}
