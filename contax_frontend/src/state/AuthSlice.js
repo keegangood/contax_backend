@@ -11,20 +11,20 @@ const initialState = {
 const BASE_URL = "http://localhost:8000/users";
 const headers = {
   "Content-Type": "application/json",
-  withCredentials: true,
 };
+
+axios.defaults.withCredentials = true;
 
 export const login = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
     const url = BASE_URL + "/login/";
     const response = axios
-      .post(url, {
+      .post(url, formData, {
         headers: headers,
-        data: formData,
       })
       .then((res) => res.data)
-      .catch((err) => err);
+      .catch((err) => JSON.stringify(err));
 
     return response;
   }
@@ -38,10 +38,10 @@ export const register = createAsyncThunk(
     const response = await axios
       .post(url, {
         headers: headers,
-        data: formData,
+        data: { ...formData },
       })
       .then((res) => res.data)
-      .catch((err) => rejectWithValue(err));
+      .catch((err) => err.response.data);
 
     return response;
   }
@@ -51,12 +51,13 @@ export const requestAccessToken = createAsyncThunk(
   "auth/requestAccessToken",
   async (_, { rejectWithValue }) => {
     const url = BASE_URL + "/token/";
+    
     const response = await axios
       .get(url, {
         headers: headers,
       })
       .then((res) => res.data)
-      .catch((err) => rejectWithValue(err));
+      .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
@@ -72,9 +73,9 @@ export const logout = createAsyncThunk(
         data: { user },
       })
       .then((res) => res.data)
-      .catch((err) => rejectWithValue(err));
+      .catch((err) => rejectWithValue(err.response.data));
 
-    return response
+    return response;
   }
 );
 
@@ -93,7 +94,6 @@ const AuthSlice = createSlice({
       state.authLoadingStatus = "PENDING";
     },
     [login.fulfilled]: (state, action) => {
-      console.log("done!");
       state.accessToken = action.payload.accessToken;
       state.isAuthenticated = true;
       state.user = action.payload.user;
