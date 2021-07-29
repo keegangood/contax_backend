@@ -2,6 +2,7 @@ import React from "react";
 import "./Homepage.scss";
 
 import { Jumbotron, Button } from "reactstrap";
+import { Link } from "react-router-dom";
 
 const Homepage = () => {
   return (
@@ -11,7 +12,7 @@ const Homepage = () => {
           <div className="col col-12 bg-primary pb-3">
             <Jumbotron id="hero" className="mx-0 ">
               <div
-                className="pb-3 d-flex flex-column align-items-end justify-content-end"
+                className="pb-5 d-flex flex-column align-items-end justify-content-end"
                 id="hero-content"
               >
                 <div
@@ -24,7 +25,14 @@ const Homepage = () => {
                   <p className="lead">Your contacts, organized.</p>
                   <div className="row g-0 mt-3">
                     <div className="col col-12 py-2 pb-3">
-                      <Button size="lg" className="btn-info shadow text-secondary">Get Started</Button>
+                      <Link to="/signup">
+                        <Button
+                          size="lg"
+                          className="btn-info shadow text-secondary"
+                        >
+                          Get Started
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>

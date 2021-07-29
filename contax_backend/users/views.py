@@ -66,7 +66,8 @@ def register(request):
     # if the serialized data is NOT valid
     # send a response with error messages and status code 400
     response.data = {
-        'msg': [msg for msg in new_user_serializer.errors.values()]}
+        'msg': new_user_serializer.errors
+    }
 
     response.status_code = status.HTTP_400_BAD_REQUEST
     # return failed response

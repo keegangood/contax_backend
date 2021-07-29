@@ -34,7 +34,7 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   "auth/register",
   async (formData, { rejectWithValue }) => {
-    const response = await fetch(BASE_URL + "/token/", {
+    const response = await fetch(BASE_URL + "/", {
       method: "POST",
       headers: headers,
       credentials: "include", // to set cookies
