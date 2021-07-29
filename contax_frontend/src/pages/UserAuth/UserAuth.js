@@ -45,11 +45,13 @@ const UserAuth = ({ pageAction, pageTitle, ...props }) => {
 
       await dispatch(login({ email, password }))
         .then((res) => {
-          props.history.push("/");
+          props.history.push("/app");
         })
         .catch((err) => console.log(err));
     } else if (pageAction === "signup") {
-      dispatch(register({ formData }));
+      await dispatch(register({ formData }))
+        .then((res) => props.history.push("/app"))
+        .catch((err) => JSON.stringify(err))
     }
   };
 
