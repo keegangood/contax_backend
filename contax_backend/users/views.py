@@ -7,7 +7,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import exceptions
 from rest_framework.decorators import (
     api_view, permission_classes,
     authentication_classes
@@ -18,6 +17,7 @@ from .models import User, RefreshToken
 from .serializers import UserCreateSerializer, UserDetailSerializer
 from .utils import generate_access_token, generate_refresh_token
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
@@ -26,11 +26,14 @@ def register(request):
     # create response object
     response = Response()
 
-    formData = request.data.get('formData')
+    # extract form data from request
+    formData = request.data.get('data').get('formData')
+
+    # add email as defaut username
     formData['username'] = formData['email']
-    
+
     # serialize request JSON data
-    new_user_serializer = UserCreateSerializer(data=request.data.get('formData'))
+    new_user_serializer = UserCreateSerializer(data=formData)
 
     if request.data.get('password') != request.data.get('password2'):
         # if password and password2 don't match return status 400
@@ -70,15 +73,17 @@ def register(request):
     # if the serialized data is NOT valid
     # send a response with error messages and status code 400
     response.data = {
-        'msg': new_user_serializer.errors
+        'msg': [str(err) for err in new_user_serializer.errors]
     }
 
     response.status_code = status.HTTP_400_BAD_REQUEST
     # return failed response
     return response
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@ensure_csrf_cookie
 def login(request):
     '''
     POST: Validate User credentials and generate refresh and access tokens
@@ -86,7 +91,7 @@ def login(request):
     # create response object
     response = Response()
 
-    formData = request.data.get('data')
+    formData = request.data
 
     email = formData.get('email')
     password = formData.get('password')
@@ -296,7 +301,11 @@ def extend_token(request):
     # generate new access token for the user
     new_access_token = generate_access_token(user)
 
-    response.data = {'accessToken': new_access_token}
+    response.data = {
+        'accessToken': new_access_token,
+        'user': UserDetailSerializer(user).data
+    }
+    
     return response
 
 
@@ -410,5 +419,3 @@ def logout(request):
     }
 
     return response
-
-
