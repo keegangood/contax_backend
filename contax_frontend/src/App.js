@@ -11,6 +11,7 @@ import thunk from "redux-thunk";
 import { Container } from "reactstrap";
 import Homepage from "./pages/Homepage/Homepage";
 import UserAuth from "./pages/UserAuth/UserAuth";
+import Contacts from "./pages/Contacts/Contacts";
 
 let store = configureStore({ reducer: rootReducer }, applyMiddleware(thunk));
 
@@ -22,6 +23,7 @@ function App() {
       <Container fluid className="g-0">
         <Router history={history}>
           <Route exact path="/" component={Homepage} />
+          <Route exact path="/app" component={Contacts} />
           <Route
             exact
             path="/login"
