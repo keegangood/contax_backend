@@ -33,56 +33,48 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   "auth/register",
   async (formData, { rejectWithValue }) => {
-    const response = await fetch(BASE_URL + "/", {
-      method: "POST",
-      headers: headers,
-      credentials: "include", // to set cookies
-      body: JSON.stringify(formData),
-    });
+    const url = BASE_URL + "/";
 
-    const data = await response.json();
+    const response = await axios
+      .post(url, {
+        headers: headers,
+        data: formData,
+      })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err));
 
-    if (response.ok) {
-      return data;
-    }
-    return rejectWithValue(data);
+    return response;
   }
 );
 
 export const requestAccessToken = createAsyncThunk(
   "auth/requestAccessToken",
   async (_, { rejectWithValue }) => {
-    const response = await fetch(BASE_URL + "/token/", {
-      method: "GET",
-      headers: headers,
-      credentials: "include", // to set cookies
-    });
+    const url = BASE_URL + "/token/";
+    const response = await axios
+      .get(url, {
+        headers: headers,
+      })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err));
 
-    const data = await response.json();
-
-    if (response.ok) {
-      return data;
-    }
-    return rejectWithValue(data);
+    return response;
   }
 );
 
 export const logout = createAsyncThunk(
   "auth/logout",
   async (user, { rejectWithValue }) => {
-    const response = await fetch(BASE_URL + "/logout/", {
-      method: "POST",
-      headers: headers,
-      credentials: "include", // to set cookies
-      body: JSON.stringify({ user }),
-    });
+    const url = BASE_URL + "/logout/";
+    const response = await axios
+      .post(url, {
+        headers: headers,
+        data: { user },
+      })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err));
 
-    const data = await response.json();
-
-    if (response.ok) {
-      return data;
-    }
-    return rejectWithValue(data);
+    return response
   }
 );
 
@@ -101,7 +93,7 @@ const AuthSlice = createSlice({
       state.authLoadingStatus = "PENDING";
     },
     [login.fulfilled]: (state, action) => {
-      console.log('done!')
+      console.log("done!");
       state.accessToken = action.payload.accessToken;
       state.isAuthenticated = true;
       state.user = action.payload.user;
