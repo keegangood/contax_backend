@@ -24,7 +24,7 @@ const UserAuthForm = ({ formAction, callApi }) => {
     <form className="p-4 pb-4 mb-4" id="user-auth-form" onSubmit={onSubmit}>
       <div class="mb-4 form-group">
         <label for="exampleInputEmail1" class="form-label">
-          Email address
+          Email
         </label>
         <input
           type="email"
@@ -49,6 +49,7 @@ const UserAuthForm = ({ formAction, callApi }) => {
         />
       </div>
 
+      {/* display confirm password field if 'signup' */}
       {formAction === "signup" && (
         <div class="mb-4 form-group">
           <label for="exampleInputPassword1" class="form-label">
