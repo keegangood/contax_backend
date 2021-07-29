@@ -48,7 +48,7 @@ class User(AbstractUser):
         }
     )
 
-    username = models.CharField(_('username'), max_length=20, unique=True, error_messages={
+    username = models.CharField(_('username'), max_length=100, unique=True, error_messages={
                                 'unique': 'This username has already been registered.'}, blank=True, null=True)
 
     # timezone = models.CharField('timezone', max_length=50, choices=pytz.all_timezones)
