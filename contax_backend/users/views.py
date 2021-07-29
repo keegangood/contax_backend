@@ -86,11 +86,13 @@ def login(request):
     # create response object
     response = Response()
 
-    email = request.data.get('email')
-    password = request.data.get('password')
+    formData = request.data.get('data')
+
+    email = formData.get('email')
+    password = formData.get('password')
 
     if email is None or password is None:
-        response.data = {'msg': ['Username and password required.']}
+        response.data = {'msg': ['Email and password required.']}
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
 
