@@ -5,8 +5,6 @@
 
     border-radius: 10px;
 
-    // border-bottom: 1px solid $light-bistre;
-
     input {
         // border: 1px solid $lighter-copper;
     }
@@ -22,6 +20,6 @@
         font-family: $secondary-font;
     }
     .form-label {
-        color: $font-color-display-accent;
+        color: $font-color-display;
     }
 }
