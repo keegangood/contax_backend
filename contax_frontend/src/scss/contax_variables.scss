@@ -17,3 +17,6 @@ $custom-danger: $bittersweet-shimmer;
 $custom-success: $olivine;
 $custom-light: adjust-color($sandy-brown, $lightness: 25%);
 $custom-shadow: adjust-color($custom-secondary, $lightness: -80%, $alpha: -.7);
+
+$font-color-display: adjust-color($custom-primary, $lightness: 70%);
+$font-color-display-accent: adjust-color($custom-primary, $lightness: 40%);
