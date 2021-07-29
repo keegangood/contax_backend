@@ -137,6 +137,22 @@ REST_FRAMEWORK = {
     ]
 }
 
+# define refresh token lifetime
+REFRESH_TOKEN_EXPIRY = {
+    'days': 7,
+    'hours': 0,
+    'minutes': 0,
+    'seconds': 0
+}
+
+# define refresh token lifetime
+ACCESS_TOKEN_EXPIRY = {
+    'days': 0,
+    'hours': 10,
+    'minutes': 0,
+    'seconds': 10
+}
+
 # to accept cookies via axios
 CORS_ALLOW_CREDENTIALS = True
 
@@ -167,7 +183,8 @@ ALLOWED_HOSTS = [
 CORS_ALLOW_HEADERS = [
     'authorization',
     'content-type',
-    'refresh_token'
+    'refresh_token',
     'x-csrftoken',
+    'x-xsrftoken',
     'withcredentials'
 ]
