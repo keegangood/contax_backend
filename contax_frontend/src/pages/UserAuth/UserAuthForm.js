@@ -1,5 +1,7 @@
 import { React, useState, useEffect } from "react";
 
+import "./scss/UserAuthForm.scss";
+
 const UserAuthForm = ({ formAction, callApi }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -7,7 +9,6 @@ const UserAuthForm = ({ formAction, callApi }) => {
     password2: "",
     username: "",
   });
-
 
   // add new form changes to state
   const onChange = (e) =>
@@ -17,11 +18,10 @@ const UserAuthForm = ({ formAction, callApi }) => {
     e.preventDefault();
 
     callApi(formData);
-
   };
 
   return (
-    <form className="p-2 pb-4" id="user-auth-form" onSubmit={onSubmit}>
+    <form className="p-4 pb-4 mb-4" id="user-auth-form" onSubmit={onSubmit}>
       <div class="mb-4 form-group">
         <label for="exampleInputEmail1" class="form-label">
           Email address
@@ -66,7 +66,7 @@ const UserAuthForm = ({ formAction, callApi }) => {
       )}
 
       <div class="mb-4 form-group">
-        <button type="submit" class="btn btn-primary w-100" id="submit">
+        <button type="submit" class="btn btn-info w-100" id="submit">
           Submit
         </button>
       </div>
@@ -76,10 +76,9 @@ const UserAuthForm = ({ formAction, callApi }) => {
             href="#"
             className="
             mt-3 
-            text-muted 
-            primary-link 
             text-decoration-none 
             small"
+            id="forgot-password"
           >
             Forgot your password?
           </a>

@@ -8,21 +8,13 @@ import UserAuthForm from "./UserAuthForm";
 // import Loading from "../../layout/Loading";
 // import { ReactComponent as Logo } from "../../../assets/img/Logo.svg";
 
-import {
-  login,
-  register,
-  requestAccessToken,
-} from "../../state/AuthSlice";
+import { login, register, requestAccessToken } from "../../state/AuthSlice";
 
 const LoginExtra = (
-  <div className="row">
-    <div className="col col-10 offset-1 text-center p-4 small">
+  <div className="row g-0 auth-extra-content">
+    <div className="col col-10 offset-1 text-center p-4 small auth-link-label">
       Don't have an account?{" "}
-      <a
-        href="/signup"
-        className="link-danger text-decoration-none"
-        id="signup-link"
-      >
+      <a href="/signup" className="link-warning text-decoration-none auth-link">
         Sign up
       </a>
     </div>
@@ -30,14 +22,10 @@ const LoginExtra = (
 );
 
 const SignupExtra = (
-  <div className="row">
-    <div className="col col-10 offset-1 text-center p-4 small">
+  <div className="row g-0 auth-extra-content">
+    <div className="col col-10 offset-1 text-center p-4 small auth-link-label">
       Already have an account?{" "}
-      <a
-        href="/login"
-        className="link-danger text-decoration-none"
-        id="signup-link"
-      >
+      <a href="/login" className="link-warning text-decoration-none auth-link">
         Log in
       </a>
     </div>
@@ -47,7 +35,9 @@ const SignupExtra = (
 const UserAuth = ({ pageAction, pageTitle, ...props }) => {
   const dispatch = useDispatch();
 
-  const { isAuthenticated, authLoadingStatus } = useSelector((state) => state.auth);
+  const { isAuthenticated, authLoadingStatus } = useSelector(
+    (state) => state.auth
+  );
 
   const callApi = async (formData) => {
     if (pageAction === "login") {
@@ -75,20 +65,19 @@ const UserAuth = ({ pageAction, pageTitle, ...props }) => {
           py-5"
       id="user-auth-page"
     >
-      <div className="row w-100">
+      <div className="row g-0 mx-1">
         <div className="col col-11 mx-auto offset-lg-1 col-md-10 col-lg-4">
-          <div className="row" id="user-auth-form-container">
+          <div className="row g-0 shadow" id="user-auth-form-container">
             <div
-              className="col col-md-10  offset-1  pt-4"
+              className="col col-md-10  offset-1"
               id="user-auth-header"
-            >
-            </div>
-            <div className="row">
-              <div className="col col-10 offset-1 user-auth-action-title  pt-5">
+            ></div>
+            <div className="row g-0">
+              <div className="col col-10 offset-1 user-auth-action-title pt-3">
                 <p className="px-2">{pageTitle}</p>
               </div>
             </div>
-            <div className="row">
+            <div className="row g-0">
               <div className="col col-10 offset-1">
                 <UserAuthForm
                   formAction={pageAction}
