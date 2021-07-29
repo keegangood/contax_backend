@@ -43,8 +43,7 @@ const UserAuth = ({ pageAction, pageTitle, ...props }) => {
     if (pageAction === "login") {
       const { email, password } = formData;
 
-      dispatch(login({ email, password }))
-        .then(unwrapResult)
+      await dispatch(login({ email, password }))
         .then((res) => {
           props.history.push("/");
         })

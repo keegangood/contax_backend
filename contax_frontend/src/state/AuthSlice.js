@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   accessToken: null, // logged in user's current access token
@@ -10,24 +11,22 @@ const initialState = {
 const BASE_URL = "http://localhost:8000/users";
 const headers = {
   "Content-Type": "application/json",
+  withCredentials: true,
 };
 
 export const login = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
-    const response = await fetch(BASE_URL + "/login/", {
-      method: "POST",
-      headers: headers,
-      credentials: "include", // to set cookies
-      body: JSON.stringify(formData),
-    });
+    const url = BASE_URL + "/login/";
+    const response = axios
+      .post(url, {
+        headers: headers,
+        data: formData,
+      })
+      .then((res) => res.data)
+      .catch((err) => err);
 
-    const data = await response.json();
-
-    if (response.ok) {
-      return data;
-    }
-    return rejectWithValue(data);
+    return response;
   }
 );
 
@@ -99,13 +98,14 @@ const AuthSlice = createSlice({
   },
   extraReducers: {
     [login.pending]: (state, action) => {
-        state.authLoadingStatus = "PENDING";
+      state.authLoadingStatus = "PENDING";
     },
     [login.fulfilled]: (state, action) => {
-        state.accessToken = action.payload.accessToken;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-        state.authLoadingStatus = "IDLE";
+      console.log('done!')
+      state.accessToken = action.payload.accessToken;
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      state.authLoadingStatus = "IDLE";
     },
     [login.rejected]: (state, action) => {
       state.accessToken = null;
@@ -115,13 +115,13 @@ const AuthSlice = createSlice({
     },
 
     [requestAccessToken.pending]: (state, action) => {
-        state.authLoadingStatus = "PENDING";
+      state.authLoadingStatus = "PENDING";
     },
     [requestAccessToken.fulfilled]: (state, action) => {
-        state.accessToken = action.payload.accessToken;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-        state.authLoadingStatus = "IDLE";
+      state.accessToken = action.payload.accessToken;
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      state.authLoadingStatus = "IDLE";
     },
     [requestAccessToken.rejected]: (state, action) => {
       state.accessToken = null;
