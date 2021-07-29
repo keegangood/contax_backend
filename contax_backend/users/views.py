@@ -26,8 +26,11 @@ def register(request):
     # create response object
     response = Response()
 
+    formData = request.data.get('formData')
+    formData['username'] = formData['email']
+    
     # serialize request JSON data
-    new_user_serializer = UserCreateSerializer(data=request.data)
+    new_user_serializer = UserCreateSerializer(data=request.data.get('formData'))
 
     if request.data.get('password') != request.data.get('password2'):
         # if password and password2 don't match return status 400
@@ -45,9 +48,10 @@ def register(request):
 
         # attach the access token to the response data
         # and set the response status code to 201
-        new_username = new_user.username
-        response.data = {'accessToken': access_token,
-                         'msg': [f'Welcome, {new_username}!']}
+        response.data = {
+            'accessToken': access_token,
+            'user': new_user_serializer.validated_data
+        }
         response.status_code = status.HTTP_201_CREATED
 
         # create refreshtoken cookie
@@ -130,7 +134,8 @@ def login(request):
     # return the access token in the reponse
     response.data = {
         'accessToken': access_token,
-        'msg': ['Login successful!']
+        'msg': ['Login successful!'],
+        'user': UserDetailSerializer(user).data
     }
     response.status_code = status.HTTP_200_OK
     return response
