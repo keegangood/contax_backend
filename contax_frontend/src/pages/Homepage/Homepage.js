@@ -10,13 +10,21 @@ const Homepage = () => {
       <div className="col col-12 bg-app">
         <div className="row g-0">
           <div className="col col-12 bg-primary pb-3">
-            <Jumbotron id="hero" className="mx-0 ">
+            <Jumbotron id="hero" className="mx-0">
               <div
-                className="pb-5 d-flex flex-column align-items-end justify-content-end"
+                className="
+                  row
+                  g-0
+                  pb-5
+                  d-flex
+                  flex-column
+                  align-items-end
+                  justify-content-end
+                  align-items-md-center"
                 id="hero-content"
               >
                 <div
-                  className=" d-flex flex-column align-items-end justify-content-end p-4 m-2 shadow"
+                  className="d-flex flex-column align-items-end justify-content-end align-items-md-center p-4 shadow"
                   id="hero-card"
                 >
                   <h1 className="display-1" id="header">
