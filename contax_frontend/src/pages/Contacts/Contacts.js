@@ -15,6 +15,9 @@ const Contacts = () => {
     const fetchContacts = async () => {
       await dispatch(requestAccessToken()).then((res) => {
         // requestStatus will either be 'fulfilled' or 'rejected'
+
+        console.log(res)
+
         const { requestStatus } = res.meta;
         const { accessToken } = res.payload;
 
@@ -23,7 +26,7 @@ const Contacts = () => {
         } else if (requestStatus === "rejected") {
           console.log("failure", res.payload);
         }
-      });
+      }).catch(err=>console.error(err));
     };
 
     fetchContacts();
