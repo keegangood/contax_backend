@@ -63,11 +63,16 @@ class SafeJWTAuthentication(BaseAuthentication):
         """
         check = CSRFCheck()
         # populates request.META['CSRF_COOKIE'], which is used in process_view()
-        check.process_request(request)
-        reason = check.process_view(request, None, (), {})
-        if reason:
-            # CSRF failed, bail with explicit error message
-            raise exceptions.PermissionDenied('CSRF Failed: %s' % reason)
+        try:
+            check.process_request(request)
+        except:
+
+            reason = check.process_view(request, None, (), {})
+            
+
+            if reason:
+                # CSRF failed, bail with explicit error message
+                raise exceptions.PermissionDenied('CSRF Failed: %s' % reason)
 
 # Thanks to Ahmed Atalla for this code
 # https://dev.to/a_atalla/django-rest-framework-custom-jwt-authentication-5n5
