@@ -16,15 +16,14 @@ axios.defaults.withCredentials = true;
 // get all contacts for a given user
 export const getContacts = createAsyncThunk(
   "contacts/getContacts",
-  async ({user}, { rejectWithValue }) => {
-    console.log(user)
+  async (accessToken, { rejectWithValue }) => {
     const url = BASE_URL + "/";
     const response = axios
-      .post(url, user, {
-        headers: headers,
+      .post(url, {}, {
+        headers: {...headers, 'Authorization': `Token ${accessToken}` },
       })
       .then((res) => res.data)
-      .catch((err) => JSON.stringify(err));
+      .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
@@ -34,13 +33,13 @@ export const getContacts = createAsyncThunk(
 // create a new contact
 export const createContact = createAsyncThunk(
   "contacts/create",
-  async (formData, { rejectWithValue }) => {
+  async ({formData, accessToken}, { rejectWithValue }) => {
     const url = BASE_URL + "/";
 
     const response = await axios
       .post(url, {
-        headers: headers,
-        data: { ...formData },
+        headers: {...headers, 'Authorization': `token ${accessToken}` },
+        data: { ...formData},
       })
       .then((res) => res.data)
       .catch((err) => err.response.data);
@@ -97,13 +96,15 @@ const ContactSlice = createSlice({
   extraReducers: {
     // GET CONTACTS
     [getContacts.pending]: (state,action) => {
-      
+      state.authLoadingStatus = "PENDING";
     },
     [getContacts.rejected]: (state,action) => {
-
+      state.contacts = [];
+      state.authLoadingStatus = "IDLE";
     },
     [getContacts.fulfilled]: (state,action) => {
-
+      state.contacts = action.payload.contacts;
+      state.authLoadingStatus = "IDLE";
     },
 
     [createContact.pending]: (state,action) => {
