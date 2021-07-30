@@ -6,3 +6,8 @@ class ContactCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields='__all__'
+class ContactDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields='__all__'
+        
