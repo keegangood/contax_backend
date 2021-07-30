@@ -13,6 +13,9 @@ from rest_framework.decorators import (
 
 from users.authentication import SafeJWTAuthentication
 
+from .models import Contact
+from .serializers import ContactDetailSerializer
+
 @api_view(['GET', 'POST'])
 @authentication_classes([SafeJWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -24,15 +27,12 @@ def contact_list(request):
     '''
     response = Response()
 
-    print(request.data)
+    user = request.user
 
-    print(request.COOKIES)
-
-    user = request.user.id
+    contacts = Contact.objects.filter(user__id=user.id)
 
     response.data = {
-        'user':user,
-        'contacts': [1,2,3]
+        'contacts': ContactDetailSerializer(contacts, many=True).data
     }
 
     return response
