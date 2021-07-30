@@ -3,7 +3,7 @@ import axios from "axios";
 
 const initialState = {
   contacts: [], // logged in user's current access token
-  contactsLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
+  contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
 };
 
 const BASE_URL = "http://localhost:8000/contacts";
@@ -42,7 +42,7 @@ export const createContact = createAsyncThunk(
         data: { ...formData},
       })
       .then((res) => res.data)
-      .catch((err) => err.response.data);
+      .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
@@ -59,7 +59,7 @@ export const updateContact = createAsyncThunk(
         headers: headers,
       })
       .then((res) => res.data)
-      .catch((err) => JSON.stringify(err));
+      .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
@@ -77,7 +77,7 @@ export const deleteContact = createAsyncThunk(
         data: { ...formData },
       })
       .then((res) => res.data)
-      .catch((err) => err.response.data);
+      .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
@@ -94,6 +94,7 @@ const ContactSlice = createSlice({
     }
   },
   extraReducers: {
+
     // GET CONTACTS
     [getContacts.pending]: (state,action) => {
       state.authLoadingStatus = "PENDING";
