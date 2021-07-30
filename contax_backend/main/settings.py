@@ -185,6 +185,5 @@ CORS_ALLOW_HEADERS = [
     'content-type',
     'refresh_token',
     'x-csrftoken',
-    'x-xsrftoken',
     'withcredentials'
 ]
