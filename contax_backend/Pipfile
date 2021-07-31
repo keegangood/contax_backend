@@ -13,6 +13,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 python-decouple = "*"
 pyjwt = "*"
+djangorestframework-camel-case = "*"
 
 [requires]
 python_version = "3.9"
