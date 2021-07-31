@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = {
-  contacts: [], // logged in user's current access token
-  contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
-};
-
 const BASE_URL = "http://localhost:8000/contacts";
 const headers = {
   "Content-Type": "application/json",
@@ -83,6 +78,11 @@ export const deleteContact = createAsyncThunk(
   }
 );
 
+const initialState = {
+  contacts: [], // logged in user's current access token
+  contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
+};
+
 const ContactSlice = createSlice({
   name: "contacts",
   initialState: initialState,
@@ -97,15 +97,15 @@ const ContactSlice = createSlice({
 
     // GET CONTACTS
     [getContacts.pending]: (state,action) => {
-      state.authLoadingStatus = "PENDING";
+      state.contactLoadingStatus = "PENDING";
     },
     [getContacts.rejected]: (state,action) => {
       state.contacts = [];
-      state.authLoadingStatus = "IDLE";
+      state.contactLoadingStatus = "IDLE";
     },
     [getContacts.fulfilled]: (state,action) => {
       state.contacts = action.payload.contacts;
-      state.authLoadingStatus = "IDLE";
+      state.contactLoadingStatus = "IDLE";
     },
 
     [createContact.pending]: (state,action) => {
