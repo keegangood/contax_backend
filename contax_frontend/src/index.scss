@@ -8,7 +8,9 @@ $theme-colors: (
     "danger": $custom-danger,
     "success": $custom-success,
     "app": $custom-light,
-    "light": $custom-light
+    "light": $custom-light,
+    "primary-light": $custom-primary-light,
+    "primary-lighter": $custom-primary-lighter
 );
 
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
