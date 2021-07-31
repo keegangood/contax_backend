@@ -10,6 +10,8 @@ $wintergreen-dream: hsla(160, 22%, 46%, 1);
 $bittersweet-shimmer: hsla(357, 46%, 52%, 1);
 
 $custom-primary: $wintergreen-dream;
+$custom-primary-light: adjust-color($custom-primary, $lightness: 20%);
+$custom-primary-lighter: adjust-color($custom-primary, $lightness: 40%);
 $custom-secondary: adjust-color($custom-primary, $lightness:-10%);
 $custom-info: $sandy-brown;
 $custom-warning: $buff;
