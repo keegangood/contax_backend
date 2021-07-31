@@ -1,0 +1,17 @@
+@use '../../../scss/contax_variables.scss' as *;
+
+.contact-item {
+
+    background-color: $custom-secondary;
+    color: $font-color-display;
+    
+    .contact-body {
+        background-color: $custom-primary;
+    
+        .contact-avatar {
+            height:10vw;
+            width:10vw;
+        }
+    }
+
+}
