@@ -29,7 +29,9 @@ def contact_list(request):
 
     user = request.user
 
-    contacts = Contact.objects.filter(user__id=user.id)
+    print(request.data)
+
+    contacts = Contact.objects.order_by('first_name').filter(user__id=user.id)
 
     response.data = {
         'contacts': ContactDetailSerializer(contacts, many=True).data
