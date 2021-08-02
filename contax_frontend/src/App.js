@@ -1,4 +1,4 @@
-import { Router, Route } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import { Provider } from "react-redux";
 
@@ -22,34 +22,38 @@ function App() {
     <Provider store={store}>
       <Container fluid className="g-0">
         <Router history={history}>
-          <Route exact path="/" component={Homepage} />
-          <Route exact path="/app" component={Contacts} />
-          <Route
-            exact
-            path="/login"
-            render={(props) => {
-              return (
-                <UserAuth
-                  pageAction={"login"}
-                  pageTitle={"Log in"}
-                  history={history}
-                />
-              );
-            }}
-          />
-          <Route
-            exact
-            path="/signup"
-            render={(props) => {
-              return (
-                <UserAuth
-                  pageAction={"signup"}
-                  pageTitle={"Sign up"}
-                  history={history}
-                />
-              );
-            }}
-          />
+          <Switch>
+            <Route exact path="/" component={Homepage} />
+            <Route path="/app/:formAction?" history={history}>
+              <Contacts />
+            </Route>
+            <Route
+              exact
+              path="/login"
+              render={(props) => {
+                return (
+                  <UserAuth
+                    pageAction={"login"}
+                    pageTitle={"Log in"}
+                    history={history}
+                  />
+                );
+              }}
+            />
+            <Route
+              exact
+              path="/signup"
+              render={(props) => {
+                return (
+                  <UserAuth
+                    pageAction={"signup"}
+                    pageTitle={"Sign up"}
+                    history={history}
+                  />
+                );
+              }}
+            />
+          </Switch>
         </Router>
       </Container>
     </Provider>
