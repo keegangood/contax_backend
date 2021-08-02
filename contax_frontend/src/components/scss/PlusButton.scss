@@ -1,0 +1,22 @@
+@use '../../scss/contax_variables.scss' as *;
+
+#plus-button {
+    color: $custom-warning;
+    background-color: $custom-secondary;
+    border: 2px solid $custom-warning;
+    border-radius: 50%;
+    bottom: 2.5rem;
+    right: 2rem;
+  
+    z-index: 10;
+    
+    &:hover {
+        cursor: pointer;
+    }
+
+    svg {
+      padding: .25rem;
+      height: 3rem;
+      width: 3rem;
+    }
+  }
