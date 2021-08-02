@@ -1,17 +1,29 @@
 @use '../../../scss/contax_variables.scss' as *;
 
 .contact-item {
+  background-color: $custom-secondary;
+  color: $font-color-display;
 
-    background-color: $custom-secondary;
-    color: $font-color-display;
-    
-    .contact-body {
-        background-color: $custom-primary;
-    
-        .contact-avatar {
-            height:10vw;
-            width:10vw;
-        }
+  position: relative;
+  transition: top 0.3s ease-in-out;
+
+  .contact-body {
+    background-color: $custom-primary;
+
+    .contact-avatar {
+      font-size: 1.5rem;
+      height: 10vw;
+      width: 10vw;
     }
+  }
+  @media screen and (min-width: 768px) {
+    .contact-body {
+      font-size: 1.2rem;
 
+      .contact-avatar {
+        height: 5vw;
+        width: 5vw;
+      }
+    }
+  }
 }
