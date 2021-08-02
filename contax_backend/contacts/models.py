@@ -18,7 +18,7 @@ class Contact(models.Model):
     email_regex = RegexValidator(regex=r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
     email = models.EmailField(validators=[email_regex], max_length=254, blank=True, null=True)
 
-    notes = models.TextField(max_length=10000, blank=True)
+    notes = models.JSONField(default=list)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
