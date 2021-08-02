@@ -1,0 +1,16 @@
+@use '../../../scss/contax_variables.scss' as *;
+
+#contact-form {
+  background-color: input {
+    background-color: red;
+  }
+
+  .form-control:focus {
+    border-color: $custom-primary;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+
+  #first-name {
+  }
+}
