@@ -11,30 +11,35 @@ axios.defaults.withCredentials = true;
 // get all contacts for a given user
 export const getContacts = createAsyncThunk(
   "contacts/getContacts",
-  async (accessToken, { rejectWithValue }) => {
+  async ({ accessToken, orderBy }, { rejectWithValue }) => {
     const url = BASE_URL + "/";
     const response = axios
-      .post(url, {}, {
-        headers: {...headers, 'Authorization': `Token ${accessToken}` },
-      })
+      .post(
+        url,
+        {
+          order_by: orderBy,
+        },
+        {
+          headers: { ...headers, Authorization: `Token ${accessToken}` },
+        }
+      )
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
 );
-
 
 // create a new contact
 export const createContact = createAsyncThunk(
   "contacts/create",
-  async ({formData, accessToken}, { rejectWithValue }) => {
+  async ({ formData, accessToken }, { rejectWithValue }) => {
     const url = BASE_URL + "/";
 
     const response = await axios
       .post(url, {
-        headers: {...headers, 'Authorization': `token ${accessToken}` },
-        data: { ...formData},
+        headers: { ...headers, Authorization: `token ${accessToken}` },
+        data: { ...formData },
       })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
@@ -43,8 +48,7 @@ export const createContact = createAsyncThunk(
   }
 );
 
-
-// update a given contact 
+// update a given contact
 export const updateContact = createAsyncThunk(
   "contacts/update",
   async (formData, { rejectWithValue }) => {
@@ -81,66 +85,53 @@ export const deleteContact = createAsyncThunk(
 const initialState = {
   contacts: [], // logged in user's current access token
   contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
+  orderBy: "firstName",
 };
 
 const ContactSlice = createSlice({
   name: "contacts",
   initialState: initialState,
   reducers: {
-    setContacts: (state,action) => {
+    setContacts: (state, action) => {
       return {
-        contacts: state.contacts.concat(action.payload.contacts)
-      }
-    }
+        contacts: state.contacts.concat(action.payload.contacts),
+      };
+    },
+    setOrderBy: (state, action) => {
+      return {
+        orderBy: action.payload.orderBy,
+      };
+    },
   },
   extraReducers: {
-
     // GET CONTACTS
-    [getContacts.pending]: (state,action) => {
+    [getContacts.pending]: (state, action) => {
       state.contactLoadingStatus = "PENDING";
     },
-    [getContacts.rejected]: (state,action) => {
+    [getContacts.rejected]: (state, action) => {
       state.contacts = [];
       state.contactLoadingStatus = "IDLE";
     },
-    [getContacts.fulfilled]: (state,action) => {
+    [getContacts.fulfilled]: (state, action) => {
       state.contacts = action.payload.contacts;
       state.contactLoadingStatus = "IDLE";
     },
 
-    [createContact.pending]: (state,action) => {
-    
-    // CREATE CONTACT
+    [createContact.pending]: (state, action) => {
+      // CREATE CONTACT
     },
-    [createContact.rejected]: (state,action) => {
+    [createContact.rejected]: (state, action) => {},
+    [createContact.fulfilled]: (state, action) => {},
 
-    },
-    [createContact.fulfilled]: (state,action) => {
-
-    },
-    
     // UPDATE CONTACT
-    [updateContact.pending]: (state,action) => {
-      
-    },
-    [updateContact.rejected]: (state,action) => {
-
-    },
-    [updateContact.fulfilled]: (state,action) => {
-
-    },
+    [updateContact.pending]: (state, action) => {},
+    [updateContact.rejected]: (state, action) => {},
+    [updateContact.fulfilled]: (state, action) => {},
 
     // DELETE CONTACT
-    [deleteContact.pending]: (state,action) => {
-      
-    },
-    [deleteContact.rejected]: (state,action) => {
-
-    },
-    [deleteContact.fulfilled]: (state,action) => {
-
-    },
-
+    [deleteContact.pending]: (state, action) => {},
+    [deleteContact.rejected]: (state, action) => {},
+    [deleteContact.fulfilled]: (state, action) => {},
   },
 });
 
