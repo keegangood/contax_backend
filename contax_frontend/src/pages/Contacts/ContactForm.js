@@ -75,9 +75,7 @@ const ContactForm = ({ contact, callApi }) => {
     });
   };
 
-  useEffect(()=>{
-    
-  }, [phoneNumbers])
+  useEffect(() => {}, [phoneNumbers]);
 
   const changePrimaryPhone = (e) => {
     setPhoneNumbers({
@@ -87,11 +85,15 @@ const ContactForm = ({ contact, callApi }) => {
   };
 
   const addNote = (text) => {
-    setFormData({
-      ...formData,
-      notes: notes.concat(text),
-    });
-    setNewNote("");
+    if (text !== "" && text !== "Notes cannot be blank!") {
+      setFormData({
+        ...formData,
+        notes: notes.concat(text),
+      });
+      setNewNote("");
+    } else {
+      setNewNote("Notes cannot be blank!");
+    }
   };
 
   return (
@@ -151,19 +153,20 @@ const ContactForm = ({ contact, callApi }) => {
       </FormGroup>
 
       {/* PHONE NUMBER FIELDS */}
-      <Row className="g-0 mb-2">
+      <Row className="g-0 mb-2 h-100">
         <Col xs={12} md={6}>
-          <FormGroup className="p-3 pt-0">
+          <FormGroup className="p-3 pt-0 pe-0 border-end border-secondary">
             <Row className="g-0">
               <Col xs={9}>
                 <Label htmlFor="phone" className="field-label py-2 lead">
                   Phone
                 </Label>
               </Col>
-              <Col xs={3} className="field-label pt-4 text-center">
+              <Col xs={2} className="field-label pt-4 ps-4 text-center">
                 Primary
               </Col>
             </Row>
+
             <Row className="g-0" id="phone">
               {PHONE_TYPES.map((phoneType, i) => (
                 <Fragment key={i}>
@@ -193,8 +196,13 @@ const ContactForm = ({ contact, callApi }) => {
                     />
                   </Col>
                   <Col
-                    xs={3}
-                    className="px-3 mb-2 d-flex flex-column justify-content-center align-items-center"
+                    xs={2}
+                    className="
+                    ps-4
+                    mb-2 
+                    d-flex flex-column 
+                    justify-content-center 
+                    align-items-center"
                   >
                     <Input
                       type="radio"
@@ -210,11 +218,7 @@ const ContactForm = ({ contact, callApi }) => {
             </Row>
           </FormGroup>
         </Col>
-      </Row>
-
-      {/* BIRTHDAY FIELD */}
-      <Row className="g-0 mb-2">
-        <Col xs={12}>
+        <Col xs={12} md={6} id="birthday-field">
           <FormGroup className="p-3 pt-0">
             <Label htmlFor="birthday" className="field-label py-2 lead">
               Birthday
@@ -228,6 +232,24 @@ const ContactForm = ({ contact, callApi }) => {
             />
           </FormGroup>
         </Col>
+      </Row>
+
+      {/* BIRTHDAY FIELD */}
+      <Row className="g-0 mb-2">
+        {/* <Col xs={12}>
+          <FormGroup className="p-3 pt-0">
+            <Label htmlFor="birthday" className="field-label py-2 lead">
+              Birthday
+            </Label>
+            <Input
+              className="form-field"
+              id="birthday"
+              type="date"
+              name="birthday"
+              onChange={onChange}
+            />
+          </FormGroup>
+        </Col> */}
       </Row>
 
       {/* NOTES FIELD */}
