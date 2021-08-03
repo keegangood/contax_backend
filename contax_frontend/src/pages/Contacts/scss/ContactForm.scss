@@ -19,8 +19,6 @@
     background-color: $custom-light;
     &:focus {
       border-color: $custom-primary;
-      box-shadow: none;
-      -webkit-box-shadow: none;
 
     }
   }
@@ -31,4 +29,9 @@
 
   #last-name {
   }
+
+  #birthday-field {
+      background-color: $custom-primary;
+  }
+
 } 
