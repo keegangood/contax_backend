@@ -1,74 +1,80 @@
 import React from "react";
-
+import formatPhoneNumber from "../../utils/formatPhoneNumber";
 import { AiOutlinePhone, AiOutlineMail } from "react-icons/ai";
 
 import { Row, Col } from "reactstrap";
 
-import "./scss/ContactItem.scss";
-const formatPhoneNumber = (phoneNumber) => {
-  let formattedPhoneNumber = `(${phoneNumber.slice(0, 3)}) `;
-  formattedPhoneNumber += `${phoneNumber.slice(3, 6)}-`;
-  formattedPhoneNumber += phoneNumber.slice(6, 10);
+import ContactAvatar from "../../components/Avatar";
 
-  return formattedPhoneNumber;
-};
+import "./scss/ContactItem.scss";
 
 const ContactItem = ({ contact, history }) => {
   const {
     firstName,
     lastName,
     email,
+    primaryPhone,
     cellPhoneNumber,
     homePhoneNumber,
     workPhoneNumber,
   } = contact;
   return (
-    <Col sm={12} className="px-0 pb-2 mb-2 pb-md-3 mb-md-3 rounded contact-item">
+    <Col
+      sm={12}
+      className="px-0 pb-2 mb-2 pb-md-3 mb-md-3 rounded contact-item"
+    >
       <Row className="contact-body p-3 d-flex rounded align-items-center">
-        <Col sm={2}
-          className="
-            contact-avatar 
-            rounded-circle
-            bg-success 
-            d-flex
-            align-items-center 
-            justify-content-center 
-            text-secondary"
-        >
-          {firstName[0]}
+        {/* AVATAR */}
+        <Col xs={2}>
+          <ContactAvatar contact={contact} />
         </Col>
-        <Col xs={7} sm={3}>
+
+        {/* NAME */}
+        <Col xs={7} sm={3} className="px-3">
           {firstName} {lastName}
         </Col>
-        <Col xs={7} className="d-none d-sm-flex flex-column p-2 small">
-          <Row className="g-0">
-            <Col xs={1} className="border-bottom border-secondary mb-2 mb-md-3">
+
+        {/* EMAIL AND PHONE */}
+        <Col xs={6} className="d-none d-sm-flex flex-column p-2 small">
+          <Row className="">
+            <Col
+              xs={1}
+              sm={{ size: 1, offset: 1 }}
+              md={{ size: 1, offset: 0 }}
+              className="border-bottom border-secondary mb-2 mb-md-3"
+            >
               <AiOutlineMail />
             </Col>
-            <Col xs={11} className="border-bottom border-secondary mb-2 mb-md-3">
+            <Col
+              xs={11}
+              sm={9}
+              md={11}
+              className="border-bottom border-secondary mb-2 mb-md-3"
+            >
               {email}
             </Col>
 
-            <Col xs={1} className="border-bottom border-secondary">
+            <Col
+              xs={1}
+              sm={{ size: 1, offset: 1 }}
+              md={{ size: 1, offset: 0 }}
+              className="border-bottom border-secondary"
+            >
               <AiOutlinePhone />
             </Col>
-            <Col xs={11} className="border-bottom border-secondary">
-              {(cellPhoneNumber || homePhoneNumber || workPhoneNumber) && (
-                <div className="">
-                  {cellPhoneNumber ? (
-                    <span>{formatPhoneNumber(cellPhoneNumber)}</span>
-                  ) : homePhoneNumber ? (
-                    <span>{formatPhoneNumber(homePhoneNumber)}</span>
-                  ) : workPhoneNumber ? (
-                    <span>{formatPhoneNumber(workPhoneNumber)}</span>
-                  ) : (
-                    ""
-                  )}
-                </div>
+            <Col
+              xs={11}
+              sm={9}
+              md={11}
+              className="border-bottom border-secondary"
+            >
+              {formatPhoneNumber(
+                contact[`${primaryPhone.toLowerCase()}PhoneNumber`]
               )}
             </Col>
           </Row>
         </Col>
+        <Col xs={1}>Hey</Col>
       </Row>
     </Col>
   );

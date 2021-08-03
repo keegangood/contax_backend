@@ -1,16 +1,34 @@
 @use '../../../scss/contax_variables.scss' as *;
 
 #contact-form {
-  background-color: input {
-    background-color: red;
+    background-color: $custom-secondary;
+
+
+    #form-label {
+      color: $font-color-display;
+    }
+    .field-label {
+      color: $font-color-display-accent;
+    }
+
+  .form-group {
+    background-color: $custom-primary;
   }
 
-  .form-control:focus {
-    border-color: $custom-primary;
-    box-shadow: none;
-    -webkit-box-shadow: none;
+  .form-control {
+    background-color: $custom-light;
+    &:focus {
+      border-color: $custom-primary;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+
+    }
   }
 
   #first-name {
+    
   }
-}
+
+  #last-name {
+  }
+} 

@@ -21,8 +21,19 @@
       font-size: 1.2rem;
 
       .contact-avatar {
-        height: 5vw;
-        width: 5vw;
+        height: 7vw;
+        width: 7vw;
+      }
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    .contact-body {
+      font-size: 1.2rem;
+
+      .contact-avatar {
+        height: 3vw;
+        width: 3vw;
       }
     }
   }
