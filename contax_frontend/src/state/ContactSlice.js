@@ -14,13 +14,11 @@ export const getContacts = createAsyncThunk(
   async ({ accessToken, orderBy }, { rejectWithValue }) => {
     const url = BASE_URL + "/";
     const response = axios
-      .post(
+      .get(
         url,
         {
-          order_by: orderBy,
-        },
-        {
-          headers: { ...headers, Authorization: `Token ${accessToken}` },
+          params: {order_by:orderBy},
+          headers: { ...headers, Authorization: `token ${accessToken}` },
         }
       )
       .then((res) => res.data)
@@ -37,10 +35,15 @@ export const createContact = createAsyncThunk(
     const url = BASE_URL + "/";
 
     const response = await axios
-      .post(url, {
-        headers: { ...headers, Authorization: `token ${accessToken}` },
-        data: { ...formData },
-      })
+      .post(
+        url,
+        {
+          formData,
+        },
+        {
+          headers: { ...headers, Authorization: `token ${accessToken}` },
+        }
+      )
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
 
