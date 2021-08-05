@@ -18,6 +18,7 @@ const ContactItem = ({ contact, history }) => {
     homePhoneNumber,
     workPhoneNumber,
   } = contact;
+
   return (
     <Col
       sm={12}
@@ -51,7 +52,7 @@ const ContactItem = ({ contact, history }) => {
               md={11}
               className="border-bottom border-secondary mb-2 mb-md-3"
             >
-              {email}
+              {email ? email : 'Not Provided'}
             </Col>
 
             <Col
@@ -68,9 +69,10 @@ const ContactItem = ({ contact, history }) => {
               md={11}
               className="border-bottom border-secondary"
             >
-              {formatPhoneNumber(
-                contact[`${primaryPhone.toLowerCase()}PhoneNumber`]
-              )}
+              {contact[`${primaryPhone.toLowerCase()}PhoneNumber`] ? (
+                <span>{formatPhoneNumber(contact[`${primaryPhone.toLowerCase()}PhoneNumber`])}</span>
+              ): 'Not Provided'}
+
             </Col>
           </Row>
         </Col>
