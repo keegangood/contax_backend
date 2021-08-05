@@ -26,7 +26,7 @@ class Contact(models.Model):
         validators=[phone_regex], max_length=17, blank=True, null=True)
     work_phone_number = models.CharField(
         validators=[phone_regex], max_length=17, blank=True, null=True)
-    primaryPhone = models.CharField(max_length=4, choices=PHONE_TYPE_CHOICES)
+    primary_phone = models.CharField(max_length=4, choices=PHONE_TYPE_CHOICES)
 
     email_regex = RegexValidator(
         regex=r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
