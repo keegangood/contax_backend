@@ -23,7 +23,7 @@ const Contacts = ({ history }) => {
   console.log(url, path);
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.auth);
+  const { user, accessToken } = useSelector((state) => state.auth);
   const { contacts, orderBy } = useSelector((state) => state.contacts);
 
   useEffect(() => {
@@ -47,19 +47,38 @@ const Contacts = ({ history }) => {
   }, []);
 
   const addContact = (formData) => {
-    dispatch(createContact(formData));
+    (async () => {
+      await dispatch(requestAccessToken())
+        .then((res) => {
+          // requestStatus will either be 'fulfilled' or 'rejected'
+          const { requestStatus } = res.meta;
+          const { accessToken } = res.payload;
+
+          if (requestStatus === "fulfilled") {
+            dispatch(createContact({formData, accessToken}));
+          } else if (requestStatus === "rejected") {
+            console.log("failure", res.payload);
+          }
+        })
+        .catch((err) => console.error(err));
+    })();
+    
   };
+
+const updateContact = formData => {
+  dispatch(updateContact({formData,accessToken}))
+}
 
   console.log(path, url);
 
   return (
     <Container>
       <Row className="g-0">
-        <Col sm={12} md={{ size: 10, offset: 1 }}>
+        <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
           {formAction === "add" ? (
-            <ContactForm callApi={addContact} />
+            <ContactForm onSubmit={addContact}/>
           ) : formAction === "edit" ? (
-            <ContactForm callApi={addContact} />
+            <ContactForm onSubmit={updateContact} />
           ) : (
             ""
           )}
