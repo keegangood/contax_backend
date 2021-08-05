@@ -6,7 +6,7 @@
  */
  const titleize = (string) => {
   let letters = [...string];
-  letters = letters.map((letter, i, arr)=> (i === 0 || letters[i-1] === ' ') ? letter.toUpperCase() : letter)
+  letters = letters.map((letter, i, arr)=> (i === 0 || letters[i-1] === ' ') ? letter.toUpperCase() : letter.toLowerCase())
   return letters.join('')
 }
   
