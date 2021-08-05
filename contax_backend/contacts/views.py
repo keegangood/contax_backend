@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import render
 
 from django.contrib.auth import get_user_model
@@ -14,7 +16,8 @@ from rest_framework.decorators import (
 from users.authentication import SafeJWTAuthentication
 
 from .models import Contact
-from .serializers import ContactDetailSerializer
+from .serializers import ContactCreateSerializer, ContactDetailSerializer
+
 
 @api_view(['GET', 'POST'])
 @authentication_classes([SafeJWTAuthentication])
@@ -26,16 +29,40 @@ def contact_list(request):
     GET - retrieve all contacts for a user
     '''
     response = Response()
-
     user = request.user
 
-    print(request.data)
+    # RETRIEVE LIST OF CONTACTS
+    if request.method == 'GET':
 
-    contacts = Contact.objects.order_by('first_name').filter(user__id=user.id)
+        contacts = Contact.objects.order_by('first_name').filter(user__id=user.id)
 
-    response.data = {
-        'contacts': ContactDetailSerializer(contacts, many=True).data
-    }
+        response.data = {
+            'contacts': ContactDetailSerializer(contacts, many=True).data
+        }
+    
+    # CREATE NEW CONTACT
+    elif request.method == 'POST':
 
+        form_data = request.data.get('form_data')
+
+        contact_serializer = ContactCreateSerializer(data=form_data)
+
+        if contact_serializer.is_valid():
+
+            contact = contact_serializer.save(user=user)
+
+            response.status_code = status.HTTP_201_CREATED
+            response.data = {
+                "contact": contact_serializer.validated_data,
+                "messages": ["Contact created successfully!"]
+            }
+        else:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            response.data = {
+                "messages": contact_serializer.errors
+            }
+
+    
     return response
     
+
