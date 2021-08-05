@@ -1,15 +1,16 @@
 @use '../../../scss/contax_variables.scss' as *;
 
 #contact-form {
-    background-color: $custom-secondary;
+  background-color: $custom-secondary;
 
-
-    #form-label {
-      color: $font-color-display;
-    }
-    .field-label {
-      color: $font-color-display-accent;
-    }
+  #form-label {
+    color: $font-color-display;
+    font-family: $secondary-font;
+  }
+  .field-label {
+    color: $font-color-display-accent;
+    font-family: $secondary-font;
+  }
 
   .form-group {
     background-color: $custom-primary;
@@ -19,19 +20,19 @@
     background-color: $custom-light;
     &:focus {
       border-color: $custom-primary;
-
     }
   }
 
-  #first-name {
-    
-  }
-
-  #last-name {
+  .btn {
+    font-family: $secondary-font;
   }
 
   #birthday-field {
-      background-color: $custom-primary;
+    background-color: $custom-primary;
   }
 
-} 
+  .note {
+    word-wrap: break-word;
+    min-height: 35px;
+  }
+}
