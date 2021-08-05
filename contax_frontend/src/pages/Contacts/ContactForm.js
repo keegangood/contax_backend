@@ -1,16 +1,30 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector, connect } from "react-redux";
+
 import titleize from "../../utils/titleize";
-import formatPhoneNumber from "../../utils/formatPhoneNumber";
-import { Button, Row, Col, Form, FormGroup, Label, Input } from "reactstrap";
+// import formatPhoneNumber from "../../utils/formatPhoneNumber";
+import {
+  Button,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Tooltip,
+} from "reactstrap";
+
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 import { useParams } from "react-router-dom";
 import Avatar from "../../components/Avatar";
+import Notes from "./Notes";
 
 import "./scss/ContactForm.scss";
 
-const PHONE_TYPES = ["cell", "home", "work"];
+const PHONE_TYPES = ["CELL", "HOME", "WORK"];
 
-const ContactForm = ({ contact, callApi }) => {
+const ContactForm = ({ contact, onSubmit }) => {
   let { formAction } = useParams();
 
   // STATE
@@ -18,8 +32,11 @@ const ContactForm = ({ contact, callApi }) => {
     firstName: "",
     lastName: "",
     email: "",
+    cellPhoneNumber: "",
+    homePhoneNumber: "",
+    workPhoneNumber: "",
+    primaryPhone: "CELL",
     birthday: "",
-    notes: [],
   });
 
   const {
@@ -30,74 +47,51 @@ const ContactForm = ({ contact, callApi }) => {
     homePhoneNumber,
     workPhoneNumber,
     birthday,
-    notes,
+    primaryPhone,
   } = formData;
 
-  const [phoneNumbers, setPhoneNumbers] = useState({
-    cellPhoneNumber: {
-      raw: "",
-      formatted: "",
-    },
-    homePhoneNumber: {
-      raw: "",
-      formatted: "",
-    },
-    workPhoneNumber: {
-      raw: "",
-      formatted: "",
-    },
-    primaryPhone: "cell",
-  });
+  const { notes } = useSelector((state) => state.notes);
 
-  const { primaryPhone } = phoneNumbers;
+  const [phoneTooltipOpen, setPhoneTooltipOpen] = useState(false);
+
+  const togglePhoneTooltip = () => setPhoneTooltipOpen(!phoneTooltipOpen);
 
   // newNote form input state
   const [newNote, setNewNote] = useState("");
+  const [updatedNoteText, setUpdatedNoteText] = useState("");
 
   //
   // HANDLE FORM INPUT CHANGES
   const onChange = (e) => {
-    let value = e.target.value;
-
     setFormData({
       ...formData,
-      [e.target.name]: value,
+      [e.target.name]: e.target.value,
     });
   };
-
-  const changePhoneNumber = (e, phoneNumber) => {
-    setPhoneNumbers({
-      ...phoneNumbers,
-      [e.target.name]: {
-        raw: e.target.value,
-        formatted: "",
-      },
-    });
-  };
-
-  useEffect(() => {}, [phoneNumbers]);
 
   const changePrimaryPhone = (e) => {
-    setPhoneNumbers({
-      ...phoneNumbers,
+    setFormData({
+      ...formData,
       primaryPhone: e.target.dataset.phoneType,
     });
   };
 
-  const addNote = (text) => {
-    if (text !== "" && text !== "Notes cannot be blank!") {
-      setFormData({
-        ...formData,
-        notes: notes.concat(text),
-      });
-      setNewNote("");
-    } else {
-      setNewNote("Notes cannot be blank!");
-    }
+  const handleSubmit = () => {
+    onSubmit({
+      ...formData,
+      notes,
+    });
   };
 
   return (
-    <Form className="pb-2 rounded mt-4" id="contact-form">
+    <Form
+      className="pb-3 rounded my-5"
+      id="contact-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+    >
       <Label className="ps-2 py-2" tag="h1" id="form-label">
         {formAction === "add" ? "Create Contact" : "Edit Contact"}
       </Label>
@@ -110,7 +104,7 @@ const ContactForm = ({ contact, callApi }) => {
       )}
 
       {/* NAME FIELDS */}
-      <FormGroup className="p-2 pt-4">
+      <FormGroup className="p-3 pt-4">
         <Label htmlFor="name" className="field-label lead ps-1">
           Name
         </Label>
@@ -139,14 +133,14 @@ const ContactForm = ({ contact, callApi }) => {
       </FormGroup>
 
       {/* EMAIL FIELD */}
-      <FormGroup className="p-2 pb-4 mb-2">
+      <FormGroup className="p-3 pb-4 mb-2">
         <Label htmlFor="email" className="field-label lead ps-1">
           Email
         </Label>
         <Input
           id="email"
           type="email"
-          placeholder="Email"
+          placeholder="user@example.com"
           name="email"
           onChange={onChange}
         />
@@ -155,14 +149,27 @@ const ContactForm = ({ contact, callApi }) => {
       {/* PHONE NUMBER FIELDS */}
       <Row className="g-0 mb-2 h-100">
         <Col xs={12} md={6}>
-          <FormGroup className="p-3 pt-0 pe-0 border-end border-secondary">
+          <FormGroup className="p-3 pt-0 pe-lg-0 border-end border-secondary">
             <Row className="g-0">
               <Col xs={9}>
                 <Label htmlFor="phone" className="field-label py-2 lead">
-                  Phone
+                  Phone{" "}
+                  <AiOutlineInfoCircle
+                    id="phoneInfo"
+                    onMouseEnter={togglePhoneTooltip}
+                    onMouseLeave={togglePhoneTooltip}
+                  ></AiOutlineInfoCircle>
+                  <Tooltip
+                    placement={"right"}
+                    target="phoneInfo"
+                    isOpen={phoneTooltipOpen}
+                    toggle={togglePhoneTooltip}
+                  >
+                    10-digit phone numbers only
+                  </Tooltip>
                 </Label>
               </Col>
-              <Col xs={2} className="field-label pt-4 ps-4 text-center">
+              <Col xs={3} className="field-label pt-4 text-center">
                 Primary
               </Col>
             </Row>
@@ -180,25 +187,13 @@ const ContactForm = ({ contact, callApi }) => {
                     <Input
                       type="tel"
                       name={`${phoneType}PhoneNumber`}
-                      value={
-                        phoneNumbers[`${phoneType}PhoneNumber`].raw
-                          ? phoneNumbers[`${phoneType}PhoneNumber`].raw
-                          : ""
-                      }
-                      onChange={(e) =>
-                        changePhoneNumber(
-                          e,
-                          formatPhoneNumber(
-                            phoneNumbers[`${phoneType}PhoneNumber`].raw
-                          )
-                        )
-                      }
+                      value={formData[`${phoneType}PhoneNumber`]}
+                      onChange={onChange}
                     />
                   </Col>
                   <Col
-                    xs={2}
+                    xs={3}
                     className="
-                    ps-4
                     mb-2 
                     d-flex flex-column 
                     justify-content-center 
@@ -234,66 +229,26 @@ const ContactForm = ({ contact, callApi }) => {
         </Col>
       </Row>
 
-      {/* BIRTHDAY FIELD */}
-      <Row className="g-0 mb-2">
-        {/* <Col xs={12}>
-          <FormGroup className="p-3 pt-0">
-            <Label htmlFor="birthday" className="field-label py-2 lead">
-              Birthday
-            </Label>
-            <Input
-              className="form-field"
-              id="birthday"
-              type="date"
-              name="birthday"
-              onChange={onChange}
-            />
-          </FormGroup>
-        </Col> */}
-      </Row>
-
       {/* NOTES FIELD */}
-      <Row className="g-0">
-        <Col xs={12}>
-          <FormGroup className="p-3 pt-0">
-            <Label htmlFor="newNote" className="field-label py-2 lead">
-              Notes
-            </Label>
+      <Notes />
 
-            {notes.length > 0 && (
-              <div
-                className="bg-primary-light p-2 rounded mb-2"
-                id="notes-list"
-              >
-                {notes.map((note, i) => (
-                  <div className="note" key={i}>
-                    - {note}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <Input
-              className="form-field"
-              id="newNote"
-              type="text"
-              name="newNote"
-              value={newNote}
-              onChange={(e) => setNewNote(e.target.value)}
-            />
-            <Button
-              color="secondary"
-              size="sm"
-              className="text-light my-2"
-              onClick={() => addNote(newNote)}
-            >
-              Add
+      <FormGroup>
+        <Row className="g-0">
+          <Col xs={{ size: 6, offset: 3 }} className="text-center p-3">
+            <Button color="info" size="lg">
+              Submit
             </Button>
-          </FormGroup>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </FormGroup>
     </Form>
   );
 };
 
-export default ContactForm;
+const mapStateToProps = (state) => {
+  return {
+    notes: state.notes.notes,
+  };
+};
+
+export default connect(mapStateToProps)(ContactForm);
