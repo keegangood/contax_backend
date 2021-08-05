@@ -12,7 +12,7 @@ const Avatar = ({ contact, height, width }) => {
             justify-content-center 
             text-secondary"
     >
-      {contact.firstName[0]}
+      {contact.firstName[0].toUpperCase()}
     </span>
   );
 };
