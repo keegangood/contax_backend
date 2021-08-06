@@ -23,7 +23,7 @@ const Notes = () => {
 
   return (
     <div>
-      <Row className="g-0">
+      <Row className="g-0 mb-2">
         <div xs={12}>
           <FormGroup className="p-3 pt-0">
             <Label htmlFor="newNote" className="field-label py-2 lead">
