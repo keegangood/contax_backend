@@ -87,8 +87,9 @@ export const deleteContact = createAsyncThunk(
 
 const initialState = {
   contacts: [], // logged in user's current access token
-  contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
+  currentContact: null,
   orderBy: "firstName",
+  contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
 };
 
 const ContactSlice = createSlice({
@@ -99,6 +100,12 @@ const ContactSlice = createSlice({
       return {
         contacts: state.contacts.concat(action.payload.contacts),
       };
+    },
+    setCurrentContact: (state, action) => {
+      return {
+        ...state,
+        currentContact: action.payload
+      }
     },
     setOrderBy: (state, action) => {
       return {
@@ -138,6 +145,6 @@ const ContactSlice = createSlice({
   },
 });
 
-export const { setContacts } = ContactSlice.actions;
+export const { setContacts, setCurrentContact, setOrderBy } = ContactSlice.actions;
 
 export default ContactSlice.reducer;

@@ -24,7 +24,7 @@ const Contacts = ({ history }) => {
   const dispatch = useDispatch();
 
   const { user, accessToken } = useSelector((state) => state.auth);
-  const { contacts, orderBy } = useSelector((state) => state.contacts);
+  const { contacts, orderBy, current } = useSelector((state) => state.contacts);
 
   useEffect(() => {
     const fetchContacts = async () => {

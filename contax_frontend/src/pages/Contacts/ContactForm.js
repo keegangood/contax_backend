@@ -35,9 +35,28 @@ const ContactForm = ({ contact, onSubmit }) => {
     cellPhoneNumber: "",
     homePhoneNumber: "",
     workPhoneNumber: "",
-    primaryPhone: "CELL",
+    primaryPhone: "",
     birthday: "",
   });
+
+  const { notes } = useSelector((state) => state.notes);
+  const { currentContact } = useSelector((state) => state.contacts);
+
+  useEffect(()=> {
+    if(currentContact){
+      setFormData({
+        firstName: currentContact.firstName,
+        lastName: currentContact.lastName,
+        email: currentContact.email,
+        cellPhoneNumber: currentContact.cellPhoneNumber,
+        homePhoneNumber: currentContact.homePhoneNumber,
+        workPhoneNumber: currentContact.workPhoneNumber,
+        primaryPhone: currentContact.primaryPhone,
+        birthday: currentContact.birthday,
+      })
+    }
+  },[currentContact])
+
 
   const {
     firstName,
@@ -50,7 +69,7 @@ const ContactForm = ({ contact, onSubmit }) => {
     primaryPhone,
   } = formData;
 
-  const { notes } = useSelector((state) => state.notes);
+
 
   const [phoneTooltipOpen, setPhoneTooltipOpen] = useState(false);
 
@@ -100,7 +119,7 @@ const ContactForm = ({ contact, onSubmit }) => {
           <Col xs={4} className="d-flex justify-content-end align-items-center">
             <Link to="/app">
               <AiOutlineCloseCircle
-                className="text-primary mx-2"
+                className="close-form-icon mx-2"
               />
             </Link>
           </Col>
@@ -153,6 +172,7 @@ const ContactForm = ({ contact, onSubmit }) => {
           type="email"
           placeholder="user@example.com"
           name="email"
+          value={email}
           onChange={onChange}
         />
       </FormGroup>
@@ -198,7 +218,7 @@ const ContactForm = ({ contact, onSubmit }) => {
                     <Input
                       type="tel"
                       name={`${phoneType}PhoneNumber`}
-                      value={formData[`${phoneType}PhoneNumber`]}
+                      value={formData[`${phoneType.toLowerCase()}PhoneNumber`]}
                       onChange={onChange}
                     />
                   </Col>
@@ -234,6 +254,7 @@ const ContactForm = ({ contact, onSubmit }) => {
               id="birthday"
               type="date"
               name="birthday"
+              value={birthday}
               onChange={onChange}
             />
           </FormGroup>
@@ -259,6 +280,7 @@ const ContactForm = ({ contact, onSubmit }) => {
 const mapStateToProps = (state) => {
   return {
     notes: state.notes.notes,
+    currentContact: state.contacts.currentContact
   };
 };
 

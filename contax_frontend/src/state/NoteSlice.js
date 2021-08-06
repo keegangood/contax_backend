@@ -44,6 +44,13 @@ const NoteSlice = createSlice({
         notes: state.notes.filter((note, index) => noteIndex !== index),
       };
     },
+    setNotes: (state, action) => {
+      const { notes } = action.payload;
+      return {
+        ...state,
+        notes,
+      };
+    },
   },
 });
 
