@@ -5,6 +5,7 @@ import {
   AiOutlineCloseCircle,
   AiOutlineEdit,
   AiOutlineSave,
+  AiOutlineDelete,
 } from "react-icons/ai";
 
 import {
@@ -53,7 +54,7 @@ const Notes = () => {
                               <span className="p-2 position-absolute d-flex flex-column top-0 end-0">
                                 {/* CANCEL EDIT NOTE */}
                                 <AiOutlineCloseCircle
-                                  className="text-danger  mb-2"
+                                  className="crud-icon cancel-icon mb-2"
                                   onClick={() => {
                                     setUpdatedNoteText("");
                                     dispatch(
@@ -63,7 +64,7 @@ const Notes = () => {
                                 />
                                 {/* SAVE EDIT NOTE */}
                                 <AiOutlineSave
-                                  className="text-primary mb-2"
+                                  className="crud-icon save-icon mb-2"
                                   onClick={() => {
                                     dispatch(
                                       updateNote({ noteIndex, updatedNoteText })
@@ -82,15 +83,15 @@ const Notes = () => {
                               {note.text}
                               <span className="position-absolute top-0 end-0 d-flex flex-column p-2">
                                 {/* DELETE NOTE */}
-                                <AiOutlineCloseCircle
-                                  className="text-danger  mb-2"
+                                <AiOutlineDelete
+                                  className="mb-2 crud-icon delete-icon"
                                   onClick={() => {
                                     dispatch(deleteNote({ noteIndex }));
                                   }}
                                 />
                                 {/* EDIT NOTE */}
                                 <AiOutlineEdit
-                                  className="text-info"
+                                  className="crud-icon edit-icon"
                                   onClick={() => {
                                     setUpdatedNoteText(note.text);
                                     dispatch(
@@ -123,11 +124,10 @@ const Notes = () => {
               size="sm"
               className="text-light my-2"
               onClick={() => {
-                if(newNoteText && newNoteText !== 'Notes cannot be blank!'){
-
+                if (newNoteText && newNoteText !== "Notes cannot be blank!") {
                   dispatch(addNote({ newNoteText }));
                 } else {
-                  setNewNoteText('Notes cannot be blank!')
+                  setNewNoteText("Notes cannot be blank!");
                 }
               }}
             >
