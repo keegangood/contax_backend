@@ -12,10 +12,42 @@
 
     .contact-avatar {
       font-size: 1.5rem;
+      font-weight: bold;
       height: 10vw;
       width: 10vw;
     }
+
+    .field-icon {
+      font-size: 1.3rem;
+    }
+    .contact-field {
+      color: $font-color-display;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+    }
+
+    .crud-icon {
+      font-size: 1.3rem;
+    }
+
+
+    .edit-icon {
+        color: $custom-light;
+
+        &:hover {
+            color: $custom-warning;
+        }
+    }
+    
+    .delete-icon {
+        color: $custom-light;
+
+        &:hover {
+            color: $custom-danger;
+        }
+    }
   }
+
   @media screen and (min-width: 768px) {
     .contact-body {
       font-size: 1.2rem;
@@ -23,6 +55,13 @@
       .contact-avatar {
         height: 7vw;
         width: 7vw;
+      }
+
+      #email-field {
+        // font-size: 1.5rem;
+      }
+      #phone-field {
+        // font-size: 1.5rem;
       }
     }
   }
@@ -32,8 +71,17 @@
       font-size: 1.2rem;
 
       .contact-avatar {
-        height: 3vw;
-        width: 3vw;
+        height: 7vw;
+        width: 7vw;
+        font-size: 2.5rem;
+      }
+
+      .field-icon {
+        font-size: 2rem;
+      }
+
+      .crud-icon {
+        font-size: 2rem;
       }
     }
   }
