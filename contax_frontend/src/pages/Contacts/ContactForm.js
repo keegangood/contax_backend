@@ -14,9 +14,9 @@ import {
   Tooltip,
 } from "reactstrap";
 
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineCloseCircle, AiOutlineInfoCircle } from "react-icons/ai";
 
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import Notes from "./Notes";
 
@@ -93,7 +93,18 @@ const ContactForm = ({ contact, onSubmit }) => {
       }}
     >
       <Label className="ps-2 py-2" tag="h1" id="form-label">
-        {formAction === "add" ? "Create Contact" : "Edit Contact"}
+        <Row className="g-0">
+          <Col xs={8}>
+            {formAction === "add" ? "Create Contact" : "Edit Contact"}
+          </Col>
+          <Col xs={4} className="d-flex justify-content-end align-items-center">
+            <Link to="/app">
+              <AiOutlineCloseCircle
+                className="text-primary mx-2"
+              />
+            </Link>
+          </Col>
+        </Row>
       </Label>
 
       {/* CONTACT AVATAR */}
@@ -219,7 +230,7 @@ const ContactForm = ({ contact, onSubmit }) => {
               Birthday
             </Label>
             <Input
-              className="form-field"
+              className="form-field text-secondary"
               id="birthday"
               type="date"
               name="birthday"
