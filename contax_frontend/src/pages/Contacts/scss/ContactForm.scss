@@ -35,4 +35,42 @@
     word-wrap: break-word;
     min-height: 35px;
   }
+
+  .crud-icon {
+    color: $custom-secondary;
+  }
+
+  .close-form-icon {
+      color: $custom-primary;
+
+      &:hover {
+          color: $custom-light;
+      }
+  }
+
+  @media screen and (min-width: 992px) {
+
+    .note {
+      .crud-icon {
+        font-size: 1.5rem;
+      }
+      .delete-icon,
+      .cancel-icon {
+        &:hover {
+          color: $custom-danger;
+        }
+      }
+      .edit-icon {
+        &:hover {
+          color: $custom-info;
+        }
+      }
+
+      .save-icon {
+        &:hover {
+          color: $custom-success;
+        }
+      }
+    }
+  }
 }
