@@ -72,7 +72,7 @@ const updateContact = formData => {
   console.log(path, url);
 
   return (
-    <Container>
+    <Container className="pb-5">
       <Row className="g-0">
         <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
           {formAction === "add" ? (
