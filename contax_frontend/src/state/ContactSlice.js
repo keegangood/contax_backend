@@ -14,13 +14,10 @@ export const getContacts = createAsyncThunk(
   async ({ accessToken, orderBy }, { rejectWithValue }) => {
     const url = BASE_URL + "/";
     const response = axios
-      .get(
-        url,
-        {
-          params: {order_by:orderBy},
-          headers: { ...headers, Authorization: `token ${accessToken}` },
-        }
-      )
+      .get(url, {
+        params: { order_by: orderBy },
+        headers: { ...headers, Authorization: `token ${accessToken}` },
+      })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
 
@@ -104,8 +101,8 @@ const ContactSlice = createSlice({
     setCurrentContact: (state, action) => {
       return {
         ...state,
-        currentContact: action.payload
-      }
+        currentContact: action.payload,
+      };
     },
     setOrderBy: (state, action) => {
       return {
@@ -145,6 +142,7 @@ const ContactSlice = createSlice({
   },
 });
 
-export const { setContacts, setCurrentContact, setOrderBy } = ContactSlice.actions;
+export const { setContacts, setCurrentContact, setOrderBy } =
+  ContactSlice.actions;
 
 export default ContactSlice.reducer;
