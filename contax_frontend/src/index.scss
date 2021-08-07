@@ -15,9 +15,14 @@ $theme-colors: (
 
 $form-check-input-bg: $custom-light;
 $form-check-input-focus-border: $custom-info;
-$form-check-input-checked-bg-color: $custom-info;
+$form-check-input-checked-bg-color: $custom-info; 
 $form-check-input-checked-border-color:$custom-info;
 $component-active-bg: $custom-info;
+
+$popover-bg: $custom-secondary;
+$popover-header-color: $font-color-display;
+
+$headings-font-family: $secondary-font;
 
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 

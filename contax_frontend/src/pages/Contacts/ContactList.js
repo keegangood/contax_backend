@@ -1,38 +1,49 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
-import {Row} from 'reactstrap';
+import { Row } from "reactstrap";
 
 import ContactItem from "./ContactItem";
 
-import './scss/ContactList.scss';
+import "./scss/ContactList.scss";
 
 const ContactList = ({ contacts, history }) => {
-  const [popoversOpen, setPopoversOpen] = useState({});
+  let [popoversOpen, setPopoversOpen] = useState({});
 
-  useEffect(()=>{
-    let popOvers = {};
+  // close all popovers on mount
+  useEffect(() => {
+    let popovers = {};
+    contacts.forEach((contact) => (popovers[contact.id] = false));
 
-    contacts.forEach(contact=>{
-      console.log('id', contact.id)
-      popOvers[`${contact.id}`] = false;
-    })
+    setPopoversOpen(popovers);
+  }, [contacts]);
 
-    setPopoversOpen(popOvers)
-  },[contacts])
+  const openPopover = (contact_id, isOpen) => {
+    let updatedPopovers = {};
 
-  const openPopOver = (contact_id) => {
-    console.log(contact_id)
-    setPopoversOpen(Object.keys(popoversOpen).map(popover_id=>{
-      if(popover_id === contact_id){
-        console.log()
+    // set the value at contact_id to true and all the rest to false
+    Object.keys(popoversOpen).forEach((popover_id) => {
+      // == because contact_id is a string and popover_id is a number
+      if (contact_id == popover_id) {
+        updatedPopovers[popover_id] = isOpen;
+        isOpen = false;
+      } else{
+        updatedPopovers[popover_id] = false;
       }
-  }))
-  }
+    });
+
+    // update state
+    setPopoversOpen(updatedPopovers);
+  };
 
   return (
     <Row className="g-0 mx-3 py-3" id="contact-list">
       {contacts.map((contact, i) => (
-          <ContactItem contact={contact} openPopOver={openPopOver} key={i} />
+        <ContactItem
+          contact={contact}
+          openPopover={openPopover}
+          popoverIsOpen={popoversOpen[contact.id]}
+          key={i}
+        />
       ))}
     </Row>
   );

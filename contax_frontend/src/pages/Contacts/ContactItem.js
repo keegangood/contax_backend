@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Popover, PopoverBody } from "reactstrap";
+import { Popover, PopoverBody, PopoverHeader } from "reactstrap";
 import formatPhoneNumber from "../../utils/formatPhoneNumber";
 
 import {
@@ -10,6 +10,8 @@ import {
   AiOutlineDelete,
   AiOutlineEdit,
   AiOutlineUser,
+  AiOutlineCheckCircle,
+  AiOutlineCloseCircle,
 } from "react-icons/ai";
 import { Row, Col } from "reactstrap";
 
@@ -19,9 +21,8 @@ import { setCurrentContact } from "../../state/ContactSlice";
 
 import "./scss/ContactItem.scss";
 
-const ContactItem = ({ contact, openPopOver }) => {
+const ContactItem = ({ contact, openPopover, popoverIsOpen }) => {
   const dispatch = useDispatch();
-
 
   const {
     firstName,
@@ -37,6 +38,7 @@ const ContactItem = ({ contact, openPopOver }) => {
     <Col
       sm={12}
       className="px-0 pb-2 mb-3 pb-md-3 mb-md-3 rounded contact-item shadow"
+      id={`contact-${contact.id}`}
     >
       <Row className="contact-body py-3 px-0 d-flex rounded align-items-center">
         {/* AVATAR */}
@@ -121,7 +123,33 @@ const ContactItem = ({ contact, openPopOver }) => {
                 }}
               />
             </Link>
-            <AiOutlineDelete className="crud-icon delete-icon my-3" onClick={()=>openPopOver(contact.id)}/>
+            <span>
+              <AiOutlineDelete
+                id={`contact-${contact.id}-popover`}
+                className="crud-icon delete-icon my-3"
+                onClick={() => openPopover(contact.id, !popoverIsOpen)}
+              />
+              <Popover
+                placement="left"
+                isOpen={popoverIsOpen}
+                target={`contact-${contact.id}-popover`}
+                className="rounded shadow"
+              >
+                <PopoverHeader hideArrow={false} className="bg-secondary">
+                  Delete?
+                </PopoverHeader>
+                <PopoverBody className="d-flex flex-column bg-light rounded-bottom">
+                  <span className="d-flex justify-content-between">
+                    <span className="crud-icon delete-confirm-icon">
+                      <AiOutlineCheckCircle />
+                    </span>
+                    <span className="">
+                      <AiOutlineCloseCircle className="crud-icon delete-cancel-icon" />
+                    </span>
+                  </span>
+                </PopoverBody>
+              </Popover>
+            </span>
           </div>
         </Col>
       </Row>
