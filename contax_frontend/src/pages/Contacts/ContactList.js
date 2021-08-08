@@ -17,7 +17,7 @@ const ContactList = ({ contacts, history }) => {
     setPopoversOpen(popovers);
   }, [contacts]);
 
-  const openPopover = (contact_id, isOpen) => {
+  const togglePopover = (contact_id, isOpen) => {
     let updatedPopovers = {};
 
     // set the value at contact_id to true and all the rest to false
@@ -40,7 +40,7 @@ const ContactList = ({ contacts, history }) => {
       {contacts.map((contact, i) => (
         <ContactItem
           contact={contact}
-          openPopover={openPopover}
+          togglePopover={togglePopover}
           popoverIsOpen={popoversOpen[contact.id]}
           key={i}
         />

@@ -232,7 +232,7 @@ const ContactForm = ({ contact, onSubmit }) => {
                   >
                     <Input
                       type="radio"
-                      checked={primaryPhone === phoneType}
+                      checked={primaryPhone.toUpperCase() === phoneType}
                       id={`primaryPhoneRadio${i}`}
                       name={`primaryPhoneRadio${i}`}
                       onClick={changePrimaryPhone}

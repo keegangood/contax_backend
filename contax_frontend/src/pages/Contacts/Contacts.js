@@ -27,7 +27,7 @@ const Contacts = ({ history }) => {
   const { contacts, orderBy, current } = useSelector((state) => state.contacts);
 
   useEffect(() => {
-    const fetchContacts = async () => {
+    (async () => {
       await dispatch(requestAccessToken())
         .then((res) => {
           // requestStatus will either be 'fulfilled' or 'rejected'
@@ -41,9 +41,8 @@ const Contacts = ({ history }) => {
           }
         })
         .catch((err) => console.error(err));
-    };
+    })();
 
-    fetchContacts();
   }, []);
 
   const addContact = (formData) => {
