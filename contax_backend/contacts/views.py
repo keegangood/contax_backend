@@ -45,6 +45,8 @@ def contact_list(request):
 
         form_data = request.data.get('form_data')
 
+        print('form_data', form_data)
+
         contact_serializer = ContactCreateSerializer(data=form_data)
 
         if contact_serializer.is_valid():
@@ -66,3 +68,32 @@ def contact_list(request):
     return response
     
 
+
+@api_view(['GET', 'POST'])
+@authentication_classes([SafeJWTAuthentication])
+@permission_classes([IsAuthenticated])
+@ensure_csrf_cookie
+def contact_detail(request, contact_pk):
+    '''
+    POST - update a contact
+    GET - get a single contact
+    '''
+    response = Response()
+    user = request.user
+
+    contact = Contact.objects.filter(pk=contact_pk, user=request.user).first()
+
+    contact_serializer = ContactDetailSerializer(contact)
+
+    if contact:
+        response.data = {
+            'contact': contact_serializer.data,
+            'message': 'Contact created successfully!'
+        }
+    else:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        response.data = {
+            'message': "Contact doesn't exist!"
+        }
+
+    return response
