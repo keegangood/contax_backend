@@ -36,9 +36,8 @@ export const register = createAsyncThunk(
     const url = BASE_URL + "/";
 
     const response = await axios
-      .post(url, {
+      .post(url, formData, {
         headers: headers,
-        data: { ...formData },
       })
       .then((res) => res.data)
       .catch((err) => err.response.data);
@@ -51,7 +50,7 @@ export const requestAccessToken = createAsyncThunk(
   "auth/requestAccessToken",
   async (_, { rejectWithValue }) => {
     const url = BASE_URL + "/token/";
-    
+
     const response = await axios
       .get(url, {
         headers: headers,
@@ -62,6 +61,8 @@ export const requestAccessToken = createAsyncThunk(
     return response;
   }
 );
+
+
 
 export const logout = createAsyncThunk(
   "auth/logout",

@@ -16,16 +16,22 @@ import {
 
 import { AiOutlineCloseCircle, AiOutlineInfoCircle } from "react-icons/ai";
 
-import { useParams, Link } from "react-router-dom";
+import { useParams, useRouteMatch, Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import Notes from "./Notes";
 
 import "./scss/ContactForm.scss";
+import { current } from "@reduxjs/toolkit";
+import { addNote } from "../../state/NoteSlice";
+import { getContactDetail, setCurrentContact } from "../../state/ContactSlice";
+import { requestAccessToken } from "../../state/AuthSlice";
 
 const PHONE_TYPES = ["CELL", "HOME", "WORK"];
 
-const ContactForm = ({ contact, onSubmit }) => {
-  let { formAction } = useParams();
+const ContactForm = ({ contact, onSubmit, match }) => {
+  let { formAction, contactId } = useParams();
+  let { url, path } = useRouteMatch();
+  let dispatch = useDispatch();
 
   // STATE
   const [formData, setFormData] = useState({
@@ -35,15 +41,38 @@ const ContactForm = ({ contact, onSubmit }) => {
     cellPhoneNumber: "",
     homePhoneNumber: "",
     workPhoneNumber: "",
-    primaryPhone: "",
+    primaryPhone: "CELL",
     birthday: "",
   });
 
   const { notes } = useSelector((state) => state.notes);
-  const { currentContact } = useSelector((state) => state.contacts);
+  const { currentContact, contactLoadingStatus } = useSelector(
+    (state) => state.contacts
+  );
 
-  useEffect(()=> {
-    if(currentContact){
+  // get the contact object for the contactId in url params
+  useEffect(() => {
+    if (contactId && !currentContact) {
+      (async () => {
+        await dispatch(requestAccessToken())
+          .then((res) => {
+            // requestStatus will either be 'fulfilled' or 'rejected'
+            const { requestStatus } = res.meta;
+            const { accessToken } = res.payload;
+
+            if (requestStatus === "fulfilled") {
+              dispatch(getContactDetail({ accessToken, contactId }));
+            } else if (requestStatus === "rejected") {
+              console.log("failure", res.payload);
+            }
+          })
+          .catch((err) => console.error(err));
+      })();
+    }
+  }, [contactId, currentContact]);
+
+  useEffect(() => {
+    if (currentContact) {
       setFormData({
         firstName: currentContact.firstName,
         lastName: currentContact.lastName,
@@ -53,23 +82,15 @@ const ContactForm = ({ contact, onSubmit }) => {
         workPhoneNumber: currentContact.workPhoneNumber,
         primaryPhone: currentContact.primaryPhone,
         birthday: currentContact.birthday,
-      })
+      });
+      currentContact.notes.map((note) => {
+        console.log(note.text);
+        dispatch(addNote({ newNoteText: note.text }));
+      });
     }
-  },[currentContact])
+  }, [currentContact]);
 
-
-  const {
-    firstName,
-    lastName,
-    email,
-    cellPhoneNumber,
-    homePhoneNumber,
-    workPhoneNumber,
-    birthday,
-    primaryPhone,
-  } = formData;
-
-
+  const { firstName, lastName, email, birthday, primaryPhone } = formData;
 
   const [phoneTooltipOpen, setPhoneTooltipOpen] = useState(false);
 
@@ -103,184 +124,189 @@ const ContactForm = ({ contact, onSubmit }) => {
   };
 
   return (
-    <Form
-      className="pb-3 rounded my-5"
-      id="contact-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
-      <Label className="ps-2 py-2" tag="h1" id="form-label">
-        <Row className="g-0">
-          <Col xs={8}>
-            {formAction === "add" ? "Create Contact" : "Edit Contact"}
+      <Form
+        className="pb-3 rounded my-5"
+        id="contact-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <Label className="ps-2 py-2" tag="h1" id="form-label">
+          <Row className="g-0">
+            <Col xs={8}>
+              {formAction === "add" ? "Create Contact" : "Edit Contact"}
+            </Col>
+            <Col
+              xs={4}
+              className="d-flex justify-content-end align-items-center"
+            >
+              <Link to="/app">
+                <AiOutlineCloseCircle className="close-form-icon mx-2" onClick={()=>{
+                    dispatch(setCurrentContact(null))
+                  }}/>
+              </Link>
+            </Col>
+          </Row>
+        </Label>
+
+        {/* CONTACT AVATAR */}
+        {contact && (
+          <Col sm={2}>
+            <Avatar contact={contact} />
           </Col>
-          <Col xs={4} className="d-flex justify-content-end align-items-center">
-            <Link to="/app">
-              <AiOutlineCloseCircle
-                className="close-form-icon mx-2"
+        )}
+
+        {/* NAME FIELDS */}
+        <FormGroup className="p-3 pt-4">
+          <Label htmlFor="name" className="field-label lead ps-1">
+            Name
+          </Label>
+          <Row className="g-0" id="name">
+            <Col xs={6} className="px-1">
+              <Input
+                type="text"
+                name="firstName"
+                placeholder="First"
+                value={firstName}
+                id="first-name"
+                onChange={onChange}
               />
-            </Link>
-          </Col>
-        </Row>
-      </Label>
+            </Col>
+            <Col xs={6} className="px-1">
+              <Input
+                type="text"
+                name="lastName"
+                placeholder="Last"
+                value={lastName}
+                id="last-name"
+                onChange={onChange}
+              />
+            </Col>
+          </Row>
+        </FormGroup>
 
-      {/* CONTACT AVATAR */}
-      {contact && (
-        <Col sm={2}>
-          <Avatar contact={contact} />
-        </Col>
-      )}
+        {/* EMAIL FIELD */}
+        <FormGroup className="p-3 pb-4 mb-2">
+          <Label htmlFor="email" className="field-label lead ps-1">
+            Email
+          </Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="user@example.com"
+            name="email"
+            value={email}
+            onChange={onChange}
+          />
+        </FormGroup>
 
-      {/* NAME FIELDS */}
-      <FormGroup className="p-3 pt-4">
-        <Label htmlFor="name" className="field-label lead ps-1">
-          Name
-        </Label>
-        <Row className="g-0" id="name">
-          <Col xs={6} className="px-1">
-            <Input
-              type="text"
-              name="firstName"
-              placeholder="First"
-              value={firstName}
-              id="first-name"
-              onChange={onChange}
-            />
-          </Col>
-          <Col xs={6} className="px-1">
-            <Input
-              type="text"
-              name="lastName"
-              placeholder="Last"
-              value={lastName}
-              id="last-name"
-              onChange={onChange}
-            />
-          </Col>
-        </Row>
-      </FormGroup>
+        {/* PHONE NUMBER FIELDS */}
+        <Row className="g-0 mb-2 h-100">
+          <Col xs={12} md={6}>
+            <FormGroup className="p-3 pt-0 pe-lg-0 border-end border-secondary">
+              <Row className="g-0">
+                <Col xs={9}>
+                  <Label htmlFor="phone" className="field-label py-2 lead">
+                    Phone{" "}
+                    <AiOutlineInfoCircle
+                      id="phoneInfo"
+                      onMouseEnter={togglePhoneTooltip}
+                      onMouseLeave={togglePhoneTooltip}
+                    ></AiOutlineInfoCircle>
+                    <Tooltip
+                      placement={"right"}
+                      target="phoneInfo"
+                      isOpen={phoneTooltipOpen}
+                      toggle={togglePhoneTooltip}
+                    >
+                      10-digit phone numbers only
+                    </Tooltip>
+                  </Label>
+                </Col>
+                <Col xs={3} className="field-label pt-4 text-center">
+                  Primary
+                </Col>
+              </Row>
 
-      {/* EMAIL FIELD */}
-      <FormGroup className="p-3 pb-4 mb-2">
-        <Label htmlFor="email" className="field-label lead ps-1">
-          Email
-        </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="user@example.com"
-          name="email"
-          value={email}
-          onChange={onChange}
-        />
-      </FormGroup>
-
-      {/* PHONE NUMBER FIELDS */}
-      <Row className="g-0 mb-2 h-100">
-        <Col xs={12} md={6}>
-          <FormGroup className="p-3 pt-0 pe-lg-0 border-end border-secondary">
-            <Row className="g-0">
-              <Col xs={9}>
-                <Label htmlFor="phone" className="field-label py-2 lead">
-                  Phone{" "}
-                  <AiOutlineInfoCircle
-                    id="phoneInfo"
-                    onMouseEnter={togglePhoneTooltip}
-                    onMouseLeave={togglePhoneTooltip}
-                  ></AiOutlineInfoCircle>
-                  <Tooltip
-                    placement={"right"}
-                    target="phoneInfo"
-                    isOpen={phoneTooltipOpen}
-                    toggle={togglePhoneTooltip}
-                  >
-                    10-digit phone numbers only
-                  </Tooltip>
-                </Label>
-              </Col>
-              <Col xs={3} className="field-label pt-4 text-center">
-                Primary
-              </Col>
-            </Row>
-
-            <Row className="g-0" id="phone">
-              {PHONE_TYPES.map((phoneType, i) => (
-                <Fragment key={i}>
-                  <Col
-                    xs={2}
-                    className="mb-2 field-label ps-1 d-flex flex-column justify-content-center"
-                  >
-                    {titleize(phoneType)}
-                  </Col>
-                  <Col xs={7} className="mb-2 ps-3">
-                    <Input
-                      type="tel"
-                      name={`${phoneType}PhoneNumber`}
-                      value={formData[`${phoneType.toLowerCase()}PhoneNumber`]}
-                      onChange={onChange}
-                    />
-                  </Col>
-                  <Col
-                    xs={3}
-                    className="
+              <Row className="g-0" id="phone">
+                {PHONE_TYPES.map((phoneType, i) => (
+                  <Fragment key={i}>
+                    <Col
+                      xs={2}
+                      className="mb-2 field-label ps-1 d-flex flex-column justify-content-center"
+                    >
+                      {titleize(phoneType)}
+                    </Col>
+                    <Col xs={7} className="mb-2 ps-3">
+                      <Input
+                        type="tel"
+                        name={`${phoneType.toLowerCase()}PhoneNumber`}
+                        value={
+                          formData[`${phoneType.toLowerCase()}PhoneNumber`]
+                        }
+                        onChange={onChange}
+                      />
+                    </Col>
+                    <Col
+                      xs={3}
+                      className="
                     mb-2 
                     d-flex flex-column 
                     justify-content-center 
                     align-items-center"
-                  >
-                    <Input
-                      type="radio"
-                      checked={primaryPhone.toUpperCase() === phoneType}
-                      id={`primaryPhoneRadio${i}`}
-                      name={`primaryPhoneRadio${i}`}
-                      onClick={changePrimaryPhone}
-                      data-phone-type={phoneType}
-                    />
-                  </Col>
-                </Fragment>
-              ))}
-            </Row>
-          </FormGroup>
-        </Col>
-        <Col xs={12} md={6} id="birthday-field">
-          <FormGroup className="p-3 pt-0">
-            <Label htmlFor="birthday" className="field-label py-2 lead">
-              Birthday
-            </Label>
-            <Input
-              className="form-field text-secondary"
-              id="birthday"
-              type="date"
-              name="birthday"
-              value={birthday}
-              onChange={onChange}
-            />
-          </FormGroup>
-        </Col>
-      </Row>
-
-      {/* NOTES FIELD */}
-      <Notes />
-
-      <FormGroup>
-        <Row className="g-0">
-          <Col xs={{ size: 6, offset: 3 }} className="text-center p-3">
-            <Button color="info" size="lg">
-              Submit
-            </Button>
+                    >
+                      <Input
+                        type="radio"
+                        checked={primaryPhone.toUpperCase() === phoneType}
+                        id={`primaryPhoneRadio${i}`}
+                        name={`primaryPhoneRadio${i}`}
+                        onClick={changePrimaryPhone}
+                        data-phone-type={phoneType}
+                      />
+                    </Col>
+                  </Fragment>
+                ))}
+              </Row>
+            </FormGroup>
+          </Col>
+          <Col xs={12} md={6} id="birthday-field">
+            <FormGroup className="p-3 pt-0">
+              <Label htmlFor="birthday" className="field-label py-2 lead">
+                Birthday
+              </Label>
+              <Input
+                className="form-field text-secondary"
+                id="birthday"
+                type="date"
+                name="birthday"
+                value={birthday}
+                onChange={onChange}
+              />
+            </FormGroup>
           </Col>
         </Row>
-      </FormGroup>
-    </Form>
+
+        {/* NOTES FIELD */}
+        <Notes />
+
+        <FormGroup>
+          <Row className="g-0">
+            <Col xs={{ size: 6, offset: 3 }} className="text-center p-3">
+              <Button color="info" size="lg">
+                Submit
+              </Button>
+            </Col>
+          </Row>
+        </FormGroup>
+      </Form>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
     notes: state.notes.notes,
-    currentContact: state.contacts.currentContact
+    currentContact: state.contacts.currentContact,
   };
 };
 

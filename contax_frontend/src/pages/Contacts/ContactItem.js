@@ -185,7 +185,7 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen }) => {
           xs={12}
           className="d-flex align-items-center justify-content-end mt-3"
         >
-          <Link to="/app/edit">
+          <Link to={`/app/edit/${contact.id}`}>
             <AiOutlineEdit
               className="crud-icon edit-icon m-2"
               onClick={() => {

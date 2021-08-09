@@ -25,6 +25,23 @@ export const getContacts = createAsyncThunk(
   }
 );
 
+
+// get a single contact
+export const getContactDetail = createAsyncThunk(
+  "contacts/getContactDetail",
+  async ({ accessToken, contactId }, { rejectWithValue }) => {
+    const url = BASE_URL + `/detail/${contactId}`;
+    const response = axios
+      .get(url, {
+        headers: { ...headers, Authorization: `token ${accessToken}` },
+      })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
+
+    return response;
+  }
+);
+
 // create a new contact
 export const createContact = createAsyncThunk(
   "contacts/create",
@@ -86,7 +103,7 @@ const initialState = {
   contacts: [], // logged in user's current access token
   currentContact: null,
   orderBy: "firstName",
-  contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
+  contactLoadingStatus: "IDLE", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
 };
 
 const ContactSlice = createSlice({
@@ -124,10 +141,14 @@ const ContactSlice = createSlice({
       state.contactLoadingStatus = "IDLE";
     },
 
+    // CREATE CONTACT
     [createContact.pending]: (state, action) => {
-      // CREATE CONTACT
+      state.contactLoadingStatus = "PENDING";
     },
-    [createContact.rejected]: (state, action) => {},
+    [createContact.rejected]: (state, action) => {
+      state.contacts = [];
+      state.contactLoadingStatus = "IDLE";
+    },
     [createContact.fulfilled]: (state, action) => {},
 
     // UPDATE CONTACT
@@ -139,6 +160,19 @@ const ContactSlice = createSlice({
     [deleteContact.pending]: (state, action) => {},
     [deleteContact.rejected]: (state, action) => {},
     [deleteContact.fulfilled]: (state, action) => {},
+
+    // GET SINGLE CONTACT
+    [getContactDetail.pending]: (state, action) => {
+      state.contactLoadingStatus = "PENDING";
+    },
+    [getContactDetail.rejected]: (state, action) => {
+      state.currentContact = null;
+      state.contactLoadingStatus = "IDLE";
+    },
+    [getContactDetail.fulfilled]: (state, action) => {
+      state.currentContact = action.payload.contact;
+      state.contactLoadingStatus = "IDLE";
+    },
   },
 });
 

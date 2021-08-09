@@ -125,6 +125,7 @@ const Notes = () => {
               className="text-light my-2"
               onClick={() => {
                 if (newNoteText && newNoteText !== "Notes cannot be blank!") {
+                  setNewNoteText("");
                   dispatch(addNote({ newNoteText }));
                 } else {
                   setNewNoteText("Notes cannot be blank!");

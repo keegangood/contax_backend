@@ -45,7 +45,6 @@ def contact_list(request):
 
         form_data = request.data.get('form_data')
 
-        print('form_data', form_data)
 
         contact_serializer = ContactCreateSerializer(data=form_data)
 
