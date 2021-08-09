@@ -1,4 +1,5 @@
 import jwt
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -18,6 +19,8 @@ from .serializers import UserCreateSerializer, UserDetailSerializer
 from .utils import generate_access_token, generate_refresh_token
 
 
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
@@ -27,13 +30,13 @@ def register(request):
     response = Response()
 
     # extract form data from request
-    formData = request.data.get('data').get('formData')
+    form_data = request.data
 
     # add email as defaut username
-    formData['username'] = formData['email']
+    form_data['username'] = form_data['email']
 
     # serialize request JSON data
-    new_user_serializer = UserCreateSerializer(data=formData)
+    new_user_serializer = UserCreateSerializer(data=form_data)
 
     if request.data.get('password') != request.data.get('password2'):
         # if password and password2 don't match return status 400
@@ -42,6 +45,7 @@ def register(request):
         return response
 
     if new_user_serializer.is_valid():
+
         # If the data is valid, create the item in the database
         new_user = new_user_serializer.save()
 
@@ -81,6 +85,8 @@ def register(request):
     return response
 
 
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
@@ -91,10 +97,10 @@ def login(request):
     # create response object
     response = Response()
 
-    formData = request.data
+    form_data = request.data
 
-    email = formData.get('email')
-    password = formData.get('password')
+    email = form_data.get('email')
+    password = form_data.get('password')
 
     if email is None or password is None:
         response.data = {'msg': ['Email and password required.']}
@@ -148,6 +154,8 @@ def login(request):
     return response
 
 
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([SafeJWTAuthentication])
@@ -193,6 +201,8 @@ def auth(request):
     serialized_user = UserDetailSerializer(instance=user)
     response.data = {'user': serialized_user.data}
     return response
+
+
 
 
 @api_view(['GET'])
@@ -301,12 +311,26 @@ def extend_token(request):
     # generate new access token for the user
     new_access_token = generate_access_token(user)
 
+    expiry = settings.ACCESS_TOKEN_EXPIRY
+    now = datetime.now()
+    delta = timedelta(
+        days=expiry['days'],
+        hours=expiry['hours'],
+        minutes=expiry['minutes'],
+        seconds=expiry['seconds'],
+    )
+
+    token_expiry = (now + delta).strftime("%Y-%m-%d %H:%M:%S")
+
     response.data = {
         'accessToken': new_access_token,
+        'tokenExpiry': token_expiry,
         'user': UserDetailSerializer(user).data
     }
     
     return response
+
+
 
 
 @api_view(['GET', 'PUT'])
