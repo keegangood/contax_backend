@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Fade } from "reactstrap";
 import formatPhoneNumber from "../../utils/formatPhoneNumber";
@@ -9,7 +9,6 @@ import {
   AiOutlineMail,
   AiOutlineDelete,
   AiOutlineEdit,
-  AiOutlineUser,
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
 } from "react-icons/ai";
@@ -29,9 +28,6 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen }) => {
     lastName,
     email,
     primaryPhone,
-    cellPhoneNumber,
-    homePhoneNumber,
-    workPhoneNumber,
   } = contact;
 
   return (

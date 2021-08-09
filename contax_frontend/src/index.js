@@ -4,7 +4,7 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import { Provider, useDispatch, useSelector, connect } from "react-redux";
+import { Provider} from "react-redux";
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
 import rootReducer from "./state";
 import thunk from "redux-thunk";

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,} from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
-import { Button, Row, Col as div, FormGroup, Label, Input } from "reactstrap";
+import { Button, Row, Col, FormGroup, Label, Input } from "reactstrap";
 import {
   AiOutlineCloseCircle,
   AiOutlineEdit,
@@ -32,17 +32,17 @@ const Notes = () => {
             </Label>
 
             {notes && notes.length > 0 && (
-              <div
+              <Col
                 className="bg-primary-light p-2 rounded mb-2"
                 id="notes-list"
               >
                 <Row className="g-0 p-2 relative">
                   {notes.map((note, noteIndex) => (
                     <>
-                      <div xs={12} className="note p-2" key={noteIndex}>
+                      <Col xs={12} className="note p-2" key={noteIndex}>
                         {note.editing ? (
                           <Row className="g-0 d-flex justify-content-center">
-                            <div xs={12} className="position-relative">
+                            <Col xs={12} className="position-relative">
                               <Input
                                 tag={"textarea"}
                                 value={updatedNoteText}
@@ -72,11 +72,11 @@ const Notes = () => {
                                   }}
                                 />
                               </span>
-                            </div>
+                            </Col>
                           </Row>
                         ) : (
                           <Row className="g-0 d-flex align-items-center">
-                            <div
+                            <Col
                               xs={12}
                               className="p-4 rounded bg-light position-relative"
                             >
@@ -100,15 +100,15 @@ const Notes = () => {
                                   }}
                                 />
                               </span>
-                            </div>
+                            </Col>
                           </Row>
                         )}
-                      </div>
-                      <div xs={2} className="d-flex align-items-center"></div>
+                      </Col>
+                      <Col xs={2} className="d-flex align-items-center"></Col>
                     </>
                   ))}
                 </Row>
-              </div>
+              </Col>
             )}
 
             <Input

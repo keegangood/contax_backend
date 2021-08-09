@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
-import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
+import { useRouteMatch, useParams } from "react-router-dom";
 
 import { Container, Row, Col } from "reactstrap";
 
@@ -11,7 +11,6 @@ import ContactForm from "./ContactForm";
 import { requestAccessToken } from "../../state/AuthSlice";
 import {
   getContacts,
-  setContacts,
   createContact,
 } from "../../state/ContactSlice";
 
@@ -22,10 +21,10 @@ const Contacts = ({ history }) => {
   const { formAction } = useParams();
   const dispatch = useDispatch();
 
-  const { user, accessToken, isAuthenticated } = useSelector(
+  const { accessToken } = useSelector(
     (state) => state.auth
   );
-  const { contacts, orderBy, currentContact, contactLoadingStatus } =
+  const { contacts, orderBy, contactLoadingStatus } =
     useSelector((state) => state.contacts);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ const Contacts = ({ history }) => {
           .catch((err) => console.error(err));
       })();
     }
-  }, []);
+  }, [dispatch]);
 
   const addContact = (formData) => {
     (async () => {

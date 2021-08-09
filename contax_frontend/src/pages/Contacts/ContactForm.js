@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
 
 import titleize from "../../utils/titleize";
@@ -21,7 +21,6 @@ import Avatar from "../../components/Avatar";
 import Notes from "./Notes";
 
 import "./scss/ContactForm.scss";
-import { current } from "@reduxjs/toolkit";
 import { addNote } from "../../state/NoteSlice";
 import { getContactDetail, setCurrentContact } from "../../state/ContactSlice";
 import { requestAccessToken } from "../../state/AuthSlice";
@@ -30,7 +29,6 @@ const PHONE_TYPES = ["CELL", "HOME", "WORK"];
 
 const ContactForm = ({ contact, onSubmit, match }) => {
   let { formAction, contactId } = useParams();
-  let { url, path } = useRouteMatch();
   let dispatch = useDispatch();
 
   // STATE
@@ -95,10 +93,6 @@ const ContactForm = ({ contact, onSubmit, match }) => {
   const [phoneTooltipOpen, setPhoneTooltipOpen] = useState(false);
 
   const togglePhoneTooltip = () => setPhoneTooltipOpen(!phoneTooltipOpen);
-
-  // newNote form input state
-  const [newNote, setNewNote] = useState("");
-  const [updatedNoteText, setUpdatedNoteText] = useState("");
 
   //
   // HANDLE FORM INPUT CHANGES

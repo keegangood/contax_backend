@@ -1,14 +1,12 @@
-import { React, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector, connect } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
+import { React } from "react";
+import { useDispatch, connect } from "react-redux";
 
 import "./scss/UserAuth.scss";
 import UserAuthForm from "./UserAuthForm";
 // import Loading from "../../layout/Loading";
 // import { ReactComponent as Logo } from "../../../assets/img/Logo.svg";
 
-import { login, register, requestAccessToken } from "../../state/AuthSlice";
+import { login, register } from "../../state/AuthSlice";
 
 const LoginExtra = (
   <div className="row g-0 auth-extra-content">
@@ -33,11 +31,11 @@ const SignupExtra = (
 );
 
 const UserAuth = ({ pageAction, pageTitle, ...props }) => {
-  const dispatch = useDispatch();
 
-  const { isAuthenticated, authLoadingStatus } = useSelector(
-    (state) => state.auth
-  );
+
+  console.log("USER AUTH LOADED BITCHES")
+
+  const dispatch = useDispatch();
 
   const callApi = async (formData) => {
     if (pageAction === "login") {
