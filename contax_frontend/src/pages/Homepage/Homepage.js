@@ -10,7 +10,7 @@ const Homepage = () => {
       <div className="col col-12 bg-app">
         <div className="row g-0">
           <div className="col col-12 bg-primary pb-3">
-            <Jumbotron id="hero" className="mx-0">
+            <Jumbotron id="hero" className="mx-0" aria-label="Header image by: freephotocc">
               <div
                 className="
                   row
@@ -50,8 +50,6 @@ const Homepage = () => {
         </div>
         <div className="col col-12 bg-secondary" id="right-column"></div>
       </div>
-      Header image by:{" "}
-      <a href="https://pixabay.com/users/freephotocc-2275370/">freephotocc</a>
     </div>
   );
 };
