@@ -31,8 +31,13 @@ class SafeJWTAuthentication(BaseAuthentication):
         try:
             # header = 'Token xxxxxxxxxxxxxxxxxxxxxxxx'
             access_token = authorization_heaader.split(' ')[1]
+
             payload = jwt.decode(
                 access_token, settings.SECRET_KEY, algorithms=['HS256'])
+        
+        # if token doesn't exist
+        except IndexError:
+            raise exceptions.AuthenticationFailed('Token prefix missing')
 
         # if token is expired
         except jwt.ExpiredSignatureError:
@@ -41,9 +46,6 @@ class SafeJWTAuthentication(BaseAuthentication):
                     'msg': 'Access token expired',
                 }
             )
-        # if token doesn't exist
-        except IndexError:
-            raise exceptions.AuthenticationFailed('Token prefix missing')
 
         # get the user associated with the token
         user = User.objects.filter(id=payload['user_id']).first()
