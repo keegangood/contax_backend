@@ -8,6 +8,7 @@ import UserAuthForm from "./UserAuthForm";
 // import { ReactComponent as Logo } from "../../../assets/img/Logo.svg";
 
 import { login, register } from "../../state/AuthSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const LoginExtra = (
   <div className="row g-0 auth-extra-content">
@@ -31,7 +32,7 @@ const SignupExtra = (
   </div>
 );
 
-const UserAuth = ({ pageAction, pageTitle, ...props }) => {
+const UserAuth = ({ pageAction, pageTitle, history, ...props }) => {
   const dispatch = useDispatch();
 
   const callApi = async (formData) => {
@@ -39,13 +40,23 @@ const UserAuth = ({ pageAction, pageTitle, ...props }) => {
       const { email, password } = formData;
 
       await dispatch(login({ email, password }))
+        .then(unwrapResult)
         .then((res) => {
-          props.history.push("/app");
+          if (history) {
+            let redirectPath = "app";
+            if (history.location.state) {
+              redirectPath = history.location.state.referrer;
+            }
+            history.push(redirectPath);
+          }
         })
         .catch((err) => console.log(err));
     } else if (pageAction === "signup") {
       await dispatch(register({ formData }))
-        .then((res) => props.history.push("/app"))
+        .then(unwrapResult)
+        .then((res) => {
+          history.push('/app')
+        })
         .catch((err) => JSON.stringify(err));
     }
   };
@@ -99,4 +110,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(UserAuth);
+export default withRouter(connect(mapStateToProps)(UserAuth));
