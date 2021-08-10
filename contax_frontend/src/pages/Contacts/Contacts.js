@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { useRouteMatch, useParams } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 import { Container, Row, Col } from "reactstrap";
 
@@ -9,48 +10,69 @@ import ContactList from "./ContactList";
 import ContactForm from "./ContactForm";
 
 import { requestAccessToken } from "../../state/AuthSlice";
-import {
+import ContactSlice, {
   getContacts,
   createContact,
+  getContactDetail,
 } from "../../state/ContactSlice";
 
 import "./scss/Contacts.scss";
 
 const Contacts = ({ history }) => {
   const { url, path } = useRouteMatch();
-  const { formAction } = useParams();
+  const { formAction, contactId } = useParams();
   const dispatch = useDispatch();
 
-  const { accessToken } = useSelector(
-    (state) => state.auth
-  );
-  const { contacts, orderBy, contactLoadingStatus } =
+  const { accessToken } = useSelector((state) => state.auth);
+  const { contacts, currentContact, orderBy, contactLoadingStatus } =
     useSelector((state) => state.contacts);
 
+  console.log('contacts',contacts)
+  console.log('contactLoadingStatus', contactLoadingStatus)
+
   useEffect(() => {
-    if (contacts.length === 0) {
+    if (!contacts) {
       (async () => {
         await dispatch(requestAccessToken())
+          .then(unwrapResult)
           .then((res) => {
-            // requestStatus will either be 'fulfilled' or 'rejected'
-            const { requestStatus } = res.meta;
-            const { accessToken } = res.payload;
-
-            if (requestStatus === "fulfilled") {
-              dispatch(getContacts({ accessToken, orderBy }));
-            } else if (requestStatus === "rejected") {
-              console.log("failure", res.payload);
-            }
+            const { accessToken } = res;
+            console.log('TOKENRESULT', res)
+            dispatch(getContacts({ accessToken, orderBy }));
           })
           .catch((err) => console.error(err));
       })();
     }
-  }, [dispatch]);
+  }, [contacts, contactLoadingStatus, dispatch]);
+
+  // get the contact object for the contactId in url params
+  useEffect(() => {
+    if (!contactId && formAction === "edit") {
+      history.push("/app/add");
+    } else if (contactId && !currentContact) {
+      (async () => {
+        await dispatch(requestAccessToken())
+          .then(unwrapResult)
+          .then((res) => {
+            let { accessToken } = res;
+
+            dispatch(getContactDetail({ accessToken, contactId }))
+              .then(unwrapResult)
+              .then((res) => console.log("woo!", res))
+              .catch((err) => console.log("oops!", err));
+          })
+          .catch((err) => {
+            console.log(err);
+            history.push("/login");
+          });
+      })();
+    }
+  }, [contactId, currentContact]);
 
   const addContact = (formData) => {
     (async () => {
       await dispatch(requestAccessToken())
-        .then((res) => { 
+        .then((res) => {
           // requestStatus will either be 'fulfilled' or 'rejected'
           const { requestStatus } = res.meta;
           const { accessToken } = res.payload;
@@ -74,20 +96,20 @@ const Contacts = ({ history }) => {
   return (
     <Container className="pb-5">
       <Row className="g-0">
-        {contactLoadingStatus === "PENDING" ? (
+        {!contacts && contactLoadingStatus === "PENDING" ? (
           "Loading Contacts..."
         ) : (
           <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
             {formAction === "add" ? (
-              <ContactForm onSubmit={addContact} />
+              <ContactForm formAction="add" onSubmit={addContact} />
             ) : formAction === "edit" ? (
-              <ContactForm onSubmit={updateContact} />
+              <ContactForm formAction="edit" onSubmit={updateContact} />
             ) : (
               ""
             )}
             {!formAction && (
               <>
-                {contacts.length > 0 ? (
+                {contacts && contacts.length > 0 ? (
                   <ContactList contacts={contacts} />
                 ) : (
                   "No Contacts"
