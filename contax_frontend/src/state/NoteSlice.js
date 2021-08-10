@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const isDuplicateNote = (newNoteText, notes) => {
+  return notes.some(
+    (note) => newNoteText.toLowerCase() === note.text.toLowerCase()
+  );
+};
+
 const initialState = {
   notes: [],
   newNoteText: "",
@@ -12,13 +18,23 @@ const NoteSlice = createSlice({
   reducers: {
     addNote: (state, action) => {
       const { newNoteText } = action.payload;
-      return {
-        notes: state.notes.concat({ text: newNoteText, editing: false }),
-      };
+
+      if (!isDuplicateNote(newNoteText, state.notes)) {
+        return {
+          ...state,
+          notes: state.notes.concat({ text: newNoteText, editing: false }),
+        };
+      } else {
+        return {
+          ...state,
+          newNoteText: "Duplicate note!",
+        };
+      }
     },
     editNote: (state, action) => {
       const { noteIndex, editing } = action.payload;
       return {
+        ...state,
         notes: state.notes.map((note, index) =>
           noteIndex === index
             ? { ...note, editing }
@@ -28,13 +44,21 @@ const NoteSlice = createSlice({
     },
     updateNote: (state, action) => {
       const { noteIndex, updatedNoteText } = action.payload;
-      return {
-        notes: state.notes.map((note, index) =>
-          noteIndex === index
-            ? { ...note, text: updatedNoteText, editing: false }
-            : note
-        ),
-      };
+      if (!isDuplicateNote(updatedNoteText, state.notes)) {
+        return {
+          ...state,
+          notes: state.notes.map((note, index) =>
+            noteIndex === index
+              ? { ...note, text: updatedNoteText, editing: false }
+              : note
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          newNoteText: "Duplicate note!",
+        };
+      }
     },
     deleteNote: (state, action) => {
       const { noteIndex } = action.payload;
@@ -48,12 +72,34 @@ const NoteSlice = createSlice({
       const { notes } = action.payload;
       return {
         ...state,
-        notes,
+        notes: notes,
+      };
+    },
+    setNewNoteText: (state, action) => {
+      const { newNoteText } = action.payload;
+      return {
+        ...state,
+        newNoteText: action.payload,
+      };
+    },
+    setUpdatedNoteText: (state, action) => {
+      const { updatedNoteText } = action.payload;
+      return {
+        ...state,
+        updatedNoteText: action.payload,
       };
     },
   },
 });
 
-export const { addNote, editNote, updateNote, deleteNote } = NoteSlice.actions;
+export const {
+  setNotes,
+  addNote,
+  editNote,
+  updateNote,
+  deleteNote,
+  setNewNoteText,
+  setUpdatedNoteText,
+} = NoteSlice.actions;
 
 export default NoteSlice.reducer;
