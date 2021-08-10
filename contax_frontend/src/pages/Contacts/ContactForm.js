@@ -104,11 +104,11 @@ const ContactForm = ({ formAction, onSubmit }) => {
       <Label className="p-3 m-0" tag="h1" id="form-label">
         <Row className="g-0">
           {/* CONTACT AVATAR */}
-            <Col xs={2}>
+            <Col xs={2} md={1}>
               <Avatar contact={currentContact} />
             </Col>
           {/* FORM ACTION */}
-          <Col xs={8} className="d-flex align-items-center ps-3">
+          <Col xs={8} md={9} className="d-flex align-items-center ps-3">
             <span>
 
             {formAction === "add" ? "Create Contact" : "Edit Contact"}

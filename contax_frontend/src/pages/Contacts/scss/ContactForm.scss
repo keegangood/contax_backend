@@ -57,7 +57,12 @@
   }
 
   @media screen and (min-width: 992px) {
-
+    .contact-avatar {
+      font-weight: bold;
+      font-family: $secondary-font;
+      height: 5vw;
+      width: 5vw;
+    }
     .note {
       .crud-icon {
         font-size: 1.5rem;
