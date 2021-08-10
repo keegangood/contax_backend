@@ -27,6 +27,14 @@
     font-family: $secondary-font;
   }
 
+  .contact-avatar {
+    font-size: 1.3rem;
+    font-weight: bold;
+    font-family: $secondary-font;
+    height: 15vw;
+    width: 15vw;
+  }
+
   #birthday-field {
     background-color: $custom-primary;
   }
