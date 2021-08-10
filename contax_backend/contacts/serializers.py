@@ -12,6 +12,7 @@ class ContactCreateSerializer(serializers.ModelSerializer):
             'home_phone_number',
             'cell_phone_number',
             'work_phone_number',
+            'primary_phone',
             'birthday',
             'notes'
         ]
