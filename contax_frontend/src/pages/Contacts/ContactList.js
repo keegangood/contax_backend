@@ -6,7 +6,7 @@ import ContactItem from "./ContactItem";
 
 import "./scss/ContactList.scss";
 
-const ContactList = ({ contacts, history }) => {
+const ContactList = ({ contacts, onDeleteContact }) => {
   let [popoversOpen, setPopoversOpen] = useState({});
 
   // close all popovers on mount
@@ -42,6 +42,7 @@ const ContactList = ({ contacts, history }) => {
           contact={contact}
           togglePopover={togglePopover}
           popoverIsOpen={popoversOpen[contact.id]}
+          onDeleteContact={onDeleteContact}
           key={i}
         />
       ))}

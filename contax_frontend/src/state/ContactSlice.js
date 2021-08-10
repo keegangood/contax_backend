@@ -88,13 +88,12 @@ export const updateContact = createAsyncThunk(
 // delete a contact from the database
 export const deleteContact = createAsyncThunk(
   "contacts/delete",
-  async (formData, { rejectWithValue }) => {
-    const url = BASE_URL + "/";
+  async ({contactId, accessToken}, { rejectWithValue }) => {
+    const url = BASE_URL + `/delete/${contactId}`;
 
     const response = await axios
-      .post(url, {
-        headers: headers,
-        data: { ...formData },
+      .post(url, {}, {
+        headers: {...headers, Authorization: `token ${accessToken}`},
       })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));

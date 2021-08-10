@@ -15,6 +15,8 @@ import {
   createContact,
   getContactDetail,
   updateContact,
+  deleteContact,
+  setContacts
 } from "../../state/ContactSlice";
 
 import { setNotes } from "../../state/NoteSlice";
@@ -22,7 +24,6 @@ import { setNotes } from "../../state/NoteSlice";
 import "./scss/Contacts.scss";
 
 const Contacts = ({ history }) => {
-  const { url, path } = useRouteMatch();
   const { formAction, contactId } = useParams();
   const dispatch = useDispatch();
 
@@ -35,6 +36,7 @@ const Contacts = ({ history }) => {
   //
   //
 
+  // GET ALL CONTACTS
   useEffect(() => {
     if (!contacts) {
       (async () => {
@@ -49,6 +51,7 @@ const Contacts = ({ history }) => {
     }
   }, [contacts, contactLoadingStatus, dispatch]);
 
+  // RETRIEVE SINGLE CONTACT
   // get the contact object for the contactId in url params
   useEffect(() => {
     if (
@@ -77,6 +80,7 @@ const Contacts = ({ history }) => {
     }
   }, [contactId, currentContact, contactLoadingStatus]);
 
+  // CREATE CONTACT
   const onCreateContact = (formData) => {
     (async () => {
       await dispatch(requestAccessToken())
@@ -93,6 +97,7 @@ const Contacts = ({ history }) => {
     })();
   };
 
+  // UPDATE CONTACT
   const onUpdateContact = (formData) => {
     (async () => {
       await dispatch(requestAccessToken())
@@ -103,6 +108,25 @@ const Contacts = ({ history }) => {
           dispatch(updateContact({ contactId, formData, accessToken }))
             .then(unwrapResult)
             .then((res) => {
+              history.push("/app");
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.error(err));
+    })();
+  };
+
+  // DELETE CONTACT
+  const onDeleteContact = (contactId) => {
+    (async () => {
+      await dispatch(requestAccessToken())
+        .then(unwrapResult)
+        .then((res) => {
+          const { accessToken } = res;
+          dispatch(deleteContact({ contactId, accessToken }))
+            .then(unwrapResult)
+            .then((res) => {
+              dispatch(getContacts({accessToken}));
               history.push("/app");
             })
             .catch((err) => console.log(err));
@@ -128,7 +152,7 @@ const Contacts = ({ history }) => {
             {!formAction && (
               <>
                 {contacts && contacts.length > 0 ? (
-                  <ContactList contacts={contacts} />
+                  <ContactList contacts={contacts} onDeleteContact={onDeleteContact}/>
                 ) : (
                   "No Contacts"
                 )}

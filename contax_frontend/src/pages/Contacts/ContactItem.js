@@ -20,7 +20,7 @@ import { setCurrentContact } from "../../state/ContactSlice";
 
 import "./scss/ContactItem.scss";
 
-const ContactItem = ({ contact, togglePopover, popoverIsOpen }) => {
+const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact }) => {
   const dispatch = useDispatch();
 
   const {
@@ -85,6 +85,7 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen }) => {
                   align-items-center
                   justify-content-center
                 "
+                onClick={()=>onDeleteContact(contact.id)}
               >
                 <AiOutlineCheckCircle />
               </span>
