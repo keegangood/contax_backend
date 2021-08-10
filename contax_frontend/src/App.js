@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  withRouter,
+} from "react-router-dom";
 import { createBrowserHistory } from "history";
 import { useDispatch, useSelector, connect } from "react-redux";
 
@@ -23,10 +28,6 @@ function App() {
   );
 
   useEffect(() => {
-    console.log(history);
-  }, [history]);
-
-  useEffect(() => {
     if (!isAuthenticated && !user) {
       (async () => {
         console.log("app loaded");
@@ -38,39 +39,41 @@ function App() {
   return (
     <Container fluid className="g-0">
       <Router history={history}>
-        <Route exact path="/" component={Homepage} />
-        <Route
-          exact
-          path="/login"
-          component={UserAuth}
-          pageAction={"login"}
-          pageTitle={"Log in"}
-          history={history}
-        />
-        <Route
-          exact
-          path="/signup"
-          component={<UserAuth />}
-          pageAction={"signup"}
-          pageTitle={"Sign up"}
-          history={history}
-        />
-        <PrivateRoute
-          exact
-          path="/app"
-          // history={history}
-          isAuthenticated={isAuthenticated}
-          authLoadingStatus={authLoadingStatus}
-          component={Contacts}
-        />
-        {/* <PrivateRoute
-          exact
-          path="/app/:formAction?/:contactId?"
-          // history={history}
-          isAuthenticated={isAuthenticated}
-          authLoadingStatus={authLoadingStatus}
-          component={Contacts}
-          /> */}
+        <Switch>
+          <Route exact path="/" component={Homepage} />
+          <Route
+            exact
+            path="/login"
+            component={(props) => (
+              <UserAuth pageAction={"login"} pageTitle={"Log in"} />
+            )}
+            history={history}
+          />
+          <Route
+            exact
+            path="/signup"
+            component={(props) => (
+              <UserAuth pageAction={"signup"} pageTitle={"Sign up"} />
+            )}
+            history={history}
+          />
+          <PrivateRoute
+            exact
+            path="/app"
+            history={history}
+            isAuthenticated={isAuthenticated}
+            authLoadingStatus={authLoadingStatus}
+            component={Contacts}
+          />
+          <PrivateRoute
+            exact
+            path="/app/:formAction?/:contactId?"
+            history={history}
+            isAuthenticated={isAuthenticated}
+            authLoadingStatus={authLoadingStatus}
+            component={Contacts}
+          />
+        </Switch>
       </Router>
     </Container>
   );
