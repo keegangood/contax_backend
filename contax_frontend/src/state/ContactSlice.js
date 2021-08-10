@@ -13,7 +13,7 @@ export const getContacts = createAsyncThunk(
   "contacts/getContacts",
   async ({ accessToken, orderBy }, { rejectWithValue }) => {
     const url = BASE_URL + "/";
-    const response = axios
+    const response = await axios
       .get(url, {
         params: { order_by: orderBy },
         headers: { ...headers, Authorization: `token ${accessToken}` },
@@ -25,13 +25,12 @@ export const getContacts = createAsyncThunk(
   }
 );
 
-
 // get a single contact
 export const getContactDetail = createAsyncThunk(
   "contacts/getContactDetail",
   async ({ accessToken, contactId }, { rejectWithValue }) => {
     const url = BASE_URL + `/detail/${contactId}`;
-    const response = axios
+    const response = await axios
       .get(url, {
         headers: { ...headers, Authorization: `token ${accessToken}` },
       })
@@ -68,12 +67,17 @@ export const createContact = createAsyncThunk(
 // update a given contact
 export const updateContact = createAsyncThunk(
   "contacts/update",
-  async (formData, { rejectWithValue }) => {
-    const url = BASE_URL + "/login/";
-    const response = axios
-      .post(url, formData, {
-        headers: headers,
-      })
+  async ({ contactId, formData, accessToken }, { rejectWithValue }) => {
+    const url = BASE_URL + `/detail/${contactId}`;
+
+    const response = await axios
+      .post(
+        url,
+        { formData },
+        {
+          headers: { ...headers, Authorization: `token ${accessToken}` },
+        }
+      )
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
 
@@ -152,9 +156,16 @@ const ContactSlice = createSlice({
     [createContact.fulfilled]: (state, action) => {},
 
     // UPDATE CONTACT
-    [updateContact.pending]: (state, action) => {},
-    [updateContact.rejected]: (state, action) => {},
-    [updateContact.fulfilled]: (state, action) => {},
+    [updateContact.pending]: (state, action) => {
+      state.contactLoadingStatus = "PENDING";
+    },
+    [updateContact.rejected]: (state, action) => {
+      state.contactLoadingStatus = "IDLE";
+    },
+    [updateContact.fulfilled]: (state, action) => {
+      state.currentContact = null;
+      state.contactLoadingStatus = "IDLE";
+    },
 
     // DELETE CONTACT
     [deleteContact.pending]: (state, action) => {},
