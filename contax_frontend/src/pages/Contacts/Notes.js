@@ -1,4 +1,4 @@
-import React, { useState,} from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { Button, Row, Col, FormGroup, Label, Input } from "reactstrap";
 import {
@@ -13,14 +13,26 @@ import {
   editNote,
   updateNote,
   deleteNote,
+  setNewNoteText,
+  setUpdatedNoteText,
 } from "../../state/NoteSlice";
 
 const Notes = () => {
   const dispatch = useDispatch();
-  const { notes } = useSelector((state) => state.notes);
+  const { notes, newNoteText, updatedNoteText } = useSelector(
+    (state) => state.notes
+  );
 
-  const [newNoteText, setNewNoteText] = useState("");
-  const [updatedNoteText, setUpdatedNoteText] = useState("");
+  useEffect(() => {
+    if (
+      newNoteText === "Duplicate note!" ||
+      newNoteText === "Notes cannot be blank!"
+    ) {
+      setTimeout(() => {
+        dispatch(setNewNoteText(""));
+      }, 2000);
+    }
+  }, [newNoteText]);
 
   return (
     <div>
@@ -38,8 +50,8 @@ const Notes = () => {
               >
                 <Row className="g-0 p-2 relative">
                   {notes.map((note, noteIndex) => (
-                    <>
-                      <Col xs={12} className="note p-2" key={noteIndex}>
+                    <div key={noteIndex}>
+                      <Col xs={12} className="note p-2">
                         {note.editing ? (
                           <Row className="g-0 d-flex justify-content-center">
                             <Col xs={12} className="position-relative">
@@ -48,7 +60,7 @@ const Notes = () => {
                                 value={updatedNoteText}
                                 autoFocus={true}
                                 onChange={(e) =>
-                                  setUpdatedNoteText(e.target.value)
+                                  dispatch(setUpdatedNoteText(e.target.value))
                                 }
                               />
                               <span className="p-2 position-absolute d-flex flex-column top-0 end-0">
@@ -56,7 +68,7 @@ const Notes = () => {
                                 <AiOutlineCloseCircle
                                   className="crud-icon cancel-icon mb-2"
                                   onClick={() => {
-                                    setUpdatedNoteText("");
+                                    dispatch(setUpdatedNoteText(""));
                                     dispatch(
                                       editNote({ noteIndex, editing: false })
                                     );
@@ -93,7 +105,7 @@ const Notes = () => {
                                 <AiOutlineEdit
                                   className="crud-icon edit-icon"
                                   onClick={() => {
-                                    setUpdatedNoteText(note.text);
+                                    dispatch(setUpdatedNoteText(note.text));
                                     dispatch(
                                       editNote({ noteIndex, editing: true })
                                     );
@@ -105,7 +117,7 @@ const Notes = () => {
                         )}
                       </Col>
                       <Col xs={2} className="d-flex align-items-center"></Col>
-                    </>
+                    </div>
                   ))}
                 </Row>
               </Col>
@@ -117,7 +129,7 @@ const Notes = () => {
               type="text"
               name="newNote"
               value={newNoteText}
-              onChange={(e) => setNewNoteText(e.target.value)}
+              onChange={(e) => dispatch(setNewNoteText(e.target.value))}
             />
             <Button
               color="secondary"
@@ -125,10 +137,10 @@ const Notes = () => {
               className="text-light my-2"
               onClick={() => {
                 if (newNoteText && newNoteText !== "Notes cannot be blank!") {
-                  setNewNoteText("");
+                  dispatch(setNewNoteText(""));
                   dispatch(addNote({ newNoteText }));
                 } else {
-                  setNewNoteText("Notes cannot be blank!");
+                  dispatch(setNewNoteText("Notes cannot be blank!"));
                 }
               }}
             >
@@ -144,6 +156,8 @@ const Notes = () => {
 const mapStateToProps = (state) => {
   return {
     notes: state.notes.notes,
+    newNoteText: state.notes.newNoteText,
+    newUpdatedText: state.notes.newUpdatedText,
   };
 };
 
