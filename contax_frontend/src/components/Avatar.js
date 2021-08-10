@@ -17,6 +17,6 @@ const Avatar = ({ contact }) => {
       <AiOutlineCamera />
     </span>
   );
-};d
+};
 
 export default Avatar;
