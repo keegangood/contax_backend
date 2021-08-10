@@ -1,5 +1,6 @@
-import { React } from "react";
+import { React, useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
+import { withRouter } from "react-router";
 
 import "./scss/UserAuth.scss";
 import UserAuthForm from "./UserAuthForm";
@@ -31,10 +32,6 @@ const SignupExtra = (
 );
 
 const UserAuth = ({ pageAction, pageTitle, ...props }) => {
-
-
-  console.log("USER AUTH LOADED BITCHES")
-
   const dispatch = useDispatch();
 
   const callApi = async (formData) => {
@@ -49,7 +46,7 @@ const UserAuth = ({ pageAction, pageTitle, ...props }) => {
     } else if (pageAction === "signup") {
       await dispatch(register({ formData }))
         .then((res) => props.history.push("/app"))
-        .catch((err) => JSON.stringify(err))
+        .catch((err) => JSON.stringify(err));
     }
   };
 
