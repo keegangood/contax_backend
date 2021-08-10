@@ -1,6 +1,7 @@
 import React from "react";
+import { AiOutlineCamera } from "react-icons/ai";
 
-const Avatar = ({ contact, height, width }) => {
+const Avatar = ({ contact }) => {
   return (
     <span
       className="
@@ -12,9 +13,10 @@ const Avatar = ({ contact, height, width }) => {
             justify-content-center 
             text-secondary"
     >
-      {contact.firstName[0].toUpperCase()}
+      {/* LOAD USER AVATAR ONCE AVAILABLE */}
+      <AiOutlineCamera />
     </span>
   );
-};
+};d
 
 export default Avatar;
