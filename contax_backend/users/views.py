@@ -30,7 +30,7 @@ def register(request):
     response = Response()
 
     # extract form data from request
-    form_data = request.data
+    form_data = request.data['form_data']
 
     # add email as defaut username
     form_data['username'] = form_data['email']
@@ -290,10 +290,7 @@ def extend_token(request):
     # Delete old refresh token
     # if the user has a refresh token in the db,
     # get the old token
-    old_refresh_token = RefreshToken.objects.filter(user=user.id).first()
-    if old_refresh_token:
-        # delete the old token
-        old_refresh_token.delete()
+    old_refresh_token = RefreshToken.objects.filter(user=user.id).all().delete()
 
     # assign a new refresh token to the current user
     RefreshToken.objects.create(user=user, token=new_refresh_token)
