@@ -26,7 +26,7 @@ from .serializers import ContactCreateSerializer, ContactDetailSerializer
 def contact_list(request):
     '''
     POST - create a contact
-    GET - retrieve all contacts for a user
+    GET  - retrieve contacts for a user
     '''
     response = Response()
     user = request.user
@@ -74,25 +74,45 @@ def contact_list(request):
 @ensure_csrf_cookie
 def contact_detail(request, contact_pk):
     '''
+    GET  - get a single contact
     POST - update a contact
-    GET - get a single contact
     '''
     response = Response()
     user = request.user
 
     contact = Contact.objects.filter(pk=contact_pk, user=request.user).first()
 
-    contact_serializer = ContactDetailSerializer(contact)
+    if contact:        
 
-    if contact:
-        response.data = {
-            'contact': contact_serializer.data,
-            'message': 'Contact created successfully!'
-        }
+        if request.method == 'GET':
+            contact_serializer = ContactDetailSerializer(contact)
+
+            response.data = {
+                'contact': contact_serializer.data,
+                'message': ''
+            }
+
+        elif request.method == 'POST':
+
+            form_data = request.data['form_data']
+            contact_serializer = ContactCreateSerializer(contact, data=form_data, partial=True)
+
+            if contact_serializer.is_valid():
+                contact = contact_serializer.save()
+
+            response.data = {
+                'contact': contact_serializer.validated_data,
+                'message': 'Contact updated successfully!'
+            }
+
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST
         response.data = {
             'message': "Contact doesn't exist!"
         }
+
+
+
+
 
     return response
