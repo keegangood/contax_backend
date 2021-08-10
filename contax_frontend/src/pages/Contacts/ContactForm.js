@@ -21,7 +21,7 @@ import Avatar from "../../components/Avatar";
 import Notes from "./Notes";
 
 import "./scss/ContactForm.scss";
-import { addNote } from "../../state/NoteSlice";
+import { addNote, setNotes } from "../../state/NoteSlice";
 import { getContactDetail, setCurrentContact } from "../../state/ContactSlice";
 
 const PHONE_TYPES = ["CELL", "HOME", "WORK"];
@@ -57,7 +57,6 @@ const ContactForm = ({ formAction, onSubmit }) => {
         birthday: currentContact.birthday,
       });
       currentContact.notes.map((note) => {
-        console.log(note.text);
         dispatch(addNote({ newNoteText: note.text }));
       });
     }
@@ -104,14 +103,13 @@ const ContactForm = ({ formAction, onSubmit }) => {
       <Label className="p-3 m-0" tag="h1" id="form-label">
         <Row className="g-0">
           {/* CONTACT AVATAR */}
-            <Col xs={2} md={1}>
-              <Avatar contact={currentContact} />
-            </Col>
+          <Col xs={2} md={1}>
+            <Avatar contact={currentContact} />
+          </Col>
           {/* FORM ACTION */}
           <Col xs={8} md={9} className="d-flex align-items-center ps-3">
             <span>
-
-            {formAction === "add" ? "Create Contact" : "Edit Contact"}
+              {formAction === "add" ? "Create Contact" : "Edit Contact"}
             </span>
           </Col>
           {/* FORM CLOSE BUTTON */}
@@ -121,6 +119,7 @@ const ContactForm = ({ formAction, onSubmit }) => {
                 className="close-form-icon mx-2"
                 onClick={() => {
                   dispatch(setCurrentContact(null));
+                  dispatch(setNotes([]));
                 }}
               />
             </Link>
@@ -262,7 +261,7 @@ const ContactForm = ({ formAction, onSubmit }) => {
       <FormGroup>
         <Row className="g-0">
           <Col xs={{ size: 6, offset: 3 }} className="text-center p-3">
-            <Button color="info" size="lg">
+            <Button color="info" size="lg" type="submit">
               Submit
             </Button>
           </Col>
