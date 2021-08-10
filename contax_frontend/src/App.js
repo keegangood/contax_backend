@@ -1,11 +1,6 @@
 import { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  withRouter,
-} from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { Route, Switch } from "react-router-dom";
+
 import { useDispatch, useSelector, connect } from "react-redux";
 
 import "./App.scss";
@@ -19,8 +14,7 @@ import PrivateRoute from "./components/PrivateRoute";
 
 import { requestAccessToken } from "./state/AuthSlice";
 
-function App() {
-  let history = createBrowserHistory();
+function App({history}) {
   const dispatch = useDispatch();
 
   let { isAuthenticated, authLoadingStatus, user } = useSelector(
@@ -38,24 +32,22 @@ function App() {
 
   return (
     <Container fluid className="g-0">
-      <Router history={history}>
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route
             exact
             path="/login"
             component={(props) => (
-              <UserAuth pageAction={"login"} pageTitle={"Log in"} />
+              <UserAuth pageAction={"login"} pageTitle={"Log in"} {...props}/>
             )}
-            history={history}
           />
           <Route
             exact
             path="/signup"
             component={(props) => (
-              <UserAuth pageAction={"signup"} pageTitle={"Sign up"} />
+              <UserAuth pageAction={"signup"} pageTitle={"Sign up"} {...props}/>
             )}
-            history={history}
+            
           />
           <PrivateRoute
             exact
@@ -74,7 +66,6 @@ function App() {
             component={Contacts}
           />
         </Switch>
-      </Router>
     </Container>
   );
 }

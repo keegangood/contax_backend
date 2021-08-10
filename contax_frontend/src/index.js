@@ -4,16 +4,23 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import { Provider} from "react-redux";
+import { Provider } from "react-redux";
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
 import rootReducer from "./state";
 import thunk from "redux-thunk";
+import { Router, Route, Switch } from "react-router-dom";
+import { createBrowserHistory } from "history";
+
 let store = configureStore({ reducer: rootReducer }, applyMiddleware(thunk));
+
+let history = createBrowserHistory();
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router history={history}>
+        <App />
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
