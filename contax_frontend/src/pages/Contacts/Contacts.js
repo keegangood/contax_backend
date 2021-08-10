@@ -10,11 +10,14 @@ import ContactList from "./ContactList";
 import ContactForm from "./ContactForm";
 
 import { requestAccessToken } from "../../state/AuthSlice";
-import ContactSlice, {
+import {
   getContacts,
   createContact,
   getContactDetail,
+  updateContact,
 } from "../../state/ContactSlice";
+
+import { setNotes } from "../../state/NoteSlice";
 
 import "./scss/Contacts.scss";
 
@@ -27,8 +30,10 @@ const Contacts = ({ history }) => {
   const { contacts, currentContact, orderBy, contactLoadingStatus } =
     useSelector((state) => state.contacts);
 
-  console.log('contacts',contacts)
-  console.log('contactLoadingStatus', contactLoadingStatus)
+  //
+  //
+  //
+  //
 
   useEffect(() => {
     if (!contacts) {
@@ -37,7 +42,6 @@ const Contacts = ({ history }) => {
           .then(unwrapResult)
           .then((res) => {
             const { accessToken } = res;
-            console.log('TOKENRESULT', res)
             dispatch(getContacts({ accessToken, orderBy }));
           })
           .catch((err) => console.error(err));
@@ -47,7 +51,11 @@ const Contacts = ({ history }) => {
 
   // get the contact object for the contactId in url params
   useEffect(() => {
-    if (!contactId && formAction === "edit") {
+    if (
+      !contactId &&
+      formAction === "edit" &&
+      contactLoadingStatus === "IDLE"
+    ) {
       history.push("/app/add");
     } else if (contactId && !currentContact) {
       (async () => {
@@ -67,31 +75,41 @@ const Contacts = ({ history }) => {
           });
       })();
     }
-  }, [contactId, currentContact]);
+  }, [contactId, currentContact, contactLoadingStatus]);
 
-  const addContact = (formData) => {
+  const onCreateContact = (formData) => {
     (async () => {
       await dispatch(requestAccessToken())
+        .then(unwrapResult)
         .then((res) => {
-          // requestStatus will either be 'fulfilled' or 'rejected'
-          const { requestStatus } = res.meta;
-          const { accessToken } = res.payload;
+          const { accessToken } = res;
 
-          if (requestStatus === "fulfilled") {
-            dispatch(createContact({ formData, accessToken }));
-          } else if (requestStatus === "rejected") {
-            console.log("failure", res.payload);
-          }
+          dispatch(createContact({ formData, accessToken }))
+            .then(unwrapResult)
+            .then((res) => dispatch(setNotes([])))
+            .catch((err) => console.log(err));
         })
         .catch((err) => console.error(err));
     })();
   };
 
-  const updateContact = (formData) => {
-    dispatch(updateContact({ formData, accessToken }));
+  const onUpdateContact = (formData) => {
+    (async () => {
+      await dispatch(requestAccessToken())
+        .then(unwrapResult)
+        .then((res) => {
+          const { accessToken } = res;
+          const contactId = currentContact.id;
+          dispatch(updateContact({ contactId, formData, accessToken }))
+            .then(unwrapResult)
+            .then((res) => {
+              history.push("/app");
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.error(err));
+    })();
   };
-
-  console.log(path, url);
 
   return (
     <Container className="pb-5">
@@ -101,9 +119,9 @@ const Contacts = ({ history }) => {
         ) : (
           <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
             {formAction === "add" ? (
-              <ContactForm formAction="add" onSubmit={addContact} />
+              <ContactForm formAction="add" onSubmit={onCreateContact} />
             ) : formAction === "edit" ? (
-              <ContactForm formAction="edit" onSubmit={updateContact} />
+              <ContactForm formAction="edit" onSubmit={onUpdateContact} />
             ) : (
               ""
             )}
