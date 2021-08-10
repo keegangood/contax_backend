@@ -99,6 +99,8 @@ def contact_detail(request, contact_pk):
 
             if contact_serializer.is_valid():
                 contact = contact_serializer.save()
+            
+            response.status_code=status.HTTP_202_ACCEPTED
 
             response.data = {
                 'contact': contact_serializer.validated_data,
@@ -111,8 +113,35 @@ def contact_detail(request, contact_pk):
             'message': "Contact doesn't exist!"
         }
 
+    return response
 
 
 
+@api_view(['POST'])
+@authentication_classes([SafeJWTAuthentication])
+@permission_classes([IsAuthenticated])
+@ensure_csrf_cookie
+def contact_delete(request, contact_pk):
+    '''
+    POST - delete a contact
+    '''
+    response = Response()
+    user = request.user
+
+    contact = Contact.objects.filter(pk=contact_pk, user=request.user).first()
+
+    if contact:
+        contact.delete()
+
+        response.status_code=status.HTTP_202_ACCEPTED
+        response.data = {
+            'message': 'Contact deleted successfully!'
+        }
+        
+    else:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        response.data = {
+            'message': 'Contact does not exist' 
+        }
 
     return response
