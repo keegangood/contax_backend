@@ -100,10 +100,10 @@ export const deleteContact = createAsyncThunk(
 );
 
 const initialState = {
-  contacts: [], // logged in user's current access token
+  contacts: null, // logged in user's current access token
   currentContact: null,
   orderBy: "firstName",
-  contactLoadingStatus: "IDLE", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
+  contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
 };
 
 const ContactSlice = createSlice({
@@ -133,7 +133,7 @@ const ContactSlice = createSlice({
       state.contactLoadingStatus = "PENDING";
     },
     [getContacts.rejected]: (state, action) => {
-      state.contacts = [];
+      state.contacts = null;
       state.contactLoadingStatus = "IDLE";
     },
     [getContacts.fulfilled]: (state, action) => {
@@ -146,7 +146,7 @@ const ContactSlice = createSlice({
       state.contactLoadingStatus = "PENDING";
     },
     [createContact.rejected]: (state, action) => {
-      state.contacts = [];
+      state.contacts = null;
       state.contactLoadingStatus = "IDLE";
     },
     [createContact.fulfilled]: (state, action) => {},
