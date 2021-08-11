@@ -12,7 +12,7 @@
 
     height: 100%;
 
-    z-index: 20;
+    z-index: $contact-delete-popover-z;
 
     .delete-contact-popover-header {
       background-color: $custom-secondary;
@@ -44,7 +44,7 @@
   }
 
   .contact-body {
-    background-color: $custom-primary;
+    background-color: $custom-light;
 
     .crud-icon {
       font-size: 1.3rem;
