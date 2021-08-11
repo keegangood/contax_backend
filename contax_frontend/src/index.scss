@@ -2,7 +2,7 @@
 
 $theme-colors: (
     "primary": $custom-primary,
-    "secondary": adjust-color($custom-primary, $lightness:-15%),
+    "secondary": adjust-color($custom-primary, $lightness: -15%),
     "info": $custom-info,
     "warning": $custom-warning,
     "danger": $custom-danger,
@@ -10,13 +10,13 @@ $theme-colors: (
     "app": $custom-light,
     "light": $custom-light,
     "primary-light": $custom-primary-light,
-    "primary-lighter": $custom-primary-lighter
+    "primary-lighter": $custom-primary-lighter,
 );
 
 $form-check-input-bg: $custom-light;
 $form-check-input-focus-border: $custom-info;
-$form-check-input-checked-bg-color: $custom-info; 
-$form-check-input-checked-border-color:$custom-info;
+$form-check-input-checked-bg-color: $custom-info;
+$form-check-input-checked-border-color: $custom-info;
 $component-active-bg: $custom-info;
 
 $popover-bg: $custom-secondary;
@@ -24,11 +24,18 @@ $popover-header-color: $font-color-display;
 
 $headings-font-family: $secondary-font;
 
-@import '../node_modules/bootstrap/scss/bootstrap.scss';
+$nav-link-color: $font-color-display;
+$nav-link-hover-color: $custom-info;
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 body {
     font-family: $primary-font;
     font-weight: 300;
-
-    background-color: $custom-light;
+    background: linear-gradient(
+        adjust-color($custom-warning, $lightness: 25%) 0%,
+        adjust-color($custom-warning, $lightness: 21%) 18%,
+        adjust-color($custom-warning, $lightness: 18%) 30%,
+        adjust-color($custom-warning, $lightness: 15%) 100%
+    );
 }
