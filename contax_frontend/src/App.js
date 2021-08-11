@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 
 import { useDispatch, useSelector, connect } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { logout } from "./state/AuthSlice";
 
 import "./App.scss";
 
@@ -9,6 +11,7 @@ import { Container } from "reactstrap";
 
 import NavDesktop from "./components/NavDesktop";
 import NavMobile from "./components/NavMobile";
+import Hamburger from "./components/Hamburger";
 
 import Homepage from "./pages/Homepage/Homepage";
 import UserAuth from "./pages/UserAuth/UserAuth";
@@ -25,37 +28,73 @@ function App({ history }) {
     (state) => state.auth
   );
 
+  const [navOpen, setNavOpen] = useState(false);
+
   useEffect(() => {
     if (!isAuthenticated && !user) {
       (async () => {
-        console.log("app loaded");
-        await dispatch(requestAccessToken());
+        await dispatch(requestAccessToken())
       })();
     }
-  }, [isAuthenticated, user, dispatch]);
+  }, [isAuthenticated, user]);
+
+  const onLogout = () => {
+    dispatch(logout());
+  };
 
   return (
-    <Container fluid className="g-0">
+    <Container fluid className="app g-0">
       <span className="d-none d-md-block">
-        <NavDesktop user={user} />
+        <NavDesktop user={user} onLogout={onLogout} />
       </span>
       <span className="d-block d-md-none">
-        <NavMobile user={user} />
+        <Hamburger
+          navOpen={navOpen}
+          setNavOpen={setNavOpen}
+          textColor={"secondary"}
+        />
+        <NavMobile
+          user={user}
+          onLogout={onLogout}
+          navOpen={navOpen}
+          setNavOpen={setNavOpen}
+        />
       </span>
       <Switch>
-        <Route exact path="/" component={Homepage} />
+        <Route
+          exact
+          path="/"
+          component={(props) => (
+            <Homepage
+              isAuthenticated={isAuthenticated}
+              authLoadingStatus={authLoadingStatus}
+            />
+          )}
+        />
         <Route
           exact
           path="/login"
           component={(props) => (
-            <UserAuth pageAction={"login"} pageTitle={"Log in"} {...props} />
+            <UserAuth
+              pageAction={"login"}
+              pageTitle={"Log in"}
+              isAuthenticated={isAuthenticated}
+              authLoadingStatus={authLoadingStatus}
+              {...props}
+            />
           )}
         />
         <Route
           exact
           path="/signup"
           component={(props) => (
-            <UserAuth pageAction={"signup"} pageTitle={"Sign up"} {...props} />
+            <UserAuth
+              pageAction={"signup"}
+              pageTitle={"Sign up"}
+              isAuthenticated={isAuthenticated}
+              authLoadingStatus={authLoadingStatus}
+              {...props}
+            />
           )}
         />
         <PrivateRoute
