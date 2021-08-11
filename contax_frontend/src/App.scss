@@ -1,0 +1,12 @@
+@use './scss/contax_variables.scss' as *;
+
+.app {
+    min-height: 100vh;
+    background-color: adjust-color($custom-warning, $lightness: 20%);
+
+    .spinner {
+        height:100vh;
+        width: 100vw;
+    }
+}
+
