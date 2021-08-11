@@ -40,4 +40,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'id',
             'last_login',
             'date_joined',
+            'first_name',
+            'last_name'
         ]
