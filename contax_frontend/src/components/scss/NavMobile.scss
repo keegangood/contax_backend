@@ -1,0 +1,43 @@
+@use '../../scss/contax_variables.scss' as *;
+
+#nav-mobile {
+    background-color: $custom-secondary;
+    font-family: $secondary-font;
+    height: 100vh;
+    width: 100%;
+    z-index: $navbar-z;
+    
+    #hamburger-icon {
+        color: $custom-light;
+        font-size: 1.5rem;
+    }
+
+    #nav-content {
+        background-color: $custom-primary;
+
+        #username-label {
+            color: $font-color-display-accent;
+            font-size: .8rem;
+        }
+        #username-value {
+            color: $font-color-display-accent;
+            font-family: $primary-font;
+        }
+    }
+
+    #navbar-title {
+        color: $font-color-display;
+        font-size: 3rem;
+        text-decoration: none;
+        transition: all .1s ease-in-out;
+
+        &:hover {
+            color: $custom-info;
+        }
+    }
+
+    .contact-avatar {
+        height: 10vw;
+        width: 10vw;
+    }
+}
