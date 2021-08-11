@@ -1,6 +1,9 @@
 @use '../../../scss/contax_variables.scss' as *;
 
 #user-auth-page {
+
+    min-height: 100vh;
+
     .user-auth-action-title {
         color: $font-color-display;
         font-size: 1.5rem;
