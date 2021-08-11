@@ -72,7 +72,7 @@ const UserAuth = ({ pageAction, pageTitle, history, ...props }) => {
           py-5"
       id="user-auth-page"
     >
-      <div className="row g-0 mx-1">
+      <div className="row g-0 mx-1 mt-5">
         <div className="col col-11 mx-auto offset-lg-1 col-md-10 col-lg-4">
           <div className="row g-0 shadow" id="user-auth-form-container">
             <div

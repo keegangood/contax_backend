@@ -36,7 +36,7 @@ const ContactList = ({ contacts, onDeleteContact }) => {
   };
 
   return (
-    <Row className="g-0 mx-3 py-3" id="contact-list">
+    <Row className="g-0 mx-3 pt-5 mt-5" id="contact-list">
       {contacts.map((contact, i) => (
         <ContactItem
           contact={contact}
