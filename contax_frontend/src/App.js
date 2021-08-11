@@ -6,6 +6,10 @@ import { useDispatch, useSelector, connect } from "react-redux";
 import "./App.scss";
 
 import { Container } from "reactstrap";
+
+import NavDesktop from "./components/NavDesktop";
+import NavMobile from "./components/NavMobile";
+
 import Homepage from "./pages/Homepage/Homepage";
 import UserAuth from "./pages/UserAuth/UserAuth";
 import Contacts from "./pages/Contacts/Contacts";
@@ -14,7 +18,7 @@ import PrivateRoute from "./components/PrivateRoute";
 
 import { requestAccessToken } from "./state/AuthSlice";
 
-function App({history}) {
+function App({ history }) {
   const dispatch = useDispatch();
 
   let { isAuthenticated, authLoadingStatus, user } = useSelector(
@@ -32,40 +36,45 @@ function App({history}) {
 
   return (
     <Container fluid className="g-0">
-        <Switch>
-          <Route exact path="/" component={Homepage} />
-          <Route
-            exact
-            path="/login"
-            component={(props) => (
-              <UserAuth pageAction={"login"} pageTitle={"Log in"} {...props}/>
-            )}
-          />
-          <Route
-            exact
-            path="/signup"
-            component={(props) => (
-              <UserAuth pageAction={"signup"} pageTitle={"Sign up"} {...props}/>
-            )}
-            
-          />
-          <PrivateRoute
-            exact
-            path="/app"
-            history={history}
-            isAuthenticated={isAuthenticated}
-            authLoadingStatus={authLoadingStatus}
-            component={Contacts}
-          />
-          <PrivateRoute
-            exact
-            path="/app/:formAction?/:contactId?"
-            history={history}
-            isAuthenticated={isAuthenticated}
-            authLoadingStatus={authLoadingStatus}
-            component={Contacts}
-          />
-        </Switch>
+      <span className="d-none d-md-block">
+        <NavDesktop user={user} />
+      </span>
+      <span className="d-block d-md-none">
+        <NavMobile user={user} />
+      </span>
+      <Switch>
+        <Route exact path="/" component={Homepage} />
+        <Route
+          exact
+          path="/login"
+          component={(props) => (
+            <UserAuth pageAction={"login"} pageTitle={"Log in"} {...props} />
+          )}
+        />
+        <Route
+          exact
+          path="/signup"
+          component={(props) => (
+            <UserAuth pageAction={"signup"} pageTitle={"Sign up"} {...props} />
+          )}
+        />
+        <PrivateRoute
+          exact
+          path="/app"
+          history={history}
+          isAuthenticated={isAuthenticated}
+          authLoadingStatus={authLoadingStatus}
+          component={Contacts}
+        />
+        <PrivateRoute
+          exact
+          path="/app/:formAction?/:contactId?"
+          history={history}
+          isAuthenticated={isAuthenticated}
+          authLoadingStatus={authLoadingStatus}
+          component={Contacts}
+        />
+      </Switch>
     </Container>
   );
 }
