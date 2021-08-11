@@ -1,0 +1,24 @@
+@use '../../scss/contax_variables.scss' as *;
+
+#nav-desktop {
+    font-family: $secondary-font;
+    background-color: $custom-secondary;
+    width: 100%;
+    z-index: $navbar-z;
+
+    #navbar-title {
+        color: $font-color-display;
+        font-size: 1.5rem;
+        text-decoration: none;
+        transition: all .1s ease-in-out;
+
+        &:hover {
+            color: $custom-info;
+        }
+    }
+
+    .contact-avatar {
+        height: 3vw;
+        width: 3vw;
+    }
+}
