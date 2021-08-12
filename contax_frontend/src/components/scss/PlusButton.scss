@@ -1,9 +1,9 @@
 @use '../../scss/contax_variables.scss' as *;
 
 #plus-button {
-    color: $custom-warning;
+    color: $custom-info;
     background-color: $custom-secondary;
-    border: 2px solid $custom-warning;
+    border: 2px solid $custom-info;
     border-radius: 50%;
     bottom: 2.5rem;
     right: 2rem;
