@@ -32,10 +32,10 @@ $nav-link-hover-color: $custom-info;
 body {
     font-family: $primary-font;
     font-weight: 300;
-    background: linear-gradient(
-        adjust-color($custom-warning, $lightness: 25%) 0%,
-        adjust-color($custom-warning, $lightness: 21%) 18%,
-        adjust-color($custom-warning, $lightness: 18%) 30%,
-        adjust-color($custom-warning, $lightness: 15%) 100%
-    );
+
 }
+
+.nav-toggle-icon {
+    font-size: 1.5rem;
+    z-index: $hamburger-z;
+  }
