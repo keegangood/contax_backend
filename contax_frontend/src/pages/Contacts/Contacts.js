@@ -3,7 +3,7 @@ import { useDispatch, useSelector, connect } from "react-redux";
 import { useRouteMatch, useParams } from "react-router-dom";
 import { unwrapResult } from "@reduxjs/toolkit";
 
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Spinner } from "reactstrap";
 
 import PlusButton from "../../components/PlusButton";
 import ContactList from "./ContactList";
@@ -90,7 +90,11 @@ const Contacts = ({ history }) => {
 
           dispatch(createContact({ formData, accessToken }))
             .then(unwrapResult)
-            .then((res) => dispatch(setNotes([])))
+            .then((res) => {
+              dispatch(setNotes([]))
+              dispatch(getContacts({ accessToken, orderBy }))
+              history.push('/app')
+            })
             .catch((err) => console.log(err));
         })
         .catch((err) => console.error(err));
@@ -139,7 +143,9 @@ const Contacts = ({ history }) => {
     <Container className="pb-5">
       <Row className="g-0">
         {!contacts && contactLoadingStatus === "PENDING" ? (
-          "Loading Contacts..."
+          <div className="spinner d-flex align-items-center justify-content-center">
+            <Spinner color="info">{' '}</Spinner>
+          </div>
         ) : (
           <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
             {formAction === "add" ? (
