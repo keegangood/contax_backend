@@ -262,7 +262,7 @@ const ContactForm = ({ formAction, onSubmit }) => {
         <Row className="g-0">
           <Col xs={{ size: 6, offset: 3 }} className="text-center p-3">
             <Button color="info" size="lg" type="submit">
-              Submit
+              Save
             </Button>
           </Col>
         </Row>
