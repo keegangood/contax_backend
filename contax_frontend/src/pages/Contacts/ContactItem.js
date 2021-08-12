@@ -105,7 +105,7 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
         </Fade>
 
         {/* AVATAR */}
-        <Row className="g-0 bg-secondary rounded-top py-3">
+        <Row className="g-0 bg-secondary rounded-top py-3 border-bottom border-info border-3">
           <Col xs={12} md={2} className="d-flex justify-content-center">
             <ContactAvatar contact={contact} />
           </Col>
