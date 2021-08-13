@@ -68,7 +68,7 @@ const Notes = () => {
                                 <AiOutlineCloseCircle
                                   className="crud-icon cancel-icon mb-2"
                                   onClick={() => {
-                                    dispatch(setUpdatedNoteText(""));
+                                    dispatch(setUpdatedNoteText({updatedNoteText:""}));
                                     dispatch(
                                       editNote({ noteIndex, editing: false })
                                     );
@@ -137,7 +137,7 @@ const Notes = () => {
               className="text-light my-2"
               onClick={() => {
                 if (newNoteText && newNoteText !== "Notes cannot be blank!") {
-                  dispatch(setNewNoteText(""));
+                  dispatch(setNewNoteText({newNoteText:''}));
                   dispatch(addNote({ newNoteText }));
                 } else {
                   dispatch(setNewNoteText("Notes cannot be blank!"));
