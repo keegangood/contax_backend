@@ -1,13 +1,21 @@
 import React from "react";
 import "./Homepage.scss";
 
-import { Jumbotron, Button } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Row, Col, Jumbotron, Button, Spinner } from "reactstrap";
+import { Link, Redirect } from "react-router-dom";
 
 const Homepage = ({ isAuthenticated, authLoadingStatus }) => {
   return (
-    <div className="row g-0" id="homepage-content">
-      {!isAuthenticated && authLoadingStatus === "IDLE" && (
+    <Row className="row g-0" id="homepage-content">
+      {authLoadingStatus === "PENDING" ? (
+        <div className='spinner d-flex justify-content-center align-items-center'>
+          <Spinner color="info">{' '}</Spinner>
+        </div>
+      ) : isAuthenticated ? (
+        <Col xs={{ size: 6, offset: 3 }}>
+          <Redirect to="/app" />
+        </Col>
+      ) : (
         <div className="col col-12 bg-app">
           <div className="row g-0">
             <div className="col col-12 bg-primary pb-3">
@@ -56,7 +64,7 @@ const Homepage = ({ isAuthenticated, authLoadingStatus }) => {
           <div className="col col-12 bg-secondary" id="right-column"></div>
         </div>
       )}
-    </div>
+    </Row>
   );
 };
 
