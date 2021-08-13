@@ -417,20 +417,20 @@ def logout(request):
     # Create response object
     response = Response()
 
-    # id of logged in user from request data
-    logged_in_user = request.data.get('user')
+    client_refresh_token = request.COOKIES.get('refreshtoken')
 
-    # find the logged in user's refresh token
-    refresh_token = RefreshToken.objects.filter(
-        user=logged_in_user).first()
-
-    if refresh_token is None:
+    if client_refresh_token is None:
         response.data = {'msg': ['Not logged in']}
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
 
-    # if the token is found, delete it
-    refresh_token.delete()
+    # find the logged in user's refresh token
+    db_refresh_token = RefreshToken.objects.filter(
+        token=client_refresh_token).first()
+
+    if db_refresh_token:
+        # if the token is found, delete it
+        db_refresh_token.delete()
 
     # delete the refresh cookie
     response.delete_cookie('refreshtoken')
