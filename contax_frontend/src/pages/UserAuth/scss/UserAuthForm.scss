@@ -22,4 +22,8 @@
     .form-label {
         color: $font-color-display;
     }
+
+    #submit-button {
+        $font-family: $secondary-font;
+    }
 }

@@ -67,7 +67,7 @@ const UserAuthForm = ({ formAction, callApi }) => {
       )}
 
       <div className="mb-4 form-group">
-        <button type="submit" className="btn btn-info w-100" id="submit">
+        <button type="submit" className="btn btn-info w-100" id="submit-button">
           Submit
         </button>
       </div>
