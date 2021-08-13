@@ -1,8 +1,10 @@
 import { React } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { Spinner } from "reactstrap";
 
 const PrivateRoute = ({
   component: Component,
+  user,
   isAuthenticated,
   authLoadingStatus,
   history,
@@ -14,15 +16,19 @@ const PrivateRoute = ({
       {...rest}
       render={(props) =>
         // if not authenticated when loaded, redirect to login page
-        !isAuthenticated && authLoadingStatus === "IDLE" ? (
+        authLoadingStatus === "PENDING" ? (
+          <div className="spinner d-flex align-items-center justify-content-center">
+            <Spinner color="info"> </Spinner>
+          </div>
+        ) : isAuthenticated ? (
+          <Component {...props} />
+        ) : (
           <Redirect
             to={{
               pathname: "/login",
               state: { referrer: props.history.location.pathname },
             }}
           />
-        ) : (
-          <Component {...props} />
         )
       }
     />
