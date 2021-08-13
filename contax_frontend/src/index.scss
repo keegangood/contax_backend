@@ -27,6 +27,11 @@ $headings-font-family: $secondary-font;
 $nav-link-color: $font-color-display;
 $nav-link-hover-color: $custom-info;
 
+$dropdown-bg: $custom-secondary;
+$dropdown-link-color: $font-color-display;
+$dropdown-link-hover-color: $custom-secondary;
+$dropdown-link-hover-bg: $custom-info;
+
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 body {
