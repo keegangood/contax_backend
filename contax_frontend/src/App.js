@@ -33,7 +33,7 @@ function App({ history }) {
   useEffect(() => {
     if (!isAuthenticated && !user) {
       (async () => {
-        await dispatch(requestAccessToken())
+        await dispatch(requestAccessToken());
       })();
     }
   }, [isAuthenticated, user]);
@@ -45,7 +45,11 @@ function App({ history }) {
   return (
     <Container fluid className="app g-0">
       <span className="d-none d-md-block">
-        <NavDesktop user={user} onLogout={onLogout} />
+        <NavDesktop
+          user={user}
+          onLogout={onLogout}
+          isAuthenticated={isAuthenticated}
+        />
       </span>
       <span className="d-block d-md-none">
         <Hamburger
@@ -55,6 +59,7 @@ function App({ history }) {
         />
         <NavMobile
           user={user}
+          isAuthenticated={isAuthenticated}
           onLogout={onLogout}
           navOpen={navOpen}
           setNavOpen={setNavOpen}
@@ -101,6 +106,7 @@ function App({ history }) {
           exact
           path="/app"
           history={history}
+          user={user}
           isAuthenticated={isAuthenticated}
           authLoadingStatus={authLoadingStatus}
           component={Contacts}
@@ -109,6 +115,7 @@ function App({ history }) {
           exact
           path="/app/:formAction?/:contactId?"
           history={history}
+          user={user}
           isAuthenticated={isAuthenticated}
           authLoadingStatus={authLoadingStatus}
           component={Contacts}
