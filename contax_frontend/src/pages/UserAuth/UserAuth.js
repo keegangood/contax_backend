@@ -64,27 +64,28 @@ const UserAuth = ({ pageAction, pageTitle, history, ...props }) => {
   return (
     <div
       className="
-          container
-          page-container 
-          w-90
-          flex flex-column 
-          justify-content-center
-          py-5"
+        container
+        page-container 
+        w-90
+        flex flex-column 
+        justify-content-center
+        py-5
+      "
       id="user-auth-page"
     >
-      <div className="row g-0 mx-1 mt-5">
+      <div className="row g-0 mx-1 mt-5 pt-lg-5">
         <div className="col col-11 mx-auto offset-lg-1 col-md-10 col-lg-4">
           <div className="row g-0 shadow" id="user-auth-form-container">
             <div
               className="col col-md-10  offset-1"
               id="user-auth-header"
             ></div>
-            <div className="row g-0">
+            <div className="row g-0 ">
               <div className="col col-10 offset-1 user-auth-action-title pt-3">
                 <p className="px-2">{pageTitle}</p>
               </div>
             </div>
-            <div className="row g-0">
+            <div className="row g-0  border-bottom border-3 border-info">
               <div className="col col-10 offset-1">
                 <UserAuthForm
                   formAction={pageAction}
