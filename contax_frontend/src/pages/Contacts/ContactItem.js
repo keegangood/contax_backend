@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Fade } from "reactstrap";
@@ -11,24 +11,34 @@ import {
   AiOutlineEdit,
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
+  AiOutlinePaperClip,
 } from "react-icons/ai";
 import { Row, Col } from "reactstrap";
 
 import ContactAvatar from "../../components/Avatar";
 
 import { setCurrentContact } from "../../state/ContactSlice";
+import { sortNotes } from "../../state/NoteSlice";
 
 import "./scss/ContactItem.scss";
 
-const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact }) => {
+const ContactItem = ({
+  contact,
+  togglePopover,
+  popoverIsOpen,
+  onDeleteContact,
+  filterBy,
+  filterQuery,
+}) => {
   const dispatch = useDispatch();
 
-  const {
-    firstName,
-    lastName,
-    email,
-    primaryPhone,
-  } = contact;
+  const { firstName, lastName, email, primaryPhone } = contact;
+
+  useEffect(() => {
+    if (filterBy === "notes") {
+      dispatch(sortNotes({ notes: contact.notes, filterQuery }));
+    }
+  }, [filterBy, filterQuery, sortNotes]);
 
   return (
     <Col
@@ -41,9 +51,9 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
         <Fade
           in={popoverIsOpen}
           className={
-            "delete-contact-popover g-0 position-absolute "
-            + "border border-secondary rounded px-0 " 
-            + (popoverIsOpen ? "d-block" : "d-none")
+            "delete-contact-popover g-0 position-absolute " +
+            "border border-secondary rounded px-0 " +
+            (popoverIsOpen ? "d-block" : "d-none")
           }
         >
           <Row className="g-0 h-100">
@@ -68,8 +78,8 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
               </span>
             </Col>
             <Col
-              xs={{size:8, offset: 2}}
-              md={{size:6, offset:3}}
+              xs={{ size: 8, offset: 2 }}
+              md={{ size: 6, offset: 3 }}
               className="
                 delete-contact-popover-body
                 d-flex
@@ -85,7 +95,7 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
                   align-items-center
                   justify-content-center
                 "
-                onClick={()=>onDeleteContact(contact.id)}
+                onClick={() => onDeleteContact(contact.id)}
               >
                 <AiOutlineCheckCircle />
               </span>
@@ -105,7 +115,22 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
         </Fade>
 
         {/* AVATAR */}
-        <Row className="g-0 bg-secondary rounded-top py-3 border-bottom border-info border-3">
+        <Row tag={Link}
+          to={`/app/detail`}
+          onClick={()=>{
+            dispatch(setCurrentContact(contact))
+          }}
+          className="
+            contact-item-header
+            g-0
+            bg-secondary
+            rounded-top
+            py-3
+            border-bottom
+            border-info
+            border-3
+          "
+        >
           <Col xs={12} md={2} className="d-flex justify-content-center">
             <ContactAvatar contact={contact} />
           </Col>
@@ -141,7 +166,7 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
               d-flex
               justify-content-center
               align-items-center
-            "
+              "
           >
             <AiOutlineMail className="text-secondary" />
           </Col>
@@ -155,17 +180,28 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
           <Col
             xs={2}
             className="
-              field-icon
-              border-bottom
-              border-secondary
-              d-flex
-              justify-content-center
-              align-items-center
+            field-icon
+            border-bottom
+            border-secondary
+            d-flex
+            justify-content-center
+            align-items-center
+            mb-3
+            mb-md-4
             "
           >
             <AiOutlinePhone className="text-secondary" />
           </Col>
-          <Col xs={10} className="contact-field border-bottom border-secondary">
+          <Col
+            xs={10}
+            className="
+              contact-field
+              border-bottom
+              border-secondary
+              mb-3
+              mb-md-4
+            "
+          >
             {contact[`${primaryPhone.toLowerCase()}PhoneNumber`] ? (
               <span>
                 {formatPhoneNumber(
@@ -176,6 +212,30 @@ const ContactItem = ({ contact, togglePopover, popoverIsOpen, onDeleteContact })
               "Not Provided"
             )}
           </Col>
+          {contact.notes !== [] && (
+            <>
+              <Col
+                xs={2}
+                className="
+                field-icon
+                border-bottom
+                border-secondary
+                d-flex
+                justify-content-center
+                
+                "
+              >
+                <AiOutlinePaperClip className="text-secondary" />
+              </Col>
+              <Col
+                xs={10}
+                className="contact-field border-bottom border-secondary"
+              >
+                {contact.notes.length > 0 &&
+                  contact.notes.map((note, i) => <div>- {note.text}</div>)}
+              </Col>
+            </>
+          )}
         </Row>
 
         <Col
