@@ -23,6 +23,7 @@ const NoteSlice = createSlice({
         return {
           ...state,
           notes: state.notes.concat({ text: newNoteText, editing: false }),
+          newNoteText: "",
         };
       } else {
         return {
@@ -52,6 +53,7 @@ const NoteSlice = createSlice({
               ? { ...note, text: updatedNoteText, editing: false }
               : note
           ),
+          newNoteText: "",
         };
       } else {
         return {
@@ -73,6 +75,12 @@ const NoteSlice = createSlice({
       return {
         ...state,
         notes: notes,
+      };
+    },
+    sortNotes: (state, action) => {
+      return {
+        ...state,
+        notes: state.notes.sort((a, b) => a.includes(action.payload)),
       };
     },
     setNewNoteText: (state, action) => {
@@ -100,6 +108,7 @@ export const {
   deleteNote,
   setNewNoteText,
   setUpdatedNoteText,
+  sortNotes
 } = NoteSlice.actions;
 
 export default NoteSlice.reducer;
