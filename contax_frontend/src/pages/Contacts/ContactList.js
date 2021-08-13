@@ -11,10 +11,13 @@ const ContactList = ({ contacts, onDeleteContact }) => {
 
   // close all popovers on mount
   useEffect(() => {
-    let popovers = {};
-    contacts.forEach((contact) => (popovers[contact.id] = false));
+    if(contacts){
 
-    setPopoversOpen(popovers);
+      let popovers = {};
+      contacts.forEach((contact) => (popovers[contact.id] = false));
+  
+      setPopoversOpen(popovers);
+    }
   }, [contacts]);
 
   const togglePopover = (contact_id, isOpen) => {
@@ -37,6 +40,7 @@ const ContactList = ({ contacts, onDeleteContact }) => {
 
   return (
     <Row className="g-0 mx-3 pt-5 mt-5" id="contact-list">
+      <div className="py-4"></div>
       {contacts.map((contact, i) => (
         <ContactItem
           contact={contact}
