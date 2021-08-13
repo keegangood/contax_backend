@@ -88,13 +88,17 @@ export const updateContact = createAsyncThunk(
 // delete a contact from the database
 export const deleteContact = createAsyncThunk(
   "contacts/delete",
-  async ({contactId, accessToken}, { rejectWithValue }) => {
+  async ({ contactId, accessToken }, { rejectWithValue }) => {
     const url = BASE_URL + `/delete/${contactId}`;
 
     const response = await axios
-      .post(url, {}, {
-        headers: {...headers, Authorization: `token ${accessToken}`},
-      })
+      .post(
+        url,
+        {},
+        {
+          headers: { ...headers, Authorization: `token ${accessToken}` },
+        }
+      )
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
 
@@ -102,11 +106,54 @@ export const deleteContact = createAsyncThunk(
   }
 );
 
+const _filterContacts = (contacts, filterBy, query) => {
+  let filteredContacts = [];
+
+  if(query === '') return contacts
+
+  if (filterBy === "name") {
+    filteredContacts = contacts.filter(
+      (contact) =>
+        contact.firstName.toLowerCase().includes(query) ||
+        contact.lastName.toLowerCase().includes(query)
+    );
+  } else if (filterBy === "email") {
+    filteredContacts = contacts.filter((contact) =>
+      contact.email.toLowerCase().includes(query)
+    );
+  } else if (filterBy === "phone") {
+
+    contacts.forEach(contact=>{
+      Object.keys(contact).map(key=>{
+        if(key.includes('PhoneNumber')){
+          console.log(`${key}`, contact[key])
+        }
+      })
+    })
+
+    filteredContacts = contacts.filter(
+      (contact) => 
+        (contact.cellPhoneNumber && contact.cellPhoneNumber.includes(query)) ||
+        (contact.homePhoneNumber && contact.homePhoneNumber.includes(query)) ||
+        (contact.workPhoneNumber && contact.workPhoneNumber.includes(query))
+    );
+  }
+
+  if(filteredContacts.length > 0){
+    return filteredContacts
+  } else {
+    return contacts
+  }
+};
+
 const initialState = {
   contacts: null, // logged in user's current access token
+  filteredContacts: [],
   currentContact: null,
-  orderBy: "firstName",
   contactLoadingStatus: "PENDING", // status of async operation ['IDLE', 'PENDING', 'SUCCESS', 'FAIL']
+  orderBy: "firstName",
+  filterBy: "name",
+  filterQuery: "",
 };
 
 const ContactSlice = createSlice({
@@ -126,9 +173,41 @@ const ContactSlice = createSlice({
     },
     setOrderBy: (state, action) => {
       return {
-        orderBy: action.payload.orderBy,
+        ...state,
+        orderBy: action.payload,
       };
     },
+    setFilterBy: (state, action) => {
+      return {
+        ...state,
+        filterBy: action.payload,
+      };
+    },
+    filterContacts: (state, action) => {
+      console.log(_filterContacts(action.payload.toLowerCase()));
+
+      return {
+        ...state,
+        filterQuery: action.payload,
+        filteredContacts: _filterContacts(
+          state.contacts,
+          state.filterBy,
+          action.payload.toLowerCase()
+        ),
+      };
+    },
+  },
+  setContactNotes: (state, action) => {
+    const {contactId, notes} = action.payload
+    return {
+      ...state, 
+      contacts: state.contacts.map(
+        contact=>
+        contact.id===contactId 
+          ? {...contact, notes: notes}
+          : contact
+      )
+    }
   },
   extraReducers: {
     // GET CONTACTS
@@ -141,6 +220,7 @@ const ContactSlice = createSlice({
     },
     [getContacts.fulfilled]: (state, action) => {
       state.contacts = action.payload.contacts;
+      state.filteredContacts = action.payload.contacts;
       state.contactLoadingStatus = "IDLE";
     },
 
@@ -186,7 +266,12 @@ const ContactSlice = createSlice({
   },
 });
 
-export const { setContacts, setCurrentContact, setOrderBy } =
-  ContactSlice.actions;
+export const {
+  setContacts,
+  setCurrentContact,
+  setOrderBy,
+  setFilterBy,
+  filterContacts,
+} = ContactSlice.actions;
 
 export default ContactSlice.reducer;
