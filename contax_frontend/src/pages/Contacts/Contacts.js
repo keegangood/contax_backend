@@ -16,7 +16,8 @@ import {
   getContactDetail,
   updateContact,
   deleteContact,
-  setContacts
+  setContacts,
+  setCurrentContact,
 } from "../../state/ContactSlice";
 
 import { setNotes } from "../../state/NoteSlice";
@@ -28,8 +29,13 @@ const Contacts = ({ history }) => {
   const dispatch = useDispatch();
 
   const { accessToken } = useSelector((state) => state.auth);
-  const { contacts, currentContact, orderBy, contactLoadingStatus } =
-    useSelector((state) => state.contacts);
+  const {
+    contacts,
+    filteredContacts,
+    currentContact,
+    orderBy,
+    contactLoadingStatus,
+  } = useSelector((state) => state.contacts);
 
   //
   //
@@ -91,9 +97,9 @@ const Contacts = ({ history }) => {
           dispatch(createContact({ formData, accessToken }))
             .then(unwrapResult)
             .then((res) => {
-              dispatch(setNotes([]))
-              dispatch(getContacts({ accessToken, orderBy }))
-              history.push('/app')
+              dispatch(setNotes([]));
+              dispatch(getContacts({ accessToken, orderBy }));
+              history.push("/app");
             })
             .catch((err) => console.log(err));
         })
@@ -112,6 +118,7 @@ const Contacts = ({ history }) => {
           dispatch(updateContact({ contactId, formData, accessToken }))
             .then(unwrapResult)
             .then((res) => {
+              dispatch(setCurrentContact(null));
               history.push("/app");
             })
             .catch((err) => console.log(err));
@@ -130,7 +137,7 @@ const Contacts = ({ history }) => {
           dispatch(deleteContact({ contactId, accessToken }))
             .then(unwrapResult)
             .then((res) => {
-              dispatch(getContacts({accessToken}));
+              dispatch(getContacts({ accessToken }));
               history.push("/app");
             })
             .catch((err) => console.log(err));
@@ -144,7 +151,7 @@ const Contacts = ({ history }) => {
       <Row className="g-0">
         {!contacts && contactLoadingStatus === "PENDING" ? (
           <div className="spinner d-flex align-items-center justify-content-center">
-            <Spinner color="info">{' '}</Spinner>
+            <Spinner color="info"> </Spinner>
           </div>
         ) : (
           <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
@@ -158,7 +165,10 @@ const Contacts = ({ history }) => {
             {!formAction && (
               <>
                 {contacts && contacts.length > 0 ? (
-                  <ContactList contacts={contacts} onDeleteContact={onDeleteContact}/>
+                  <ContactList
+                    contacts={filteredContacts}
+                    onDeleteContact={onDeleteContact}
+                  />
                 ) : (
                   "No Contacts"
                 )}
