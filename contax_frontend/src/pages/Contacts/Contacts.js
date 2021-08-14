@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
-import { useRouteMatch, useParams } from "react-router-dom";
+import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 import { Container, Row, Col, Spinner } from "reactstrap";
@@ -8,6 +8,7 @@ import { Container, Row, Col, Spinner } from "reactstrap";
 import PlusButton from "../../components/PlusButton";
 import ContactList from "./ContactList";
 import ContactForm from "./ContactForm";
+import ContactDetail from "./ContactDetail";
 
 import { requestAccessToken } from "../../state/AuthSlice";
 import {
@@ -26,6 +27,12 @@ import "./scss/Contacts.scss";
 
 const Contacts = ({ history }) => {
   const { formAction, contactId } = useParams();
+  const { path } = useRouteMatch();
+
+  console.log("formAction", formAction);
+  console.log("contactId", contactId);
+  console.log("path", path);
+
   const dispatch = useDispatch();
 
   const { accessToken } = useSelector((state) => state.auth);
@@ -119,7 +126,7 @@ const Contacts = ({ history }) => {
             .then(unwrapResult)
             .then((res) => {
               dispatch(setCurrentContact(null));
-              dispatch(getContacts({ accessToken, orderBy }))
+              dispatch(getContacts({ accessToken, orderBy }));
               history.push("/app");
             })
             .catch((err) => console.log(err));
@@ -156,26 +163,37 @@ const Contacts = ({ history }) => {
           </div>
         ) : (
           <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
-            {formAction === "add" ? (
-              <ContactForm formAction="add" onSubmit={onCreateContact} />
-            ) : formAction === "edit" ? (
-              <ContactForm formAction="edit" onSubmit={onUpdateContact} />
-            ) : (
-              ""
-            )}
-            {!formAction && (
-              <>
-                {contacts && contacts.length > 0 ? (
+            <Switch>
+              <Route
+                path={`${path}/add`}
+                formAction="add"
+                onSubmit={onCreateContact}
+                component={() => (
+                  <ContactForm formAction="add" onSubmit={onCreateContact} />
+                )}
+              />
+              <Route
+                path={`${path}/detail/:contactId`}
+                component={() => <ContactDetail />}
+              />
+              <Route
+                path={`${path}/edit/:contactId`}
+                component={() => (
+                  <ContactForm formAction="edit" onSubmit={onUpdateContact} />
+                )}
+              />
+              <Route
+                path={path}
+                component={() => (
                   <ContactList
                     contacts={filteredContacts}
                     onDeleteContact={onDeleteContact}
                   />
-                ) : (
-                  "No Contacts"
                 )}
-                <PlusButton history={history} />
-              </>
-            )}
+              />
+            </Switch>
+
+            <PlusButton history={history} />
           </Col>
         )}
       </Row>

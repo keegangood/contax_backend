@@ -77,6 +77,14 @@ function App({ history }) {
             />
           )}
         />
+        <PrivateRoute
+          path="/app"
+          history={history}
+          user={user}
+          isAuthenticated={isAuthenticated}
+          authLoadingStatus={authLoadingStatus}
+          component={Contacts}
+        />
         <Route
           exact
           path="/login"
@@ -103,16 +111,7 @@ function App({ history }) {
             />
           )}
         />
-        <PrivateRoute
-          exact
-          path="/app"
-          history={history}
-          user={user}
-          isAuthenticated={isAuthenticated}
-          authLoadingStatus={authLoadingStatus}
-          component={Contacts}
-        />
-        <PrivateRoute
+        {/* <PrivateRoute
           exact
           path="/app/detail/:contactId"
           history={history}
@@ -120,8 +119,8 @@ function App({ history }) {
           isAuthenticated={isAuthenticated}
           authLoadingStatus={authLoadingStatus}
           component={ContactDetail}
-        />
-        <PrivateRoute
+        /> */}
+        {/* <PrivateRoute
           exact
           path="/app/:formAction?/:contactId?"
           history={history}
@@ -129,7 +128,7 @@ function App({ history }) {
           isAuthenticated={isAuthenticated}
           authLoadingStatus={authLoadingStatus}
           component={Contacts}
-        />
+        /> */}
       </Switch>
     </Container>
   );

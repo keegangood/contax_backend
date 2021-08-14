@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
 import rootReducer from "./state";
 import thunk from "redux-thunk";
-import { Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
 let store = configureStore({ reducer: rootReducer }, applyMiddleware(thunk));
