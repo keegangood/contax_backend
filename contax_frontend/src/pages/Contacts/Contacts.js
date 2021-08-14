@@ -119,6 +119,7 @@ const Contacts = ({ history }) => {
             .then(unwrapResult)
             .then((res) => {
               dispatch(setCurrentContact(null));
+              dispatch(getContacts({ accessToken, orderBy }))
               history.push("/app");
             })
             .catch((err) => console.log(err));
