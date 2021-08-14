@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Row, Col, Navbar, Nav, NavLink } from "reactstrap";
 
 import Avatar from "./Avatar";
@@ -8,6 +8,9 @@ import ContactFilter from "../pages/Contacts/ContactFilter";
 import "./scss/NavDesktop.scss";
 
 const NavDesktop = ({ isAuthenticated, user, onLogout }) => {
+
+  const location = useLocation();
+
   return (
     <Navbar
       id="nav-desktop"
@@ -66,7 +69,7 @@ const NavDesktop = ({ isAuthenticated, user, onLogout }) => {
           </Nav>
         </Col>
       </Row>
-      {isAuthenticated && (
+      {(isAuthenticated && location.pathname === '/app') && (
         <Row className="g-0 bg-primary w-100 py-2">
           <Col xs={{ size: 6, offset: 3 }}>
             <ContactFilter />
