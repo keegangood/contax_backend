@@ -1,0 +1,63 @@
+@use '../../../scss/contax_variables.scss' as *;
+
+#contact-detail-content {
+  .contact-avatar {
+    height: 30vw;
+    width: 30vw;
+    font-size: 2rem;
+  }
+
+  .close-icon {
+    color: $custom-primary;
+    font-size: 2rem;
+
+    &:hover {
+      color: $custom-light;
+    }
+  }
+
+  .contact-full-name {
+    color: $font-color-display;
+    font-family: $secondary-font;
+    font-size: 2rem;
+  }
+
+  .field-icon {
+    font-size: 2rem;
+  }
+
+  .contact-field {
+    color: $font-color-display;
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  @media screen and (min-width: 992px) {
+    font-size: 1.2rem;
+
+    .contact-avatar {
+      height: 7vw;
+      width: 7vw;
+      font-size: 2.5rem;
+    }
+
+    .field-icon {
+      font-size: 2rem;
+    }
+
+    .contact-field {
+      font-size: 1.5rem;
+      .phone-type-label {
+        font-size: 1rem;
+      }
+    }
+
+    .crud-icon {
+      font-size: 2rem;
+    }
+
+    .name-field {
+      font-size: 2rem;
+    }
+  }
+}
