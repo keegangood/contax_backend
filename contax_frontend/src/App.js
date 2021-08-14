@@ -16,6 +16,7 @@ import Hamburger from "./components/Hamburger";
 import Homepage from "./pages/Homepage/Homepage";
 import UserAuth from "./pages/UserAuth/UserAuth";
 import Contacts from "./pages/Contacts/Contacts";
+import ContactDetail from "./pages/Contacts/ContactDetail";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -110,6 +111,15 @@ function App({ history }) {
           isAuthenticated={isAuthenticated}
           authLoadingStatus={authLoadingStatus}
           component={Contacts}
+        />
+        <PrivateRoute
+          exact
+          path="/app/detail/:contactId"
+          history={history}
+          user={user}
+          isAuthenticated={isAuthenticated}
+          authLoadingStatus={authLoadingStatus}
+          component={ContactDetail}
         />
         <PrivateRoute
           exact
