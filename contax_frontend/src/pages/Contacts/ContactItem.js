@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Fade } from "reactstrap";
 import formatPhoneNumber from "../../utils/formatPhoneNumber";
 
@@ -11,11 +11,12 @@ import {
   AiOutlineEdit,
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
-  AiOutlinePaperClip,
+  AiOutlineFileText,
 } from "react-icons/ai";
 import { Row, Col } from "reactstrap";
 
 import ContactAvatar from "../../components/Avatar";
+import ContactDeletePopover from "./ContactDeletePopover";
 
 import { setCurrentContact } from "../../state/ContactSlice";
 import { sortNotes } from "../../state/NoteSlice";
@@ -31,6 +32,7 @@ const ContactItem = ({
   filterQuery,
 }) => {
   const dispatch = useDispatch();
+  const { contactId } = useParams();
 
   const { firstName, lastName, email, primaryPhone } = contact;
 
@@ -47,8 +49,14 @@ const ContactItem = ({
       id={`contact-${contact.id}`}
     >
       <Row className="contact-body pb-3 position-relative rounded ">
+        {/* <ContactDeletePopover
+          togglePopover={togglePopover}
+          popoverIsOpen={popoverIsOpen}
+          onDeleteContact={onDeleteContact}
+          contact={contact}
+        /> */}
         {/* DELETE CONTACT POPOVER */}
-        <Fade
+        {/* <Fade
           in={popoverIsOpen}
           className={
             "delete-contact-popover g-0 position-absolute " +
@@ -112,13 +120,14 @@ const ContactItem = ({
               </span>
             </Col>
           </Row>
-        </Fade>
+        </Fade> */}
 
         {/* AVATAR */}
-        <Row tag={Link}
-          to={`/app/detail`}
-          onClick={()=>{
-            dispatch(setCurrentContact(contact))
+        <Row
+          tag={Link}
+          to={`/app/detail/${contact.id}`}
+          onClick={() => {
+            dispatch(setCurrentContact(contact));
           }}
           className="
             contact-item-header
@@ -129,6 +138,7 @@ const ContactItem = ({
             border-bottom
             border-info
             border-3
+            text-decoration-none
           "
         >
           <Col xs={12} md={2} className="d-flex justify-content-center">
@@ -144,7 +154,9 @@ const ContactItem = ({
               border-bottom
               border-secondary
               mt-2 mt-md-0
-              d-flex align-items-end justify-content-center align-items-md-center justify-content-md-start
+              d-flex
+              align-items-end justify-content-center
+              align-items-md-center justify-content-md-start
             "
           >
             <span>
@@ -166,7 +178,7 @@ const ContactItem = ({
               d-flex
               justify-content-center
               align-items-center
-              "
+            "
           >
             <AiOutlineMail className="text-secondary" />
           </Col>
@@ -180,14 +192,14 @@ const ContactItem = ({
           <Col
             xs={2}
             className="
-            field-icon
-            border-bottom
-            border-secondary
-            d-flex
-            justify-content-center
-            align-items-center
-            mb-3
-            mb-md-4
+              field-icon
+              border-bottom
+              border-secondary
+              d-flex
+              justify-content-center
+              align-items-center
+              mb-3
+              mb-md-4
             "
           >
             <AiOutlinePhone className="text-secondary" />
@@ -217,22 +229,21 @@ const ContactItem = ({
               <Col
                 xs={2}
                 className="
-                field-icon
-                border-bottom
-                border-secondary
-                d-flex
-                justify-content-center
-                
+                  field-icon
+                  border-bottom
+                  border-secondary
+                  d-flex
+                  justify-content-center
                 "
               >
-                <AiOutlinePaperClip className="text-secondary" />
+                <AiOutlineFileText className="text-secondary" />
               </Col>
               <Col
                 xs={10}
                 className="contact-field border-bottom border-secondary"
               >
                 {contact.notes.length > 0 &&
-                  contact.notes.map((note, i) => <div>- {note.text}</div>)}
+                  contact.notes.map((note, i) => <div>&bull; {note.text}</div>)}
               </Col>
             </>
           )}
