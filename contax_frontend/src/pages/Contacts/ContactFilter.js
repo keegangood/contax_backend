@@ -11,8 +11,6 @@ import {
   InputGroupButtonDropdown,
 } from "reactstrap";
 
-import "./scss/ContactFilter.scss";
-
 import { filterContacts, setFilterBy } from "../../state/ContactSlice";
 
 const ContactFilter = () => {
@@ -23,7 +21,7 @@ const ContactFilter = () => {
     dispatch(filterContacts(e.target.value));
   };
 
-  const OPTIONS = ["name", "email", "phone", "notes"];
+  const OPTIONS = ["name", "email", "phone"] //, "notes"];
 
   return (
     <div className="w-100" id="contact-filter">
