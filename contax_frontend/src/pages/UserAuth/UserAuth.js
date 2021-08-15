@@ -45,7 +45,7 @@ const UserAuth = ({ pageAction, pageTitle, history, ...props }) => {
           if (history) {
             let redirectPath = "app";
             if (history.location.state) {
-              redirectPath = history.location.state.referrer;
+              redirectPath = history.location.state.referer;
             }
             history.push(redirectPath);
           }
