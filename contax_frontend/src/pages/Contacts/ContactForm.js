@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { Link, useParams } from "react-router-dom";
 
 import titleize from "../../utils/titleize";
@@ -21,12 +22,13 @@ import Avatar from "../../components/Avatar";
 import Notes from "./Notes";
 
 import "./scss/ContactForm.scss";
-import { addNote, setNotes } from "../../state/NoteSlice";
+import { addNote, setNewNoteText, setNotes } from "../../state/NoteSlice";
 import { getContactDetail, setCurrentContact } from "../../state/ContactSlice";
+import { requestAccessToken } from "../../state/AuthSlice";
 
 const PHONE_TYPES = ["CELL", "HOME", "WORK"];
 
-const ContactForm = ({ formAction, onSubmit }) => {
+const ContactForm = ({ onSubmit, history }) => {
   let dispatch = useDispatch();
 
   // STATE
@@ -42,7 +44,39 @@ const ContactForm = ({ formAction, onSubmit }) => {
   });
 
   const { notes } = useSelector((state) => state.notes);
-  const { currentContact } = useSelector((state) => state.contacts);
+  const { currentContact, contactLoadingStatus } = useSelector(
+    (state) => state.contacts
+  );
+  const { formAction, contactId } = useParams();
+
+  // RETRIEVE SINGLE CONTACT
+  // get the contact object for the contactId in url params
+  useEffect(() => {
+    if (
+      !contactId &&
+      formAction === "edit" &&
+      contactLoadingStatus === "IDLE"
+    ) {
+      history.push("/app/add");
+    } else if (contactId && !currentContact) {
+      (async () => {
+        await dispatch(requestAccessToken())
+          .then(unwrapResult)
+          .then((res) => {
+            let { accessToken } = res;
+
+            dispatch(getContactDetail({ accessToken, contactId }))
+              .then(unwrapResult)
+              .then((res) => console.log("woo!", res))
+              .catch((err) => console.log("oops!", err));
+          })
+          .catch((err) => {
+            console.log(err);
+            history.push("/login");
+          });
+      })();
+    }
+  }, [contactId, currentContact, contactLoadingStatus]);
 
   useEffect(() => {
     if (currentContact) {
@@ -58,6 +92,7 @@ const ContactForm = ({ formAction, onSubmit }) => {
       });
       currentContact.notes.map((note) => {
         dispatch(addNote({ newNoteText: note.text }));
+        dispatch(setNewNoteText(""));
       });
     }
   }, [currentContact]);
@@ -114,15 +149,20 @@ const ContactForm = ({ formAction, onSubmit }) => {
           </Col>
           {/* FORM CLOSE BUTTON */}
           <Col xs={2} className="d-flex justify-content-end align-items-center">
-            <Link to="/app">
+            <div>
               <AiOutlineCloseCircle
                 className="close-form-icon mx-2"
                 onClick={() => {
                   dispatch(setCurrentContact(null));
                   dispatch(setNotes([]));
+                  if (history.location.state) {
+                    history.push(history.location.state.referer);
+                  } else {
+                    history.push("/app");
+                  }
                 }}
               />
-            </Link>
+            </div>
           </Col>
         </Row>
       </Label>
