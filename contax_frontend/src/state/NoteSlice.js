@@ -1,9 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const isDuplicateNote = (newNoteText, notes) => {
-  return notes.some(
-    (note) => newNoteText.toLowerCase() === note.text.toLowerCase()
-  );
+  if (notes) {
+    return notes.some(
+      (note) => newNoteText.toLowerCase() === note.text.toLowerCase()
+    );
+  } else {
+    return false;
+  }
 };
 
 const initialState = {
@@ -71,10 +75,9 @@ const NoteSlice = createSlice({
       };
     },
     setNotes: (state, action) => {
-      const { notes } = action.payload;
       return {
         ...state,
-        notes: notes,
+        notes: action.payload,
       };
     },
     sortNotes: (state, action) => {
@@ -108,7 +111,7 @@ export const {
   deleteNote,
   setNewNoteText,
   setUpdatedNoteText,
-  sortNotes
+  sortNotes,
 } = NoteSlice.actions;
 
 export default NoteSlice.reducer;
