@@ -49,12 +49,14 @@
   }
 
   .close-form-icon {
-      color: $custom-primary;
+      color: $custom-light;
 
       &:hover {
-          color: $custom-light;
+          color: $custom-primary;
+          cursor: pointer;
       }
   }
+
 
   @media screen and (min-width: 992px) {
     .contact-avatar {
