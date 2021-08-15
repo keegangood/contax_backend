@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useRouteMatch } from "react-router-dom";
 import { Fade } from "reactstrap";
 import formatPhoneNumber from "../../utils/formatPhoneNumber";
 
@@ -33,6 +33,7 @@ const ContactItem = ({
 }) => {
   const dispatch = useDispatch();
   const { contactId } = useParams();
+  const {path}=useRouteMatch();
 
   const { firstName, lastName, email, primaryPhone } = contact;
 
@@ -49,78 +50,13 @@ const ContactItem = ({
       id={`contact-${contact.id}`}
     >
       <Row className="contact-body pb-3 position-relative rounded ">
-        {/* <ContactDeletePopover
+        {/* DELETE CONTACT POPOVER */}
+        <ContactDeletePopover
           togglePopover={togglePopover}
           popoverIsOpen={popoverIsOpen}
           onDeleteContact={onDeleteContact}
           contact={contact}
-        /> */}
-        {/* DELETE CONTACT POPOVER */}
-        {/* <Fade
-          in={popoverIsOpen}
-          className={
-            "delete-contact-popover g-0 position-absolute " +
-            "border border-secondary rounded px-0 " +
-            (popoverIsOpen ? "d-block" : "d-none")
-          }
-        >
-          <Row className="g-0 h-100">
-            <Col
-              xs={12}
-              className="
-                delete-contact-popover-header
-                text-center
-                p-4
-                lead
-                d-flex
-                align-items-center
-                justify-content-center
-              "
-              onClick={() => {
-                togglePopover(contact.id, !popoverIsOpen);
-              }}
-            >
-              <span>
-                Delete <br />
-                {firstName} {lastName}?
-              </span>
-            </Col>
-            <Col
-              xs={{ size: 8, offset: 2 }}
-              md={{ size: 6, offset: 3 }}
-              className="
-                delete-contact-popover-body
-                d-flex
-                align-items-center
-                justify-content-around
-                pb-5 pt-3 pt-md-4
-              "
-            >
-              <span
-                className="
-                  crud-icon delete-confirm-icon
-                  d-flex
-                  align-items-center
-                  justify-content-center
-                "
-                onClick={() => onDeleteContact(contact.id)}
-              >
-                <AiOutlineCheckCircle />
-              </span>
-              <span
-                className="
-                  crud-icon delete-cancel-icon
-                  d-flex
-                  align-items-center
-                  justify-content-center
-                "
-                onClick={() => togglePopover(contact.id, !popoverIsOpen)}
-              >
-                <AiOutlineCloseCircle />
-              </span>
-            </Col>
-          </Row>
-        </Fade> */}
+        />
 
         {/* AVATAR */}
         <Row
@@ -253,7 +189,10 @@ const ContactItem = ({
           xs={12}
           className="d-flex align-items-center justify-content-end mt-3"
         >
-          <Link to={`/app/edit/${contact.id}`}>
+          <Link to={{
+            pathname: `/app/edit/${contact.id}`,
+            state: {referer: path}
+          }}>
             <AiOutlineEdit
               className="crud-icon edit-icon m-2"
               onClick={() => {
