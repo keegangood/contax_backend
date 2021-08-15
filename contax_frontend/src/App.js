@@ -11,7 +11,6 @@ import { Container } from "reactstrap";
 
 import NavDesktop from "./components/NavDesktop";
 import NavMobile from "./components/NavMobile";
-import Hamburger from "./components/Hamburger";
 
 import Homepage from "./pages/Homepage/Homepage";
 import UserAuth from "./pages/UserAuth/UserAuth";
@@ -53,11 +52,6 @@ function App({ history }) {
         />
       </span>
       <span className="d-block d-md-none">
-        <Hamburger
-          navOpen={navOpen}
-          setNavOpen={setNavOpen}
-          textColor={"secondary"}
-        />
         <NavMobile
           user={user}
           isAuthenticated={isAuthenticated}
