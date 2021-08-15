@@ -16,6 +16,25 @@
     }
   }
 
+  .crud-icon {
+      font-size: 1.5rem;
+  }
+
+  .edit-icon {
+      color: $custom-light;
+
+      &:hover {
+          color: $custom-warning;
+      }
+  }
+  .delete-icon {
+      color: $custom-light;
+
+      &:hover {
+          color: $custom-danger;
+      }
+  }
+
   .contact-full-name {
     color: $font-color-display;
     font-family: $secondary-font;
