@@ -6,8 +6,7 @@ const Hamburger = ({ navOpen, setNavOpen, textColor }) => {
   return (
     <span
       className={
-        "nav-toggle-icon position-absolute position-fixed end-0 p-2 " +
-        `text-${navOpen ? "light" : "secondary"}`
+        "nav-toggle-icon position-absolute end-0 p-2 text-light"
       }
       onClick={() => {
         setNavOpen(!navOpen);
