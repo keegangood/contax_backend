@@ -51,7 +51,7 @@ const Contacts = ({ history }) => {
 
   // GET ALL CONTACTS
   useEffect(() => {
-    if (!contacts) {
+    if (!contacts && !formAction) {
       (async () => {
         await dispatch(requestAccessToken())
           .then(unwrapResult)
@@ -64,34 +64,7 @@ const Contacts = ({ history }) => {
     }
   }, [contacts, contactLoadingStatus, dispatch]);
 
-  // RETRIEVE SINGLE CONTACT
-  // get the contact object for the contactId in url params
-  useEffect(() => {
-    if (
-      !contactId &&
-      formAction === "edit" &&
-      contactLoadingStatus === "IDLE"
-    ) {
-      history.push("/app/add");
-    } else if (contactId && !currentContact) {
-      (async () => {
-        await dispatch(requestAccessToken())
-          .then(unwrapResult)
-          .then((res) => {
-            let { accessToken } = res;
-
-            dispatch(getContactDetail({ accessToken, contactId }))
-              .then(unwrapResult)
-              .then((res) => console.log("woo!", res))
-              .catch((err) => console.log("oops!", err));
-          })
-          .catch((err) => {
-            console.log(err);
-            history.push("/login");
-          });
-      })();
-    }
-  }, [contactId, currentContact, contactLoadingStatus]);
+  
 
   // CREATE CONTACT
   const onCreateContact = (formData) => {
@@ -104,8 +77,8 @@ const Contacts = ({ history }) => {
           dispatch(createContact({ formData, accessToken }))
             .then(unwrapResult)
             .then((res) => {
-              dispatch(setNotes([]));
               dispatch(getContacts({ accessToken, orderBy }));
+              dispatch(setNotes([]));
               history.push("/app");
             })
             .catch((err) => console.log(err));
@@ -169,7 +142,7 @@ const Contacts = ({ history }) => {
                 formAction="add"
                 onSubmit={onCreateContact}
                 component={() => (
-                  <ContactForm formAction="add" onSubmit={onCreateContact} />
+                  <ContactForm formAction="add" onSubmit={onCreateContact} history={history}/>
                 )}
               />
               <Route
@@ -179,7 +152,7 @@ const Contacts = ({ history }) => {
               <Route
                 path={`${path}/edit/:contactId`}
                 component={() => (
-                  <ContactForm formAction="edit" onSubmit={onUpdateContact} />
+                  <ContactForm formAction="edit" onSubmit={onUpdateContact} history={history}/>
                 )}
               />
               <Route
