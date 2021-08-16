@@ -43,7 +43,7 @@ function App({ history }) {
   };
 
   return (
-    <Container fluid className="app g-0">
+    <Container fluid className="app g-0 mt-5">
       <span className="d-none d-md-block">
         <NavDesktop
           user={user}
