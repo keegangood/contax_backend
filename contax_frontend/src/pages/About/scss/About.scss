@@ -1,19 +1,35 @@
 @use '../../../scss/contax_variables.scss' as *;
 
 #about-content {
-    color: $custom-secondary;
+  color: $custom-secondary;
+    font-size: 1.2rem;
 
-    #about-title {
-        color: $font-color-display;
-    }
+  #about-title {
+    color: $font-color-display;
+  }
 
-    #dev-time-label {
-        font-family: $secondary-font;
-        font-size: .8rem;
-    }
+  #app-name {
+      font-family: $secondary-font;
+  }
 
-    .about-section-header {
-        color: $font-color-display-accent;
-    }
+  #dev-time-label {
+    font-family: $secondary-font;
+    font-size: 0.8rem;
+}
+
+.about-section-header {
+    color: $font-color-display-accent;
+}
+
+@media screen and (min-width: 768px) {
+    font-size: 1.5rem;
     
+    #dev-time-label {
+          font-size: 1.2rem;
+
+      }
+    }
+    @media screen and (min-width: 992px) {
+      font-size: 2rem;
+  }
 }
