@@ -33,7 +33,7 @@ const ContactItem = ({
 }) => {
   const dispatch = useDispatch();
   const { contactId } = useParams();
-  const {path}=useRouteMatch();
+  const { path } = useRouteMatch();
 
   const { firstName, lastName, email, primaryPhone } = contact;
 
@@ -49,14 +49,8 @@ const ContactItem = ({
       className="px-0 pb-2 mb-3 pb-md-3 mb-md-4 contact-item shadow rounded"
       id={`contact-${contact.id}`}
     >
-      <Row className="contact-body pb-3 position-relative rounded ">
+      <Row className="contact-body position-relative rounded ">
         {/* DELETE CONTACT POPOVER */}
-        <ContactDeletePopover
-          togglePopover={togglePopover}
-          popoverIsOpen={popoverIsOpen}
-          onDeleteContact={onDeleteContact}
-          contact={contact}
-        />
 
         {/* AVATAR */}
         <Row
@@ -102,112 +96,130 @@ const ContactItem = ({
         </Row>
 
         {/* NAME, EMAIL AND PHONE */}
-        <Row className="g-0 px-4 px-md-3 mt-4 small">
-          <Col
-            xs={2}
-            className="
-              field-icon
-              border-bottom
-              border-secondary
-              mb-3
-              mb-md-4
-              d-flex
-              justify-content-center
-              align-items-center
-            "
-          >
-            <AiOutlineMail className="text-secondary" />
-          </Col>
-          <Col
-            xs={10}
-            className="contact-field border-bottom border-secondary mb-3 mb-md-4"
-          >
-            {email ? email : "Not Provided"}
-          </Col>
+        {popoverIsOpen ? (
+          <ContactDeletePopover
+            togglePopover={togglePopover}
+            popoverIsOpen={popoverIsOpen}
+            onDeleteContact={onDeleteContact}
+            contact={contact}
+          />
+        ) : (
+          <Row className="g-0 px-4 px-md-3 mt-4 small position-relative">
+            <Col
+              xs={2}
+              className="
+                  field-icon
+                  border-bottom
+                  border-secondary
+                  mb-3
+                  mb-md-4
+                  d-flex
+                  justify-content-center
+                  align-items-center
+                "
+            >
+              <AiOutlineMail className="text-secondary" />
+            </Col>
+            <Col
+              xs={10}
+              className="contact-field border-bottom border-secondary mb-3 mb-md-4"
+            >
+              {email ? email : "Not Provided"}
+            </Col>
 
-          <Col
-            xs={2}
-            className="
-              field-icon
-              border-bottom
-              border-secondary
-              d-flex
-              justify-content-center
-              align-items-center
-              mb-3
-              mb-md-4
-            "
-          >
-            <AiOutlinePhone className="text-secondary" />
-          </Col>
-          <Col
-            xs={10}
-            className="
-              contact-field
-              border-bottom
-              border-secondary
-              mb-3
-              mb-md-4
-            "
-          >
-            {contact[`${primaryPhone.toLowerCase()}PhoneNumber`] ? (
-              <span>
-                {formatPhoneNumber(
-                  contact[`${primaryPhone.toLowerCase()}PhoneNumber`]
-                )}
-              </span>
-            ) : (
-              "Not Provided"
-            )}
-          </Col>
-          {contact.notes !== [] && (
-            <>
-              <Col
-                xs={2}
-                className="
+            <Col
+              xs={2}
+              className="
                   field-icon
                   border-bottom
                   border-secondary
                   d-flex
                   justify-content-center
+                  align-items-center
+                  mb-3
+                  mb-md-4
                 "
+            >
+              <AiOutlinePhone className="text-secondary" />
+            </Col>
+            <Col
+              xs={10}
+              className="
+                  contact-field
+                  border-bottom
+                  border-secondary
+                  mb-3
+                  mb-md-4
+                "
+            >
+              {contact[`${primaryPhone.toLowerCase()}PhoneNumber`] ? (
+                <span>
+                  {formatPhoneNumber(
+                    contact[`${primaryPhone.toLowerCase()}PhoneNumber`]
+                  )}
+                </span>
+              ) : (
+                "Not Provided"
+              )}
+            </Col>
+            {contact.notes !== [] && (
+              <>
+                <Col
+                  xs={2}
+                  className="
+                      field-icon
+                      border-bottom
+                      border-secondary
+                      d-flex
+                      justify-content-center
+                    "
+                >
+                  <AiOutlineFileText className="text-secondary" />
+                </Col>
+                <Col
+                  xs={10}
+                  className="contact-field border-bottom border-secondary"
+                >
+                  {contact.notes.length > 0 &&
+                    contact.notes.map((note, i) => (
+                      <div>&bull; {note.text}</div>
+                    ))}
+                </Col>
+              </>
+            )}
+            <Col
+              xs={12}
+              className="
+                d-flex
+                align-items-center
+                justify-content-end 
+                mt-3
+                pb-3
+              "
+            >
+              <Link
+                to={{
+                  pathname: `/app/edit/${contact.id}`,
+                  state: { referer: path },
+                }}
               >
-                <AiOutlineFileText className="text-secondary" />
-              </Col>
-              <Col
-                xs={10}
-                className="contact-field border-bottom border-secondary"
-              >
-                {contact.notes.length > 0 &&
-                  contact.notes.map((note, i) => <div>&bull; {note.text}</div>)}
-              </Col>
-            </>
-          )}
-        </Row>
-
-        <Col
-          xs={12}
-          className="d-flex align-items-center justify-content-end mt-3"
-        >
-          <Link to={{
-            pathname: `/app/edit/${contact.id}`,
-            state: {referer: path}
-          }}>
-            <AiOutlineEdit
-              className="crud-icon edit-icon m-2"
-              onClick={() => {
-                dispatch(setCurrentContact(contact));
-              }}
-            />
-          </Link>
-          <span className="position-relative">
-            <AiOutlineDelete
-              id={`contact-${contact.id}-popover`}
-              className="crud-icon delete-icon m-2"
-              onClick={() => togglePopover(contact.id, !popoverIsOpen)}
-            />
-          </span>
-        </Col>
+                <AiOutlineEdit
+                  className="crud-icon edit-icon m-2"
+                  onClick={() => {
+                    dispatch(setCurrentContact(contact));
+                  }}
+                />
+              </Link>
+              <span className="position-relative">
+                <AiOutlineDelete
+                  id={`contact-${contact.id}-popover`}
+                  className="crud-icon delete-icon m-2"
+                  onClick={() => togglePopover(contact.id, !popoverIsOpen)}
+                />
+              </span>
+            </Col>
+          </Row>
+        )}
       </Row>
     </Col>
   );
