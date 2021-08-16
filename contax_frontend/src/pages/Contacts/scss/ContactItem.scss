@@ -7,41 +7,7 @@
   position: relative;
   transition: top 0.3s ease-in-out;
 
-  .delete-contact-popover {
-    background-color: $custom-light;
-
-    height: 100%;
-
-    z-index: $contact-delete-popover-z;
-
-    .delete-contact-popover-header {
-      background-color: $custom-secondary;
-
-      font-family: $secondary-font;
-      font-size: 1.5rem;
-      height: 50%;
-    }
-
-    .delete-contact-popover-body {
-      .crud-icon {
-        font-size: 4rem;
-      }
-      .delete-confirm-icon {
-        color: $custom-success;
-        transition: all 0.2s ease-in-out;
-        &:hover {
-          color: adjust-color($custom-success, $lightness: 10%);
-        }
-      }
-      .delete-cancel-icon {
-        color: $custom-danger;
-        transition: all 0.2s ease-in-out;
-        &:hover {
-          color: adjust-color($custom-danger, $lightness: 10%);
-        }
-      }
-    }
-  }
+  
 
   .contact-body {
     background-color: $custom-primary;
