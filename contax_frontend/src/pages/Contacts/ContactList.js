@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Row } from "reactstrap";
+import { Row, Col } from "reactstrap";
 
 import ContactItem from "./ContactItem";
 
@@ -11,26 +11,25 @@ const ContactList = ({ contacts, onDeleteContact }) => {
 
   // close all popovers on mount
   useEffect(() => {
-    if(contacts){
-
+    if (contacts) {
       let popovers = {};
       contacts.forEach((contact) => (popovers[contact.id] = false));
-  
+
       setPopoversOpen(popovers);
     }
   }, [contacts]);
 
-  const togglePopover = (contact_id, isOpen) => {
+  const togglePopover = (contactId, isOpen) => {
     let updatedPopovers = {};
 
-    // set the value at contact_id to true and all the rest to false
-    Object.keys(popoversOpen).forEach((popover_id) => {
-      // == because contact_id is a string and popover_id is a number
-      if (contact_id == popover_id) {
-        updatedPopovers[popover_id] = isOpen;
+    // set the value at contactId to true and all the rest to false
+    Object.keys(popoversOpen).forEach((popoverId) => {
+      // == because contactId is a string and popoverId is a number
+      if (contactId == popoverId) {
+        updatedPopovers[popoverId] = isOpen;
         isOpen = false;
-      } else{
-        updatedPopovers[popover_id] = false;
+      } else {
+        updatedPopovers[popoverId] = false;
       }
     });
 
@@ -39,17 +38,22 @@ const ContactList = ({ contacts, onDeleteContact }) => {
   };
 
   return (
-    <Row className="g-0 mx-3 pt-5 mt-5" id="contact-list">
-      <div className="py-4"></div>
-      {contacts.map((contact, i) => (
-        <ContactItem
-          contact={contact}
-          togglePopover={togglePopover}
-          popoverIsOpen={popoversOpen[contact.id]}
-          onDeleteContact={onDeleteContact}
-          key={i}
-        />
-      ))}
+    <Row className="g-0 mx-3 pt-md-5 mt-5" id="contact-list">
+      {contacts.length === 0
+        ? <Col xs={12} className="text-center">
+          <h1 className="display-1 text-secondary">
+            No contacts found
+          </h1>
+        </Col>
+        : contacts.map((contact, i) => (
+            <ContactItem
+              contact={contact}
+              togglePopover={togglePopover}
+              popoverIsOpen={popoversOpen[contact.id]}
+              onDeleteContact={onDeleteContact}
+              key={i}
+            />
+          ))}
     </Row>
   );
 };
