@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Navbar, NavLink, Row, Col, Fade } from "reactstrap";
 import Avatar from "./Avatar";
 import Hamburger from "./Hamburger";
 import ContactFilter from "../pages/Contacts/ContactFilter";
 import "./scss/NavMobile.scss";
 
-const NavMobile = ({ user, onLogout, navOpen, setNavOpen, history }) => {
+const NavMobile = ({ user, onLogout, path, navOpen, setNavOpen, history }) => {
   const [isHidden, setIsHidden] = useState(true);
+
+  const location = useLocation();
 
   return (
     <>
@@ -35,11 +37,13 @@ const NavMobile = ({ user, onLogout, navOpen, setNavOpen, history }) => {
               Contax
             </Link>
           </Col>
-          <Col xs={{size:7, offset:1}} className="d-flex ">
-            <ContactFilter />
-          </Col>
-          <Col 
-            xs={1} 
+          {user && location.pathname === "/app" && (
+            <Col xs={{ size: 7, offset: 1 }} className="d-flex ">
+              <ContactFilter />
+            </Col>
+          )}
+          <Col
+            xs={1}
             className="
               d-flex
               align-items-center
