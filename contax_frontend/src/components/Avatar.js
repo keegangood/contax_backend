@@ -2,8 +2,6 @@ import React from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 
 const Avatar = (props) => {
-  console.log(props);
-
   return (
     <span
       className={
