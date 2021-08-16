@@ -82,7 +82,7 @@ const ContactDetail = ({ onDeleteContact, history }) => {
   return (
     currentContact && (
       <Container id="contact-detail-content">
-        <Row className="g-0 pt-5">
+        <Row className="g-0 pt-5 mx-2">
           <Col
             xs={12}
             className="
