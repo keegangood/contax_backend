@@ -122,15 +122,6 @@ const _filterContacts = (contacts, filterBy, query) => {
       contact.email.toLowerCase().includes(query)
     );
   } else if (filterBy === "phone") {
-
-    contacts.forEach(contact=>{
-      Object.keys(contact).map(key=>{
-        if(key.includes('PhoneNumber')){
-          console.log(`${key}`, contact[key])
-        }
-      })
-    })
-
     filteredContacts = contacts.filter(
       (contact) => 
         (contact.cellPhoneNumber && contact.cellPhoneNumber.includes(query)) ||
@@ -138,12 +129,9 @@ const _filterContacts = (contacts, filterBy, query) => {
         (contact.workPhoneNumber && contact.workPhoneNumber.includes(query))
     );
   }
+  
 
-  if(filteredContacts.length > 0){
-    return filteredContacts
-  } else {
-    return contacts
-  }
+  return filteredContacts
 };
 
 const initialState = {
@@ -184,16 +172,17 @@ const ContactSlice = createSlice({
       };
     },
     filterContacts: (state, action) => {
-      console.log(_filterContacts(action.payload.toLowerCase()));
+
+      let filtered = _filterContacts(
+        state.contacts,
+        state.filterBy,
+        action.payload.toLowerCase()
+      );
 
       return {
         ...state,
         filterQuery: action.payload,
-        filteredContacts: _filterContacts(
-          state.contacts,
-          state.filterBy,
-          action.payload.toLowerCase()
-        ),
+        filteredContacts: filtered,
       };
     },
   },
