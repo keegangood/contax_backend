@@ -20,6 +20,7 @@ import ContactDetail from "./pages/Contacts/ContactDetail";
 import PrivateRoute from "./components/PrivateRoute";
 
 import { requestAccessToken } from "./state/AuthSlice";
+import About from "./pages/About/About";
 
 function App({ history }) {
   const dispatch = useDispatch();
@@ -71,6 +72,13 @@ function App({ history }) {
             />
           )}
         />
+        <Route
+          exact
+          path="/about"
+          component={(props) => (
+            <About />
+          )}
+        />
         <PrivateRoute
           path="/app"
           history={history}
@@ -105,24 +113,6 @@ function App({ history }) {
             />
           )}
         />
-        {/* <PrivateRoute
-          exact
-          path="/app/detail/:contactId"
-          history={history}
-          user={user}
-          isAuthenticated={isAuthenticated}
-          authLoadingStatus={authLoadingStatus}
-          component={ContactDetail}
-        /> */}
-        {/* <PrivateRoute
-          exact
-          path="/app/:formAction?/:contactId?"
-          history={history}
-          user={user}
-          isAuthenticated={isAuthenticated}
-          authLoadingStatus={authLoadingStatus}
-          component={Contacts}
-        /> */}
       </Switch>
     </Container>
   );
