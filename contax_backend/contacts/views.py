@@ -45,6 +45,10 @@ def contact_list(request):
 
         form_data = request.data.get('form_data')
 
+        # set birthday to None of not included in form data
+        birthday = form_data.get('birthday')
+        if birthday == '':
+            form_data['birthday'] = None
 
         contact_serializer = ContactCreateSerializer(data=form_data)
 
@@ -54,13 +58,13 @@ def contact_list(request):
 
             response.status_code = status.HTTP_201_CREATED
             response.data = {
-                "contact": contact_serializer.validated_data,
-                "messages": ["Contact created successfully!"]
+                'contact': ContactDetailSerializer(contact).data,
+                'message': 'Contact created successfully!'
             }
         else:
             response.status_code = status.HTTP_400_BAD_REQUEST
             response.data = {
-                "messages": contact_serializer.errors
+                'message': contact_serializer.errors
             }
 
     
@@ -82,7 +86,7 @@ def contact_detail(request, contact_pk):
 
     contact = Contact.objects.filter(pk=contact_pk, user=request.user).first()
 
-    if contact:        
+    if contact: 
 
         if request.method == 'GET':
             contact_serializer = ContactDetailSerializer(contact)
@@ -100,12 +104,12 @@ def contact_detail(request, contact_pk):
             if contact_serializer.is_valid():
                 contact = contact_serializer.save()
             
-            response.status_code=status.HTTP_202_ACCEPTED
+                response.status_code=status.HTTP_202_ACCEPTED
 
-            response.data = {
-                'contact': contact_serializer.validated_data,
-                'message': 'Contact updated successfully!'
-            }
+                response.data = {
+                    'contact': ContactDetailSerializer(contact).data,
+                    'message': 'Contact updated successfully!'
+                }
 
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST
