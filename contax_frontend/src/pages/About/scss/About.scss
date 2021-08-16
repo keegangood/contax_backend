@@ -1,0 +1,19 @@
+@use '../../../scss/contax_variables.scss' as *;
+
+#about-content {
+    color: $custom-secondary;
+
+    #about-title {
+        color: $font-color-display;
+    }
+
+    #dev-time-label {
+        font-family: $secondary-font;
+        font-size: .8rem;
+    }
+
+    .about-section-header {
+        color: $font-color-display-accent;
+    }
+    
+}
