@@ -1,6 +1,10 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Row, Col, Fade } from "reactstrap";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from "react-icons/ai";
+
+import './scss/ContactDeletePopover.scss';
+import { setCurrentContact } from "../../state/ContactSlice";
 
 const ContactDeletePopover = ({
   popoverIsOpen,
@@ -8,24 +12,26 @@ const ContactDeletePopover = ({
   contact,
   onDeleteContact,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <>
       {/* DELETE CONTACT POPOVER */}
       <Fade
         in={popoverIsOpen}
         className={
-          "delete-contact-popover g-0 position-absolute " +
-          "border border-secondary rounded px-0 " +
+          "delete-contact-popover g-0 " +
+          "border border-secondary rounded " +
           (popoverIsOpen ? "d-block" : "d-none")
         }
       >
-        <Row className="g-0 h-100">
+        <Row className="g-0">
           <Col
             xs={12}
             className="
               delete-contact-popover-header
               text-center
-              p-4
+              pt-4
               lead
               d-flex
               align-items-center
@@ -36,8 +42,7 @@ const ContactDeletePopover = ({
             }}
           >
             <span>
-              Delete <br />
-              {contact.firstName} {contact.lastName}?
+              Delete?
             </span>
           </Col>
           <Col
@@ -48,30 +53,31 @@ const ContactDeletePopover = ({
               d-flex
               align-items-center
               justify-content-around
-              pb-5 pt-3 pt-md-4
+              pb-4
             "
           >
             <span
               className="
-                crud-icon delete-confirm-icon
                 d-flex
                 align-items-center
                 justify-content-center
               "
-              onClick={() => onDeleteContact(contact.id)}
+              onClick={() => {
+                dispatch(setCurrentContact(null))
+                onDeleteContact(contact.id)}
+            }
             >
-              <AiOutlineCheckCircle />
+              <AiOutlineCheckCircle className="delete-confirm-icon"/>
             </span>
             <span
               className="
-                crud-icon delete-cancel-icon
                 d-flex
                 align-items-center
                 justify-content-center
               "
               onClick={() => togglePopover(contact.id, !popoverIsOpen)}
             >
-              <AiOutlineCloseCircle />
+              <AiOutlineCloseCircle className="delete-cancel-icon"/>
             </span>
           </Col>
         </Row>
