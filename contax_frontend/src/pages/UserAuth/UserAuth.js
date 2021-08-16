@@ -69,7 +69,7 @@ const UserAuth = ({ pageAction, pageTitle, history, ...props }) => {
         w-90
         flex flex-column 
         justify-content-center
-        py-5
+        py-1
       "
       id="user-auth-page"
     >
