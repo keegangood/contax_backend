@@ -28,11 +28,6 @@ import "./scss/Contacts.scss";
 const Contacts = ({ history }) => {
   const { formAction, contactId } = useParams();
   const { path } = useRouteMatch();
-
-  console.log("formAction", formAction);
-  console.log("contactId", contactId);
-  console.log("path", path);
-
   const dispatch = useDispatch();
 
   const { accessToken } = useSelector((state) => state.auth);
@@ -64,8 +59,6 @@ const Contacts = ({ history }) => {
     }
   }, [contacts, contactLoadingStatus, dispatch]);
 
-  
-
   // CREATE CONTACT
   const onCreateContact = (formData) => {
     (async () => {
@@ -79,7 +72,7 @@ const Contacts = ({ history }) => {
             .then((res) => {
               dispatch(getContacts({ accessToken, orderBy }));
               dispatch(setNotes([]));
-              history.push("/app");
+              history.push(`/app/detail/${res.contact.id}`);
             })
             .catch((err) => console.log(err));
         })
@@ -88,7 +81,8 @@ const Contacts = ({ history }) => {
   };
 
   // UPDATE CONTACT
-  const onUpdateContact = (formData) => {
+  const onUpdateContact = (formData, redirectUrl) => {
+    console.log("redirectUrl from update contact:", redirectUrl);
     (async () => {
       await dispatch(requestAccessToken())
         .then(unwrapResult)
@@ -100,7 +94,7 @@ const Contacts = ({ history }) => {
             .then((res) => {
               dispatch(setCurrentContact(null));
               dispatch(getContacts({ accessToken, orderBy }));
-              history.push("/app");
+              history.push(redirectUrl || `/app/detail/${res.contact.id}`);
             })
             .catch((err) => console.log(err));
         })
@@ -128,31 +122,45 @@ const Contacts = ({ history }) => {
   };
 
   return (
-    <Container className="pb-5">
+    <Container fluid className="pb-5">
       <Row className="g-0">
-        {!contacts && contactLoadingStatus === "PENDING" ? (
+        {!contacts && !currentContact && contactLoadingStatus === "PENDING" ? (
           <div className="spinner d-flex align-items-center justify-content-center">
             <Spinner color="info"> </Spinner>
           </div>
         ) : (
-          <Col sm={12} md={{ size: 10, offset: 1 }} className="p-2">
+          <Col xs={12} md={{size:10, offset:1}} lg={{size:8, offset:2}}>
             <Switch>
               <Route
                 path={`${path}/add`}
                 formAction="add"
                 onSubmit={onCreateContact}
                 component={() => (
-                  <ContactForm formAction="add" onSubmit={onCreateContact} history={history}/>
+                  <ContactForm
+                    formAction="add"
+                    onSubmit={onCreateContact}
+                    history={history}
+                  />
                 )}
               />
               <Route
                 path={`${path}/detail/:contactId`}
-                component={() => <ContactDetail />}
+                component={() => (
+                  <ContactDetail
+                    onDeleteContact={onDeleteContact}
+                    formAction="edit"
+                    history={history}
+                  />
+                )}
               />
               <Route
                 path={`${path}/edit/:contactId`}
                 component={() => (
-                  <ContactForm formAction="edit" onSubmit={onUpdateContact} history={history}/>
+                  <ContactForm
+                    formAction="edit"
+                    onSubmit={onUpdateContact}
+                    history={history}
+                  />
                 )}
               />
               <Route
