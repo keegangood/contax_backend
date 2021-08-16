@@ -40,7 +40,12 @@ function App({ history }) {
   }, [isAuthenticated, user]);
 
   const onLogout = () => {
-    dispatch(logout());
+    dispatch(logout())
+      .then(unwrapResult)
+      .then(res=>{
+        history.push('/app')
+      })
+      .catch(err=>console.log('Error', err));
   };
 
   return (
