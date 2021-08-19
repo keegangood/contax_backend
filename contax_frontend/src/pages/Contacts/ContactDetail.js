@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { Link, useParams, useRouteMatch } from "react-router-dom";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { addAlert } from "../../state/AlertSlice";
 
 import titleize from "../../utils/titleize";
 import formatPhoneNumber from "../../utils/formatPhoneNumber";
@@ -61,8 +62,8 @@ const ContactDetail = ({ onDeleteContact, history }) => {
                 dispatch(setCurrentContact(contact));
               })
               .catch((err) => {
+                dispatch(addAlert({text:err.message, alertType:'danger'}))
                 history.push("/app");
-                // set message "contact not found"
               });
           })
           .catch((err) => {
