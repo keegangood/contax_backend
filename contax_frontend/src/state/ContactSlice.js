@@ -236,9 +236,17 @@ const ContactSlice = createSlice({
     },
 
     // DELETE CONTACT
-    [deleteContact.pending]: (state, action) => {},
-    [deleteContact.rejected]: (state, action) => {},
-    [deleteContact.fulfilled]: (state, action) => {},
+    [deleteContact.pending]: (state, action) => {
+      state.contactLoadingStatus = "PENDING";
+    },
+    [deleteContact.rejected]: (state, action) => {
+      state.contactLoadingStatus = "IDLE";
+    },
+    [deleteContact.fulfilled]: (state, action) => {
+      state.contacts = action.payload.contacts;
+      state.filteredContacts = action.payload.contacts;
+      state.contactLoadingStatus = "IDLE";
+    },
 
     // GET SINGLE CONTACT
     [getContactDetail.pending]: (state, action) => {
