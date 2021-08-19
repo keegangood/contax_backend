@@ -24,7 +24,6 @@ class SafeJWTAuthentication(BaseAuthentication):
         User = get_user_model()
         authorization_heaader = request.headers.get('Authorization')
 
-        print(authorization_heaader)
 
         if not authorization_heaader:
             return None
@@ -43,7 +42,7 @@ class SafeJWTAuthentication(BaseAuthentication):
         except jwt.ExpiredSignatureError:
             raise exceptions.AuthenticationFailed(
                 detail={
-                    'msg': 'Access token expired',
+                    'message': 'Access token expired',
                 }
             )
 
