@@ -24,7 +24,7 @@ export const login = createAsyncThunk(
         headers: headers,
       })
       .then((res) => res.data)
-      .catch((err) => JSON.stringify(err));
+      .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
@@ -40,7 +40,7 @@ export const register = createAsyncThunk(
         headers: headers,
       })
       .then((res) => res.data)
-      .catch((err) => err.response.data);
+      .catch((err) => rejectWithValue(err.response.data));
 
     return response;
   }
@@ -91,6 +91,22 @@ const AuthSlice = createSlice({
     },
   },
   extraReducers: {
+    [register.pending]: (state, action) => {
+      state.authLoadingStatus = "PENDING";
+    },
+    [register.rejected]: (state, action) => {
+      state.accessToken = null;
+      state.isAuthenticated = false;
+      state.user = null;
+      state.authLoadingStatus = "IDLE";
+    },
+    [register.fulfilled]: (state, action) => {
+      state.accessToken = action.payload.accessToken;
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      state.authLoadingStatus = "IDLE";
+    },
+
     [login.pending]: (state, action) => {
       state.authLoadingStatus = "PENDING";
     },
