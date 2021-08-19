@@ -21,6 +21,8 @@ import {
   setCurrentContact,
 } from "../../state/ContactSlice";
 
+import { addAlert, removeAlert } from "../../state/AlertSlice";
+
 import { setNotes } from "../../state/NoteSlice";
 
 import "./scss/Contacts.scss";
@@ -48,16 +50,17 @@ const Contacts = ({ history }) => {
   useEffect(() => {
     if (!contacts && !formAction) {
       (async () => {
+        console.log("GETTING ALL CONTACTS");
         await dispatch(requestAccessToken())
           .then(unwrapResult)
           .then((res) => {
             const { accessToken } = res;
             dispatch(getContacts({ accessToken, orderBy }));
           })
-          .catch((err) => console.error(err));
+          .catch((err) => console.error("GET ALL CONTACTS ERROR", err));
       })();
     }
-  }, [contacts, contactLoadingStatus, dispatch]);
+  }, [contacts, dispatch]);
 
   // CREATE CONTACT
   const onCreateContact = (formData) => {
@@ -70,19 +73,27 @@ const Contacts = ({ history }) => {
           dispatch(createContact({ formData, accessToken }))
             .then(unwrapResult)
             .then((res) => {
+              let alert = { text: "Contact created!", alertType: "success" };
               dispatch(getContacts({ accessToken, orderBy }));
               dispatch(setNotes([]));
+              dispatch(addAlert(alert));
+              setTimeout(() => dispatch(removeAlert(alert)), 3000);
               history.push(`/app/detail/${res.contact.id}`);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              console.log(err);
+            });
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          let alert = { text: "Must be logged in!", alertType: "danger" };
+          dispatch(addAlert(alert));
+          setTimeout(() => dispatch(removeAlert(alert)), 3000);
+        });
     })();
   };
 
   // UPDATE CONTACT
   const onUpdateContact = (formData, redirectUrl) => {
-    console.log("redirectUrl from update contact:", redirectUrl);
     (async () => {
       await dispatch(requestAccessToken())
         .then(unwrapResult)
@@ -92,11 +103,17 @@ const Contacts = ({ history }) => {
           dispatch(updateContact({ contactId, formData, accessToken }))
             .then(unwrapResult)
             .then((res) => {
+              let alert = { text: "Contact updated!", alertType: "success" };
+              dispatch(addAlert(alert));
+              setTimeout(() => dispatch(removeAlert(alert)), 3000);
+
               dispatch(setCurrentContact(null));
               dispatch(getContacts({ accessToken, orderBy }));
               history.push(redirectUrl || `/app/detail/${res.contact.id}`);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((err) => console.error(err));
     })();
@@ -112,7 +129,8 @@ const Contacts = ({ history }) => {
           dispatch(deleteContact({ contactId, accessToken }))
             .then(unwrapResult)
             .then((res) => {
-              dispatch(getContacts({ accessToken }));
+              let alert = { text: "Contact deleted!", alertType: "success" };
+              dispatch(addAlert(alert));
               history.push("/app");
             })
             .catch((err) => console.log(err));
@@ -129,7 +147,7 @@ const Contacts = ({ history }) => {
             <Spinner color="info"> </Spinner>
           </div>
         ) : (
-          <Col xs={12} md={{size:10, offset:1}} lg={{size:8, offset:2}}>
+          <Col xs={12} md={{ size: 10, offset: 1 }} lg={{ size: 8, offset: 2 }}>
             <Switch>
               <Route
                 path={`${path}/add`}
