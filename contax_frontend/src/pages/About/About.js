@@ -12,6 +12,7 @@ const About = () => {
     "Conditional rendering",
     "Spinners indicating loading state",
     "Real-time contact filtering",
+    "Success/Failure alerts",
   ];
 
   const TECH_STACK_LIST = [
@@ -21,7 +22,7 @@ const About = () => {
     "React",
     "Redux/Thunk",
     "Axios",
-    "Reactstrap"
+    "Reactstrap",
   ];
 
   return (
@@ -37,7 +38,7 @@ const About = () => {
                     display-1
                     text-center
                     bg-secondary
-                    py-2 m-0
+                    py-5 m-0
                     border-bottom border-3 border-info"
                 >
                   What is Contax?
@@ -51,8 +52,9 @@ const About = () => {
                 md={8}
                 className="p-3 p-lg-5 my-4 my-lg-5 mx-auto ms-sm-3 ms-md-5 bg-light rounded shadow"
               >
-                <span id="app-name">Contax</span> is a contact manager created by Keegan Good to represent
-                the culmination of one year of learning React.
+                <span id="app-name">Contax</span> is a contact manager created
+                by Keegan Good to represent the culmination of one year of
+                learning React.
                 <div className="mt-3">
                   <span id="dev-time-label" className="small">
                     Development time to production:
@@ -67,7 +69,7 @@ const About = () => {
                 md={8}
                 className="my-4 my-lg-5 mx-auto me-sm-3 me-md-5 bg-light rounded shadow"
               >
-                <h4 className="about-section-header display-4 bg-secondary p-3 rounded-top  border-bottom border-3 border-info">
+                <h4 className="about-section-header display-4 bg-secondary p-3 p-lg-4 rounded-top  border-bottom border-3 border-info">
                   Challenges
                 </h4>
                 <div className="about-section p-3 p-lg-5 shadow">
@@ -89,7 +91,17 @@ const About = () => {
                 md={8}
                 className="my-4 mx-auto ms-md-3 ms-lg-5 bg-light rounded"
               >
-                <h4 className="about-section-header display-4 bg-secondary rounded-top p-3 border-bottom border-3 border-info">
+                <h4
+                  className="
+                    about-section-header
+                    display-4
+                    bg-secondary
+                    rounded-top
+                    p-3
+                    p-lg-4
+                    border-bottom border-3 border-info
+                  "
+                >
                   <span>Tech Stack</span>
                   <IoExtensionPuzzleOutline className="mb-2 ms-2 p-1" />
                 </h4>
