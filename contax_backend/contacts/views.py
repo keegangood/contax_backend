@@ -152,10 +152,14 @@ def contact_delete(request, contact_pk):
 
     if contact:
         contact.delete()
+        
+        # retreive an updated list of all contacts for the current user
+        contacts = Contact.objects.order_by('first_name').filter(user__id=user.id)
 
         response.status_code=status.HTTP_202_ACCEPTED
         response.data = {
-            'message': 'Contact deleted successfully!'
+            'message': 'Contact deleted successfully!',
+            'contacts': ContactDetailSerializer(contacts, many=True).data
         }
         
     else:
