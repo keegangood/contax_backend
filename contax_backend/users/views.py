@@ -18,6 +18,18 @@ from .models import User, RefreshToken
 from .serializers import UserCreateSerializer, UserDetailSerializer
 from .utils import generate_access_token, generate_refresh_token
 
+def listify_serializer_errors(serializer_errors):
+    '''Return serializer errors into a list of strings'''
+    errors = []
+    for key in serializer_errors.keys():
+        for message in serializer_errors[key]:
+            # only display username exists error on user update
+            if key == 'username':
+                continue
+            
+            errors.append(f"{key.capitalize()}: {message}")
+
+    return errors
 
 
 
@@ -38,9 +50,9 @@ def register(request):
     # serialize request JSON data
     new_user_serializer = UserCreateSerializer(data=form_data)
 
-    if request.data.get('password') != request.data.get('password2'):
+    if form_data.get('password') != form_data.get('password_2'):
         # if password and password2 don't match return status 400
-        response.data = {'msg': ["Passwords don't match"]}
+        response.data = {'message': "Passwords don't match"}
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
 
@@ -52,6 +64,9 @@ def register(request):
         # generate access and refresh tokens for the new user
         access_token = generate_access_token(new_user)
         refresh_token = generate_refresh_token(new_user)
+
+        # Create refresh token in the database
+        RefreshToken.objects.create(token=refresh_token, user=new_user)
 
         # attach the access token to the response data
         # and set the response status code to 201
@@ -76,8 +91,9 @@ def register(request):
 
     # if the serialized data is NOT valid
     # send a response with error messages and status code 400
+    
     response.data = {
-        'msg': [str(err) for err in new_user_serializer.errors]
+        'message': listify_serializer_errors(new_user_serializer.errors)
     }
 
     response.status_code = status.HTTP_400_BAD_REQUEST
@@ -103,7 +119,7 @@ def login(request):
     password = form_data.get('password')
 
     if email is None or password is None:
-        response.data = {'msg': ['Email and password required.']}
+        response.data = {'message': 'Email and password required.'}
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
 
@@ -111,7 +127,7 @@ def login(request):
 
     if user is None or not user.check_password(password):
         response.data = {
-            'msg': ['Incorrect email or password']
+            'message': 'Incorrect email or password'
         }
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
@@ -147,7 +163,7 @@ def login(request):
     # return the access token in the reponse
     response.data = {
         'accessToken': access_token,
-        'msg': ['Login successful!'],
+        'message': 'Login successful!',
         'user': UserDetailSerializer(user).data
     }
     response.status_code = status.HTTP_200_OK
@@ -170,7 +186,7 @@ def auth(request):
 
     # if the access token doesn't exist, return 401
     if access_token is None:
-        response.data = {'msg': ['No access token']}
+        response.data = {'message': 'No access token'}
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
 
@@ -188,12 +204,12 @@ def auth(request):
     user = User.objects.filter(id=payload.get('user_id')).first()
 
     if user is None:
-        response.data = {'msg': ['User not found']}
+        response.data = {'message': 'User not found'}
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
 
     if not user.is_active:
-        response.data = {'msg': ['User not active']}
+        response.data = {'message': 'User not active'}
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
 
@@ -213,14 +229,17 @@ def extend_token(request):
     # create response object
     response = Response()
 
+
     # get the refresh token cookie
     refresh_token = request.COOKIES.get('refreshtoken')
+
+    print('refresh_token',refresh_token)
 
     # if the refresh token doesn't exist
     # return 401 - Unauthorized
     if refresh_token is None:
         response.data = {
-            'msg': ['Authentication credentials were not provided']
+            'message': 'Authentication credentials were not provided'
         }
 
         response.status_code = status.HTTP_401_UNAUTHORIZED
@@ -233,7 +252,7 @@ def extend_token(request):
 
     if user_refresh_token is None:
         response.data = {
-            'msg': ['Authentication credentials were not provided']
+            'message': 'Authentication credentials were not provided'
         }
 
         response.status_code = status.HTTP_401_UNAUTHORIZED
@@ -259,7 +278,7 @@ def extend_token(request):
         expired_token.delete()
 
         response.data = {
-            'msg': ['Expired refresh token, please log in again.']
+            'message': 'Expired refresh token, please log in again.'
         }
         response.status_code = status.HTTP_401_UNAUTHORIZED
 
@@ -272,14 +291,14 @@ def extend_token(request):
     user = User.objects.filter(id=payload.get('user_id')).first()
     if user is None:
         response.data = {
-            'msg': ['User not found']
+            'message': 'User not found'
         }
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
 
     if not user.is_active:
         response.data = {
-            'msg': ['User is inactive']
+            'message': 'User is inactive'
         }
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
@@ -348,7 +367,7 @@ def user_detail(request, pk):
 
     if user is None:
         response.data = {
-            'msg': ['User not found']
+            'message': ['User not found']
         }
         response.status_code = status.HTTP_401_UNAUTHORIZED
 
@@ -356,7 +375,7 @@ def user_detail(request, pk):
 
     if not user.is_active:
         response.data = {
-            'msg': ['User is inactive']
+            'message': ['User is inactive']
         }
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
@@ -375,7 +394,7 @@ def user_detail(request, pk):
     # pk is not the owner of the token
     if pk != payload.get('user_id'):
         response.data = {
-            'msg': ['Not authorized']
+            'message': ['Not authorized']
         }
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return response
@@ -399,11 +418,11 @@ def user_detail(request, pk):
             # combine updated with the current user instance and serialize
             serialized_user.update(
                 instance=user, validated_data=serialized_user.validated_data)
-            response.data = {'msg': ['Account info updated successffully']}
+            response.data = {'message': ['Account info updated successffully']}
             response.status_code = status.HTTP_202_ACCEPTED
             return response
 
-        response.data = {'msg': serialized_user.errors}
+        response.data = {'message': serialized_user.errors}
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
 
@@ -420,7 +439,7 @@ def logout(request):
     client_refresh_token = request.COOKIES.get('refreshtoken')
 
     if client_refresh_token is None:
-        response.data = {'msg': ['Not logged in']}
+        response.data = {'message': ['Not logged in']}
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
 
@@ -436,7 +455,7 @@ def logout(request):
     response.delete_cookie('refreshtoken')
 
     response.data = {
-        'msg': ['Logout successful. See you next time!']
+        'message': ['Logout successful. See you next time!']
     }
 
     return response
