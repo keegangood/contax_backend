@@ -42,7 +42,7 @@ const ContactList = ({ contacts, onDeleteContact }) => {
       {contacts.length === 0
         ? <Col xs={12} className="text-center">
           <h1 className="display-1 text-secondary">
-            No contacts found
+            No contacts
           </h1>
         </Col>
         : contacts.map((contact, i) => (
