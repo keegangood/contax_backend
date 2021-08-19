@@ -18,6 +18,20 @@ from users.authentication import SafeJWTAuthentication
 from .models import Contact
 from .serializers import ContactCreateSerializer, ContactDetailSerializer
 
+def listify_serializer_errors(serializer_errors):
+    '''Return serializer errors into a list of strings'''
+    errors = []
+    for key in serializer_errors.keys():
+        for message in serializer_errors[key]:
+            # only display username exists error on user update
+            if key == 'username':
+                continue
+            
+            key=key.replace('_', ' ')
+            errors.append(f"{key.capitalize()}: {message}")
+
+    return errors
+
 
 @api_view(['GET', 'POST'])
 @authentication_classes([SafeJWTAuthentication])
@@ -64,7 +78,9 @@ def contact_list(request):
         else:
             response.status_code = status.HTTP_400_BAD_REQUEST
             response.data = {
-                'message': contact_serializer.errors
+                'message': listify_serializer_errors(
+                    contact_serializer.errors
+                )
             }
 
     
