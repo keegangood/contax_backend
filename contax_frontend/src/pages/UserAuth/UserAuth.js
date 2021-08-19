@@ -1,5 +1,5 @@
 import { React, useEffect } from "react";
-import { useDispatch, connect } from "react-redux";
+import { useDispatch, connect, useSelector } from "react-redux";
 import { withRouter } from "react-router";
 
 import "./scss/UserAuth.scss";
@@ -9,6 +9,8 @@ import UserAuthForm from "./UserAuthForm";
 
 import { login, register } from "../../state/AuthSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { addAlert, removeAlert } from "../../state/AlertSlice";
+import { requestAccessToken } from "../../state/AuthSlice";
 
 const LoginExtra = (
   <div className="row g-0 auth-extra-content">
@@ -35,13 +37,21 @@ const SignupExtra = (
 const UserAuth = ({ pageAction, pageTitle, history, ...props }) => {
   const dispatch = useDispatch();
 
+  const { accessToken } = useSelector((state) => state.auth);
+
   const callApi = async (formData) => {
     if (pageAction === "login") {
-      const { email, password } = formData;
+      const { email, password, password2 } = formData;
 
-      await dispatch(login({ email, password }))
+      await dispatch(login({ email, password, password2 }))
         .then(unwrapResult)
+        // login success
         .then((res) => {
+          // set alert
+          let alert = { text: "Welcome!", alertType: "success" };
+          dispatch(addAlert(alert));
+
+          // redirect
           if (history) {
             let redirectPath = "app";
             if (history.location.state) {
@@ -50,16 +60,40 @@ const UserAuth = ({ pageAction, pageTitle, history, ...props }) => {
             history.push(redirectPath);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          let alert;
+          if (typeof err.message === "string") {
+            dispatch(addAlert({ text: err.message, alertType: "danger" }));
+          } else if (Array.isArray(err.message)) {
+            err.message.map((message) => {
+              dispatch(addAlert({ text: message, alertType: "danger" }));
+            });
+          }
+        });
     } else if (pageAction === "signup") {
       await dispatch(register({ formData }))
         .then(unwrapResult)
         .then((res) => {
-          history.push('/app')
+          dispatch(addAlert({ text: "Welcome!", alertType: "success" }));
         })
-        .catch((err) => JSON.stringify(err));
+        .catch((err) => {
+          let alert;
+          if (typeof err.message === "string") {
+            dispatch(addAlert({ text: err.message, alertType: "danger" }));
+          } else if (Array.isArray(err.message)) {
+            err.message.map((message) => {
+              dispatch(addAlert({ text: message, alertType: "danger" }));
+            });
+          }
+        });
     }
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      history.push("/app");
+    }
+  }, [accessToken]);
 
   return (
     <div
