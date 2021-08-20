@@ -211,4 +211,4 @@ CORS_ALLOW_HEADERS = [
     'withcredentials'
 ]
 
-django_heroku(locals())
+django_heroku.settings(locals())
