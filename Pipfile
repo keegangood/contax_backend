@@ -15,6 +15,10 @@ python-decouple = "*"
 pyjwt = "*"
 djangorestframework-camel-case = "*"
 gunicorn = "*"
+whitenoise = "*"
+django-heroku = "*"
+psycopg2 = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.9"

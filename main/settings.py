@@ -1,5 +1,8 @@
 from pathlib import Path
 import decouple
+import django_heroku
+import psycopg2
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -16,7 +19,6 @@ else:
     SECRET_KEY = decouple.config('DJANGO_SECRET_KEY_PRODUCTION')
 
 
-ALLOWED_HOSTS = ['.herokuapp.com']
 
 STATIC_ROOT = BASE_DIR / 'static'
 
@@ -32,6 +34,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'whitenoise',
 
     'users',
     'contacts',
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -78,9 +82,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
 }
 
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -192,6 +199,7 @@ CSRF_TRUSTED_ORIGINS = [
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
+    'contaxapp.herokuapp.com',
     # other allowed hosts...
 ]
 
@@ -202,3 +210,5 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'withcredentials'
 ]
+
+django_heroku(locals())
