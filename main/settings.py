@@ -18,6 +18,7 @@ else:
 
 ALLOWED_HOSTS = []
 
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Application definition
 
