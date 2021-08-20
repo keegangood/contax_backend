@@ -16,7 +16,7 @@ else:
     SECRET_KEY = decouple.config('DJANGO_SECRET_KEY_PRODUCTION')
 
 
-ALLOWED_HOSTS = ['contaxapp.herokuapp.com']
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 STATIC_ROOT = BASE_DIR / 'static'
 
