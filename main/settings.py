@@ -183,19 +183,17 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
     'https://contaxapp.herokuapp.com',
-    '.netlify.app',
     # other allowed origins...
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://\w+\.netlify\.app$",
+    r"^https://\w+\.netlify\.app/\w+",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
     'https://contaxapp.herokuapp.com',
-    '.netlify.app',
     # other allowed origins...
 ]
 
