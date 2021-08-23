@@ -181,18 +181,24 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:8000',
+    'contaxapp.herokuapp.com',
+    '.netlify.app',
     # other whitelisted origins
 ]
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
+    'contaxapp.herokuapp.com',
+    '.netlify.app',
     # other allowed origins...
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
+    'contaxapp.herokuapp.com',
+    '.netlify.app',
     # other allowed origins...
 ]
 
@@ -200,6 +206,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'contaxapp.herokuapp.com',
+    '.netlify.app',
     # other allowed hosts...
 ]
 
