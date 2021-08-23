@@ -178,13 +178,6 @@ ACCESS_TOKEN_EXPIRY = {
 # to accept cookies via axios
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'http://localhost:8000',
-    'https://contaxapp.herokuapp.com',
-    '.netlify.app',
-    # other whitelisted origins
-]
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
@@ -192,6 +185,10 @@ CORS_ALLOWED_ORIGINS = [
     'https://contaxapp.herokuapp.com',
     '.netlify.app',
     # other allowed origins...
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://\w+\.netlify\.app$",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
