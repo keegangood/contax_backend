@@ -187,7 +187,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://\w+\.netlify\.app/\w+",
+    r"^https://\S+\.netlify\.app/\S+",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
