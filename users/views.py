@@ -156,7 +156,7 @@ def login(request):
         value=refresh_token,  # cookie value
         httponly=True,  # to help prevent XSS
         domain='.netlify.app',  # change in production
-        samesite='strict',  # to help prevent XSS
+        samesite='none',  # to help prevent XSS
         # secure=True # for https connections only
     )
 
