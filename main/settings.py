@@ -181,7 +181,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:8000',
-    'contaxapp.herokuapp.com',
+    'https://contaxapp.herokuapp.com',
     '.netlify.app',
     # other whitelisted origins
 ]
@@ -189,7 +189,7 @@ CORS_ORIGIN_WHITELIST = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
-    'contaxapp.herokuapp.com',
+    'https://contaxapp.herokuapp.com',
     '.netlify.app',
     # other allowed origins...
 ]
@@ -197,7 +197,7 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
-    'contaxapp.herokuapp.com',
+    'https://contaxapp.herokuapp.com',
     '.netlify.app',
     # other allowed origins...
 ]
@@ -205,7 +205,7 @@ CSRF_TRUSTED_ORIGINS = [
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'contaxapp.herokuapp.com',
+    'https://contaxapp.herokuapp.com',
     '.netlify.app',
     # other allowed hosts...
 ]
@@ -215,7 +215,8 @@ CORS_ALLOW_HEADERS = [
     'content-type',
     'refresh_token',
     'x-csrftoken',
-    'withcredentials'
+    'withcredentials',
+    'access-control-allow-origin'
 ]
 
 django_heroku.settings(locals())
