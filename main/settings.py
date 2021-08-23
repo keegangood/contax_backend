@@ -178,12 +178,14 @@ ACCESS_TOKEN_EXPIRY = {
 # to accept cookies via axios
 CORS_ALLOW_CREDENTIALS = True
 
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
     'https://contaxapp.herokuapp.com',
-    'https://wonderful-lamport-b2455b.netlify.app'
+    'https://wonderful-lamport-b2455b.netlify.app',
     # other allowed origins...
 ]
 
@@ -191,6 +193,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
     'https://contaxapp.herokuapp.com',
+    'https://wonderful-lamport-b2455b.netlify.app',
     # other allowed origins...
 ]
 
