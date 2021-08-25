@@ -3,6 +3,7 @@ import decouple
 import django_heroku
 import psycopg2
 import dj_database_url
+from corsheaders.defaults import default_headers
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -208,13 +209,9 @@ ALLOWED_HOSTS = [
     # other allowed hosts...
 ]
 
-CORS_ALLOW_HEADERS = [
-    'authorization',
-    'content-type',
+CORS_ALLOW_HEADERS = list(default_headers) + [
     'refresh_token',
-    'x-csrftoken',
     'withcredentials',
-    'access-control-allow-origin'
 ]
 
 django_heroku.settings(locals())
