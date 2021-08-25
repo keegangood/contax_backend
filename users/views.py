@@ -79,11 +79,12 @@ def register(request):
         # create refreshtoken cookie
         response.set_cookie(
             key='refreshtoken',  # cookie name
-            value=new_refresh_token,  # cookie value
+            value=refresh_token,  # cookie value
             httponly=True,  # to help prevent XSS attacks
             samesite='None',  # to help prevent XSS attacks
             secure=True # for https connections only
         )
+
 
 
         # return successful response
@@ -161,6 +162,7 @@ def login(request):
 
     # return the access token in the reponse
     response.data = {
+        'refreshToken': refresh_token,
         'accessToken': access_token,
         'message': 'Login successful!',
         'user': UserDetailSerializer(user).data
@@ -231,8 +233,6 @@ def extend_token(request):
 
     # get the refresh token cookie
     refresh_token = request.COOKIES.get('refreshtoken')
-
-    print('refresh_token',refresh_token)
 
     # if the refresh token doesn't exist
     # return 401 - Unauthorized
