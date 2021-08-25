@@ -319,7 +319,7 @@ def extend_token(request):
         key='refreshtoken',  # cookie name
         value=new_refresh_token,  # cookie value
         httponly=True,  # to help prevent XSS attacks
-        samesite='Lax',  # to help prevent XSS attacks
+        samesite='None',  # to help prevent XSS attacks
         domain='netlify.app',  # change in production
         secure=True # for https connections only
     )
