@@ -188,7 +188,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
     'https://contaxapp.herokuapp.com',
-    'https://wonderful-lamport-b2455b.netlify.app',
+    'https://contaxapp.netlify.app',
     # other allowed origins...
 ]
 
@@ -196,7 +196,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
     'https://contaxapp.herokuapp.com',
-    'wonderful-lamport-b2455b.netlify.app',
+    'contaxapp.netlify.app',
     # other allowed origins...
 ]
 
