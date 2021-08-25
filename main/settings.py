@@ -211,6 +211,7 @@ ALLOWED_HOSTS = [
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'refresh_token',
     'withcredentials',
+    'access-control-allow-origin',
 ]
 
 django_heroku.settings(locals())
