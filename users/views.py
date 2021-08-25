@@ -157,7 +157,7 @@ def login(request):
         httponly=True,  # to help prevent XSS
         domain='netlify.app',  # change in production
         samesite='Lax',  # to help prevent XSS
-        # secure=True # for https connections only
+        secure=True # for https connections only
     )
 
     # return the access token in the reponse
