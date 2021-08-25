@@ -156,7 +156,7 @@ def login(request):
         value=refresh_token,  # cookie value
         httponly=True,  # to help prevent XSS
         domain='https://wonderful-lamport-b2455b.netlify.app',  # change in production
-        samesite='none',  # to help prevent XSS
+        samesite='Lax',  # to help prevent XSS
         # secure=True # for https connections only
     )
 
@@ -319,9 +319,9 @@ def extend_token(request):
         key='refreshtoken',  # cookie name
         value=new_refresh_token,  # cookie value
         httponly=True,  # to help prevent XSS attacks
-        samesite='strict',  # to help prevent XSS attacks
-        domain='localhost',  # change in production
-        # secure=True # for https connections only
+        samesite='Lax',  # to help prevent XSS attacks
+        domain='https://wonderful-lamport-b2455b.netlify.app',  # change in production
+        secure=True # for https connections only
     )
 
     # generate new access token for the user
