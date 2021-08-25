@@ -78,13 +78,13 @@ def register(request):
 
         # create refreshtoken cookie
         response.set_cookie(
-            key='refreshtoken',
-            value=refresh_token,
-            httponly=True,  # to help prevent XSS
-            samesite='Lax',  # to help prevent XSS
-            domain='netlify.app',  # change in production
+            key='refreshtoken',  # cookie name
+            value=new_refresh_token,  # cookie value
+            httponly=True,  # to help prevent XSS attacks
+            samesite='None',  # to help prevent XSS attacks
             secure=True # for https connections only
         )
+
 
         # return successful response
         return response
@@ -155,7 +155,6 @@ def login(request):
         key='refreshtoken',  # cookie name
         value=refresh_token,  # cookie value
         httponly=True,  # to help prevent XSS
-        # domain='netlify.app',  # change in production
         samesite='None',  # to help prevent XSS
         secure=True # for https connections only
     )
@@ -320,7 +319,6 @@ def extend_token(request):
         value=new_refresh_token,  # cookie value
         httponly=True,  # to help prevent XSS attacks
         samesite='None',  # to help prevent XSS attacks
-        # domain='https://wonderful-lamport-b2455b.netlify.app',  # change in production
         secure=True # for https connections only
     )
 
