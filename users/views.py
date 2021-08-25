@@ -320,7 +320,7 @@ def extend_token(request):
         value=new_refresh_token,  # cookie value
         httponly=True,  # to help prevent XSS attacks
         samesite='None',  # to help prevent XSS attacks
-        domain='https://wonderful-lamport-b2455b.netlify.app',  # change in production
+        # domain='https://wonderful-lamport-b2455b.netlify.app',  # change in production
         secure=True # for https connections only
     )
 
