@@ -30,7 +30,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         fake = Faker()
-        user = get_user_model().objects.all().first()
+        user, created = get_user_model().objects.get_or_create(
+            email='guest@contax.com',
+            password='pass3412'
+        )
+
+        if created:
+            user.set_password(user.password)
 
         users = requests.get("https://jsonplaceholder.typicode.com/users").json()
 
