@@ -14,7 +14,7 @@ def generate_phone_number():
     else:
         digits = 10
 
-        phone_number = '-'.join([str(random.randint(0,9)) for _ in range(digits)])
+        phone_number = ''.join([str(random.randint(0,9)) for _ in range(digits)])
 
     return phone_number
 
@@ -40,8 +40,8 @@ def set_default_contacts():
         email = user_data['email']
 
         year = random.randint(1950, 2000)
-        month = random.randint(0, 11)
-        day = random.randint(0, 27)
+        month = random.randint(1, 12)
+        day = random.randint(1, 27)
 
         birthday = date(year=year,month=month,day=day)
         
