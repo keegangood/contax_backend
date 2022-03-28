@@ -225,7 +225,7 @@ fake_user_data = [
         },
         "notes": [
             {
-                "test": "Javascript developer"
+                "text": "Javascript developer"
             }
         ]
     },
