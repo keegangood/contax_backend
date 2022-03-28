@@ -21,11 +21,10 @@ def generate_phone_number():
 def set_default_contacts():
     user, created = get_user_model().objects.get_or_create(
         email='guest@contax.com',
-        password='pass3412'
     )
 
     if created:
-        user.set_password(user.password)
+        user.set_password('pass3412')
 
     user.contacts.all().delete()
 
