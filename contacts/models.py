@@ -11,7 +11,7 @@ class Contact(models.Model):
         ('WORK', 'Work')
     )
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='contacts')
 
     first_name = models.CharField("first_name", max_length=100)
     last_name = models.CharField("last_name", max_length=100)
