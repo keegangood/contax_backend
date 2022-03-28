@@ -65,7 +65,7 @@ def set_default_contacts():
             "cell_phone_number":cell_phone_number,
             "work_phone_number":work_phone_number,
             "primary_phone": "CELL",
-            "notes": json.dumps(user_data['notes'])
+            "notes": json.dumps(user_data['notes']) or ''
         })
 
         # print(contact_serializer.initial_data)
