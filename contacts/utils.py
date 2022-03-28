@@ -1,10 +1,9 @@
-import requests
 import random
 from datetime import date
 from faker import Faker
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-
+from users.fake_user_data import fake_user_data
 from contacts.models import Contact
 from contacts.serializers import ContactCreateSerializer
 
@@ -37,9 +36,8 @@ def set_default_contacts():
 
     user.contacts.all().delete()
 
-    users = requests.get("https://jsonplaceholder.typicode.com/users").json()
 
-    for user_data in users:
+    for user_data in fake_user_data:
         first_name = user_data['name'].split()[0]
         last_name = user_data['name'].split()[1]
 
