@@ -250,11 +250,11 @@ fake_user_data = [
             "name": "Hoeger LLC",
             "catchPhrase": "Centralized empowering task-force",
             "bs": "target end-to-end models"
-        }
+        },
+        "notes": [
+            {
+                "text": "Professional Juggler"
+            }
+        ]
     },
-    "notes": [
-        {
-            "text": "Professional Juggler"
-        }
-    ]
 ]
