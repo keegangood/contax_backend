@@ -112,7 +112,18 @@ fake_user_data = [
         "name": "Keebler LLC",
         "catchPhrase": "User-centric fault-tolerant solution",
         "bs": "revolutionize end-to-end systems"
-      }
+      },
+      "notes": [
+        {
+          "text": "Has three cats"
+        },
+        {
+          "Unavailable on Tuesdays"
+        },
+        {
+          "Rides a bike"
+        }
+      ]
     },
     {
       "id": 6,
@@ -135,9 +146,16 @@ fake_user_data = [
         "name": "Considine-Lockman",
         "catchPhrase": "Synchronised bottom-line interface",
         "bs": "e-enable innovative applications"
-      }
-    },
-    {
+      },
+      "notes":[
+        {
+          "Vegan"
+        },
+        {
+          "Collects light bulbs"
+        }
+      ]
+    },    {
       "id": 7,
       "name": "Kurtis Weissnat",
       "username": "Elwyn.Skiles",
@@ -204,7 +222,12 @@ fake_user_data = [
         "name": "Yost and Sons",
         "catchPhrase": "Switchable contextually-based project",
         "bs": "aggregate real-time technologies"
-      }
+      },
+      "notes": [
+        {
+          "Javascript developer"
+        }
+      ]
     },
     {
       "id": 10,
@@ -228,6 +251,11 @@ fake_user_data = [
         "catchPhrase": "Centralized empowering task-force",
         "bs": "target end-to-end models"
       }
-    }
+    },
+      "notes": [
+        {
+          "Professional Juggler"
+        }
+      ]
   ]
   

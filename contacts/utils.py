@@ -1,5 +1,6 @@
 import random
 from datetime import date
+import json
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from users.fake_user_data import fake_user_data
@@ -63,7 +64,8 @@ def set_default_contacts():
             "home_phone_number":home_phone_number,
             "cell_phone_number":cell_phone_number,
             "work_phone_number":work_phone_number,
-            "primary_phone": "CELL"
+            "primary_phone": "CELL",
+            "notes": json.dumps(user_data['notes'])
         })
 
         # print(contact_serializer.initial_data)
