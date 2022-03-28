@@ -1,6 +1,5 @@
 import random
 from datetime import date
-from faker import Faker
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from users.fake_user_data import fake_user_data
@@ -15,17 +14,11 @@ def generate_phone_number():
     else:
         digits = 10
 
-        # digit_chance = random.random()
-        # if chance > .7:
-            # for international numbers
-            #     digits = 15
-
-        phone_number = ''.join([str(random.randint(0,9)) for _ in range(digits)])
+        phone_number = '-'.join([str(random.randint(0,9)) for _ in range(digits)])
 
     return phone_number
 
 def set_default_contacts():
-    fake = Faker()
     user, created = get_user_model().objects.get_or_create(
         email='guest@contax.com',
         password='pass3412'
@@ -47,7 +40,11 @@ def set_default_contacts():
         
         email = user_data['email']
 
-        birthday = fake.date_between(start_date=date(1940, 1, 1), end_date=date(2000, 1, 1))
+        year = random.randint(1950, 2000)
+        month = random.randint(0, 11)
+        day = random.randint(0, 27)
+
+        birthday = date(year=year,month=month,day=day)
         
         today = date.today()
         age = today.year - birthday.year
