@@ -19,7 +19,6 @@ from .serializers import UserCreateSerializer, UserDetailSerializer
 from contacts.serializers import ContactCreateSerializer
 from .utils import generate_access_token, generate_refresh_token
 from contacts.utils import generate_phone_number
-from faker import Faker
 from datetime import date
 
 from utils import set_default_contacts
