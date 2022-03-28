@@ -21,7 +21,7 @@ from .utils import generate_access_token, generate_refresh_token
 from contacts.utils import generate_phone_number
 from datetime import date
 
-from utils import set_default_contacts
+from .utils import set_default_contacts
 
 
 def listify_serializer_errors(serializer_errors):
