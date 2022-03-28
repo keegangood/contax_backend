@@ -1,8 +1,11 @@
-# Contax
+# Contax REST API
 
-## A single-page contact manager
+A REST API which powers [Contax](https://contaxapp.netlify.app/), a single-page contact manager application.
 
-### Learned:
+### Concepts Learned:
 
+- User login with email
+- Custom Authentication class combining Django's CSRF token with two JWT tokens
 - Django REST Framework camelCase parser
 - Reactstrap
+- Django's JSONField

@@ -16,7 +16,15 @@ from rest_framework.decorators import (
 from .authentication import SafeJWTAuthentication
 from .models import User, RefreshToken
 from .serializers import UserCreateSerializer, UserDetailSerializer
+from contacts.serializers import ContactCreateSerializer
 from .utils import generate_access_token, generate_refresh_token
+from contacts.utils import generate_phone_number
+from faker import Faker
+import requests
+from datetime import date
+
+from utils import set_default_contacts
+
 
 def listify_serializer_errors(serializer_errors):
     '''Return serializer errors into a list of strings'''
@@ -126,12 +134,17 @@ def login(request):
 
     user = User.objects.filter(email=email).first()
 
+
     if user is None or not user.check_password(password):
         response.data = {
             'message': 'Incorrect email or password'
         }
         response.status_code = status.HTTP_400_BAD_REQUEST
         return response
+    
+    # reset the guest account if needed
+    if user.email == 'guest@contax.com':
+        set_default_contacts()
 
     # generate access and refresh tokens for the current user
     access_token = generate_access_token(user)
