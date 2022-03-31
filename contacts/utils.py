@@ -68,10 +68,9 @@ def set_default_contacts():
             "notes": notes
         })
 
-        # print(contact_serializer.initial_data)
 
         if contact_serializer.is_valid():
             contact = contact_serializer.save(user=user)
-            print(contact)
+            print(contact.id, contact)
         else:
             print(contact_serializer.errors)
