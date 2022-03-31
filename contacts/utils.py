@@ -71,6 +71,6 @@ def set_default_contacts():
 
         if contact_serializer.is_valid():
             contact = contact_serializer.save(user=user)
-            print(contact.id, contact)
+            # print(contact.id, contact)
         else:
             print(contact_serializer.errors)
