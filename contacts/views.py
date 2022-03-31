@@ -102,6 +102,10 @@ def contact_detail(request, contact_pk):
 
     contact = Contact.objects.filter(pk=contact_pk, user=request.user).first()
 
+    print('user:', request.user)
+    print('contact_id:', contact_pk)
+    print('contact:', contact)
+
     if contact: 
 
         if request.method == 'GET':
