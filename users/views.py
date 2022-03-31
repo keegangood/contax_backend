@@ -245,6 +245,8 @@ def extend_token(request):
     # get the refresh token cookie
     refresh_token = request.COOKIES.get('refreshtoken')
 
+    print(request.COOKIES)
+
     # # if the refresh token doesn't exist
     # # return 401 - Unauthorized
     # if refresh_token is None:
