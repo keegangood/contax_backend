@@ -15,7 +15,7 @@ def generate_phone_number():
     else:
         digits = 10
 
-        phone_number = ''.join([str(random.randint(0,9)) for _ in range(digits)])
+        phone_number = ''.join([str(random.randint(1,9)) for _ in range(digits)])
 
     return phone_number
 
