@@ -4,7 +4,7 @@ A REST API which powers [Contax](https://contaxapp.netlify.app/), a single-page 
 
 ### Concepts Learned:
 
-- User login with email
+- User login with email instead of username
 - Custom Authentication class combining Django's CSRF token with two JWT tokens
 - Django REST Framework camelCase parser
 - Reactstrap
