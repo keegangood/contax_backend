@@ -52,8 +52,6 @@ def set_default_contacts():
         if today.month < birthday.month:
             age -= 1
 
-        print(user_data.get('notes'))
-
         notes = user_data.get('notes') or []
 
         contact_serializer = ContactCreateSerializer(data={
@@ -73,6 +71,7 @@ def set_default_contacts():
         # print(contact_serializer.initial_data)
 
         if contact_serializer.is_valid():
-            contact_serializer.save(user=user)
+            contact = contact_serializer.save(user=user)
+            print(contact)
         else:
             print(contact_serializer.errors)
