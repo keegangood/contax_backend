@@ -1,6 +1,6 @@
 from pathlib import Path
 import decouple
-import django_heroku
+import django_on_heroku
 import psycopg2
 import dj_database_url
 from corsheaders.defaults import default_headers
@@ -216,4 +216,4 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'access-control-allow-origin',
 ]
 
-django_heroku.settings(locals())
+django_on_heroku.settings(locals())
